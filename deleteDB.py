@@ -156,14 +156,40 @@ def delete(tablename, algo, name, algoId, subTidN, bit, numK
         results = cur_search.fetchall()
         print(cur_search.fetchall())
         db.commit()
-
+        log = '删除 '+ tablename +' 中业务名为 ' + name +' 的条目成功'
         print('success delete')
-        return results
+        return log
     except Exception as e:
         # db.rollback()
         print('rollback')
     finally:
         db.close()
+
+def delete_revise(tablename, date, ver, intro, decision, content, reviser):
+    sql_delete = "delete from '{tablename}_logs'" \
+                 " where date = '{date}' and ver = '{ver}' and intro = '{intro}' and decision = '{decision}' and content = '{content}' and reviser = '{reviser}'".format( tablename = tablename,
+                                                                                                                                         date = date,
+                                                                                                                                         ver = ver,
+                                                                                                                                         intro = intro,
+                                                                                                                                         decision = decision,
+                                                                                                                                         content = content,
+                                                                                                                                         reviser = reviser
+                                                                                                                                         )
+    try:
+        print(sql_delete)
+        db = sqlite3.connect('test2.db')
+        cur_search = db.cursor()
+        cur_search.execute(sql_delete)
+        print(cur_search.fetchall())
+        db.commit()
+        print('success delete')
+
+    except Exception as e:
+        # db.rollback()
+        print('rollback')
+    finally:
+        db.close()
+
     #
     # "and {bit} = {bit_}" \
     # " and {numK} = {numK_} and {tidW} = {tidW_} and {tidN} = {tidN_} and {subTidW} = {subTidW_}" \

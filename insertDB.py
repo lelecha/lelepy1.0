@@ -1,5 +1,6 @@
 
 import sqlite3
+import traceback
 
 
 def insert_db(tablename, algo, name, algoId, subTidN, bit, numK
@@ -8,68 +9,68 @@ def insert_db(tablename, algo, name, algoId, subTidN, bit, numK
               TBLM_ID, dpt, dpt_person, confirmation):
 
 
-    if algo == '':
+    if algo == '' or algo.isspace():
 
         algo = 'N/A'
 
 
-    if name == '':
+    if name == '' or name.isspace():
 
         name = 'N/A'
 
-    if algoId == '':
+    if algoId == '' or algoId.isspace():
         algoId = 'N/A'
 
-    if subTidN == '':
+    if subTidN == '' or subTidN.isspace():
         subTidN = 'N/A'
-    if bit == '':
+    if bit == '' or bit.isspace():
         bit = 'N/A'
-    if numK == '':
+    if numK == '' or numK.isspace():
         numK = 'N/A'
 
-    if tidW == '':
+    if tidW == '' or tidW.isspace():
         tidW = 'N/A'
 
-    if tidN == '':
+    if tidN == '' or tidN.isspace():
         tidN = 'N/A'
 
-    if subTidW == '':
+    if subTidW == '' or subTidW.isspace():
         subTidW = 'N/A'
 
-    if sTypeW_bit == '':
+    if sTypeW_bit == '' or sTypeW_bit.isspace():
         sTypeW_bit = 'N/A'
 
-    if  sType == '':
+    if  sType == '' or sType.isspace():
         sType = 'N/A'
 
-    if storeLocation == '':
+    if storeLocation == '' or storeLocation.isspace():
         storeLocation = 'N/A'
 
-    if ISSU == '':
+    if ISSU == '' or ISSU.isspace():
         ISSU = 'N/A'
 
-    if algoSpe == '':
+    if algoSpe == '' or algoSpe.isspace():
         algoSpe = 'N/A'
 
-    if testSpe == '':
+    if testSpe == '' or testSpe.isspace():
         testSpe = 'N/A'
 
-    if castType == '':
+    if castType == '' or castType.isspace():
         castType = 'N/A'
 
-    if iOrd == '':
+    if iOrd == '' or iOrd.isspace():
         iOrd = 'N/A'
 
-    if TBLM_ID == '':
+    if TBLM_ID == '' or TBLM_ID.isspace():
         TBLM_ID = 'N/A'
 
-    if dpt == '':
+    if dpt == '' or dpt.isspace():
         dpt = 'N/A'
 
-    if dpt_person == '':
+    if dpt_person == '' or dpt_person.isspace():
         dpt_person = 'N/A'
 
-    if confirmation == '':
+    if confirmation == '' or confirmation.isspace():
         confirmation = 'N/A'
 
     sql_insert = "insert into '{tablename}' (id, algo, name, bit, numK, tidW, tidN, subTidW, subTidN, sTypeW_bit, sType, " \
@@ -99,14 +100,73 @@ def insert_db(tablename, algo, name, algoId, subTidN, bit, numK
                                                                                                            dpt=dpt,
                                                                                                            dpt_person=dpt_person,
                                                                                                            confirmation=confirmation)
+
+
+    return sql_insert
+
+
+
+
+
+def insert_logs(tablename, date, ver, intro, decision, content, reviser):
+
+    if date == '' or date.isspace():
+
+        date = 'N/A'
+
+
+    if ver == '' or ver.isspace():
+
+        ver = 'N/A'
+
+    if intro == '' or intro.isspace():
+        intro = 'N/A'
+
+    if decision == '' or decision.isspace():
+        decision = 'N/A'
+    if content == ''or content.isspace():
+        content = 'N/A'
+    if reviser == '' or reviser.isspace():
+        reviser = 'N/A'
+
+
+    sql_insert_logs = "insert into '{tablename}_logs'(date, ver, intro, decision, content, reviser) values ('{date}'," \
+                      "'{ver}','{intro}','{decision}','{content}','{reviser}')".format(tablename = tablename,
+                                                                                       date = date,
+                                                                                       ver = ver,
+                                                                                       intro = intro,
+                                                                                       decision = decision,
+                                                                                       content = content,
+                                                                                       reviser = reviser
+                                                                                       )
     try:
         db = sqlite3.connect('test2.db')
         cur_insert = db.cursor()
-        cur_insert.execute(sql_insert)
+        cur_insert.execute(sql_insert_logs)
         db.commit()
-        print('success insert')
+
+
+        print('success insert logs')
     except Exception as e:
         # db.rollback()
         print('rollback')
     finally:
         db.close()
+
+def excecute_sql(sql_store):
+    try:
+        db = sqlite3.connect('test2.db')
+        cur_insert = db.cursor()
+        for i in sql_store:
+            print(i)
+            cur_insert.execute(i)
+        db.commit()
+    except Exception as e:
+        # db.rollback()
+        print('rollback')
+        traceback.print_exc()
+        raise Exception
+    finally:
+        db.close()
+
+

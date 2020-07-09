@@ -45,3 +45,31 @@ def create_table(tablename):
     #     raise e
     # finally:
     con.close()
+def create_log(tablename):
+    # try:
+    # tablename 需要是单板名字
+    con = sqlite3.connect('test2.db')
+    # con = pymysql.connect(host='localhost', user='root',
+    #                       passwd='mgq960830!', charset='utf8')
+    cur = con.cursor()
+
+    # cur.execute("create database {tablename};".format(tablename = tablename))
+
+    # cur.execute("use {tablename};".format(tablename = tablename))
+
+    cur.execute("CREATE TABLE IF NOT EXISTS '{tablename}_logs' ("
+                
+                "date varchar(50),"
+                "ver varchar(50),"
+                "intro varchar(255),"
+                "decision varchar(255),"
+                "content varchar(255),"
+                "reviser varchar(255))"
+                .format(tablename=tablename))
+    # except Exception as e:
+    #     raise e
+    # finally:
+    con.close()
+
+
+

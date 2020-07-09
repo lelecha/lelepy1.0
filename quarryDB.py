@@ -319,6 +319,7 @@ def quarry_search(tablename, algo, name, algoId, subTidN, bit, numK
         print(cur_search.fetchall())
         db.commit()
 
+
         print('success search')
         return results
     except Exception as e:
@@ -326,5 +327,25 @@ def quarry_search(tablename, algo, name, algoId, subTidN, bit, numK
         print('rollback')
     finally:
         db.close()
+
+def quarry_logs(tablename):
+    sql_quarry_log = "select * from '{tablename}_logs' ".format(tablename = tablename)
+    try:
+        print(sql_quarry_log)
+        db = sqlite3.connect('test2.db')
+        cur_search = db.cursor()
+        cur_search.execute(sql_quarry_log)
+        results = cur_search.fetchall()
+        print(cur_search.fetchall())
+        db.commit()
+
+        print('success quarry logs')
+        return results
+    except Exception as e:
+        # db.rollback()
+        print('rollback')
+    finally:
+        db.close()
+
 
 
