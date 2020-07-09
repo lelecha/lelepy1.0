@@ -1,4 +1,5 @@
 # -*- coding:utf8 -*-
+import sqlite3DB
 def main():
 
    # insertDB.insert_db('blogs','2','22','tom')
@@ -46,5 +47,19 @@ def main():
     # lite3.sqlite3DB.create_table("NE9000 4T(5887)")
     # lite3.sqlite3DB.create_table("NE9000 1T6D(5886)")
     # lite3.sqlite3DB.create_table("NE9000 1TM-2TM(5896)")
+   #resources = ['形态表', 'CX600_M2', 'CX6600', 'NE40E', 'NE5000E', 'NE5000E-20S', 'NE8000', 'NE9000']
+    # sqlite3DB.create_log('CX600_M2')
+    #
+    #
+    # sqlite3DB.create_log('NE40E')
+    # sqlite3DB.create_log('CX6600')
+    # sqlite3DB.create_log('NE5000E')
+    # sqlite3DB.create_log('NE5000E-20S')
+    #
+    #
+    # sqlite3DB.create_log('NE8000')
+    #
+    #
+    # sqlite3DB.create_log('NE9000')
 if __name__ == '__main__':
     main()

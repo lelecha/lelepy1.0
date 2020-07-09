@@ -39,7 +39,7 @@ class Ui_MainWindow(object):
         self.pushButton_1.setMinimumSize(QtCore.QSize(100, 40))
         self.pushButton_1.setObjectName("pushButton_1")
         self.verticalLayout.addWidget(self.pushButton_1)
-        #废弃
+
         # self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         # self.pushButton_2.setMinimumSize(QtCore.QSize(100, 40))
         # self.pushButton_2.setObjectName("pushButton_2")
@@ -48,6 +48,7 @@ class Ui_MainWindow(object):
         # self.pushButton_3.setMinimumSize(QtCore.QSize(100, 40))
         # self.pushButton_3.setObjectName("pushButton_3")
         # self.verticalLayout.addWidget(self.pushButton_3)
+
         self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_4.setMinimumSize(QtCore.QSize(100, 40))
         self.pushButton_4.setObjectName("pushButton_4")
@@ -346,12 +347,12 @@ class Ui_MainWindow(object):
         self.pushButton_17.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.pushButton_17.setObjectName("pushButton_17")
         self.verticalLayout_14.addWidget(self.pushButton_17)
-        self.pushButton_16 = QtWidgets.QPushButton(self.page)
-        self.pushButton_16.setMinimumSize(QtCore.QSize(100, 30))
-        self.pushButton_16.setMaximumSize(QtCore.QSize(100, 30))
-        self.pushButton_16.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.pushButton_16.setObjectName("pushButton_16")
-        self.verticalLayout_14.addWidget(self.pushButton_16)
+        # self.pushButton_16 = QtWidgets.QPushButton(self.page)
+        # self.pushButton_16.setMinimumSize(QtCore.QSize(100, 30))
+        # self.pushButton_16.setMaximumSize(QtCore.QSize(100, 30))
+        # self.pushButton_16.setLayoutDirection(QtCore.Qt.RightToLeft)
+        # self.pushButton_16.setObjectName("pushButton_16")
+        # self.verticalLayout_14.addWidget(self.pushButton_16)
         self.horizontalLayout_6.addLayout(self.verticalLayout_14)
         self.verticalLayout_16.addLayout(self.horizontalLayout_6)
         self.verticalLayout_18.addLayout(self.verticalLayout_16)
@@ -368,7 +369,13 @@ class Ui_MainWindow(object):
         self.tableWidget_5.setColumnCount(len(constants.head_name_logs) - 1) #时间不用写
         self.tableWidget_5.setRowCount(1)
         self.tableWidget_5.setHorizontalHeaderLabels(constants.head_name_logs_input)
-        self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableWidget_5.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(0,QHeaderView.ResizeToContents)
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(1,QHeaderView.ResizeToContents)
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(2,QHeaderView.ResizeToContents)
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(3,QHeaderView.Stretch)
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(4,QHeaderView.ResizeToContents)
+
         # self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.horizontalLayout_7.addWidget(self.tableWidget_5)
@@ -382,7 +389,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_18.addLayout(self.verticalLayout_17)
         self.verticalLayout_18.setStretch(0, 1)
         self.verticalLayout_18.setStretch(1, 11)
-        self.verticalLayout_18.setStretch(2, 2)
+        self.verticalLayout_18.setStretch(2, 4)
         self.stackedWidget_1.addWidget(self.page)
 
         #浏览刷新建
@@ -668,15 +675,15 @@ class Ui_MainWindow(object):
         #注册修订确认
         self.pushButton_15.clicked.connect(self.double_check_revise)
 
-        self.tableWidget_5.itemChanged.connect(self.resize)
+        # self.tableWidget_5.itemChanged.connect(self.resize)
         # 修订保存键
         self.pushButton_14.clicked.connect(self.update_revise)
 
 
 
-    def resize(self):
-        self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        # self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+    # def resize(self):
+    #     self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+    #     # self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
 
 
@@ -748,7 +755,7 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "修订记录："))
         self.pushButton_14.setText(_translate("MainWindow", "保存更改"))
         self.pushButton_17.setText(_translate("MainWindow", "删除选择记录"))
-        self.pushButton_16.setText(_translate("MainWindow", "导出到Excel"))
+        # self.pushButton_16.setText(_translate("MainWindow", "导出到Excel"))
         self.pushButton_15.setText(_translate("MainWindow", "提交"))
         self.label_8.setText(_translate("MainWindow", "请输入修订内容："))
 
@@ -814,7 +821,7 @@ class Ui_MainWindow(object):
         # 从下拉栏中选择形态表
 
     content = []
-
+    revise_content = []
     def select_from_resources(self):
         try:
             resource = self.comboBox.currentText()
@@ -823,22 +830,72 @@ class Ui_MainWindow(object):
             #初始化tab
             self.tabWidget.clear()
             self.content = []
+            self.revise_content = []
+
+            #查询修订表
+            revise_results = quarryDB.quarry_logs(resource)
+            self.revise_tab(revise_results)
+            self.revise_content.append(resource + "修订记录")
+            self.revise_content.append(revise_results)
             for i in resource_list:
-                # print(i)
+                print('当前表' + i)
 
                 results = quarryDB.quarry_all(i)  # 查询一个table返回所有搜索结果
 
 
-                if len(results) != 0:
+                # if len(results) != 0:
 
-                    self.browse_form(i, results)
-                    self.content.append([i])
-                    self.content.append(list(results))
+                self.browse_form(i, results)
+                self.content.append([i])
+                self.content.append(list(results))
 
-                else:
-                    print (i, "is empty")
+                # else:
+                #     print (i, "is empty")
         except Exception as a:
-            print("")
+            traceback.print_exc()
+
+    def revise_tab(self, results):
+        # 初始化一个tab页
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        # 设置成垂直排列
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.tab)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        # 把table放到tab里
+        self.tableWidget = QtWidgets.QTableWidget(self.tab)
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setRowCount(0)
+        self.verticalLayout_6.addWidget(self.tableWidget)
+        self.tabWidget.addTab(self.tab, "")
+        _translate = QtCore.QCoreApplication.translate
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", self.comboBox.currentText() + '修订记录'))
+
+        # # 贴到table上
+        if results != None and len(results) != 0 and len(results[0]) - 1 > 0:
+            self.tableWidget.setRowCount(len(results))
+            self.tableWidget.setColumnCount(len(results[0]))
+            for i in range(len(results)):
+                for j in range(len(results[0])):
+
+                    self.tableWidget.setItem(i, j, QTableWidgetItem(results[i][j]))
+            self.tableWidget.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+            self.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+            self.tableWidget.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+            self.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+            self.tableWidget.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+            self.tableWidget.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
+            self.tableWidget.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        # #表头 设置成中文
+        # headName = quarryDB.get_head_name(tablename)
+        # for i in range(len(headName)):
+        #     headName[i] = constants.head_name[headName[i]]
+        # 常量表头
+        headName = constants.head_name_logs
+        self.tableWidget.setHorizontalHeaderLabels(headName)
+
+
+
 
 
     def browse_form(self, tablename, results):
@@ -860,9 +917,16 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", tablename))
 
+
         # # 贴到table上
-        self.tableWidget.setRowCount(len(results))
-        self.tableWidget.setColumnCount(len(results[0]) - 1)
+        if results != None and len(results) != 0 and len(results[0]) - 1 > 0:
+            self.tableWidget.setRowCount(len(results))
+            self.tableWidget.setColumnCount(len(results[0]) - 1)
+            for i in range(len(results)):
+                for j in range(len(results[0])):
+                    if j != 0:
+                        self.tableWidget.setItem(i, j - 1, QTableWidgetItem(results[i][j]))
+            self.rander_table_background_browse(self.tableWidget)
         # #表头 设置成中文
         # headName = quarryDB.get_head_name(tablename)
         # for i in range(len(headName)):
@@ -871,11 +935,11 @@ class Ui_MainWindow(object):
         headName = constants.head_name_cn
         self.tableWidget.setHorizontalHeaderLabels(headName)
 
-        for i in range(len(results)):
-            for j in range(len(results[0])):
-                if j != 0:
-                    self.tableWidget.setItem(i, j - 1, QTableWidgetItem(results[i][j]))
-        self.rander_table_background_browse(self.tableWidget)
+        # for i in range(len(results)):
+        #     for j in range(len(results[0])):
+        #         if j != 0:
+        #             self.tableWidget.setItem(i, j - 1, QTableWidgetItem(results[i][j]))
+        # self.rander_table_background_browse(self.tableWidget)
 
 
 
@@ -963,8 +1027,8 @@ class Ui_MainWindow(object):
             for i in range(len(constants.head_name_cn)):
 
                 if self.tableWidget_3.item(0,i) != None and self.tableWidget_3.item(0,i).text() != '' and self.tableWidget_3.item(0,i).text().isspace() == False:
-                    text = self.tableWidget_3.item(0,i).text()
-                    print(self.tableWidget_3.item(0,i).text().isspace())
+                    text = self.tableWidget_3.item(0,i).text().strip()
+
                     # print(text)
 
                     form.append(text)
@@ -976,8 +1040,9 @@ class Ui_MainWindow(object):
                 return
 
 
-
-
+            logs_1 = []
+            logs_2 = []
+            logs_3 = []
             for i in self.selected_hardware:
                 # print(i, form)
                 sql = insertDB.insert_db(i, form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
@@ -985,15 +1050,21 @@ class Ui_MainWindow(object):
                                    , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
                                    form[19], form[20])
                 sql_store.append(sql)
+                #记录日志
+                logs_1.append(form[0])
+                logs_2.append(form[1])
+                logs_3.append(i)
                 # self.upload_logs('向 ' + i + '中 ' + form[0] + ' 插入 ' + form[1] + ' 成功')
             insertDB.excecute_sql(sql_store)
+            for i in range(len(logs_1)):
+                self.upload_logs('向 ' + logs_3[i] + '中的算法：' + logs_1[i] + ' 插入 ' + logs_2[i] + ' 成功')
             self.search()
         except Exception as e :
             traceback.print_exc()
             print('submit_form error')
             A = QMessageBox.warning(self.stackedWidget_1, '提示', '插入条目失败，存在相同业务名')  # 创建一个二次确认框
 
-            # self.upload_logs('向 ' + i + ' 中 ' + form[0] + ' 插入 ' + form[1] + ' 失败 ,业务名重复')
+            self.upload_logs('插入失败 ,业务名重复')
     #备份搜索结果 用来进行更新
     copy = []
     def search(self):
@@ -1007,7 +1078,7 @@ class Ui_MainWindow(object):
             form = []
             for i in range(len(constants.head_name_cn)):
                 if self.tableWidget_3.item(0,i) != None and self.tableWidget_3.item(0,i) != '' and self.tableWidget_3.item(0,i).text().isspace() == False:
-                    text = self.tableWidget_3.item(0,i).text()
+                    text = self.tableWidget_3.item(0,i).text().strip()
                     # print(text)
                     emptyflag = 0
                     form.append(text)
@@ -1096,7 +1167,13 @@ class Ui_MainWindow(object):
                         row.append(results[i][j])
                     self.copy_logs.append(row)
 
-
+                self.tableWidget_6.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+                self.tableWidget_6.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+                self.tableWidget_6.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+                self.tableWidget_6.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+                self.tableWidget_6.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+                self.tableWidget_6.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
+                self.tableWidget_6.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeToContents)
 
                 # self.browse_form(i, results)
                 # self.content.append([i])
@@ -1104,12 +1181,10 @@ class Ui_MainWindow(object):
 
             else:
                 print("is empty")
-            # self.tableWidget_6.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-            self.tableWidget_6.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-            self.tableWidget_6.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
 
         except Exception as a:
-            print("")
+            traceback.print_exc()
 
     def rander_table_background(self, table):
         for i in range(table.rowCount()):
@@ -1140,7 +1215,7 @@ class Ui_MainWindow(object):
             for i in range(self.tableWidget_4.rowCount()):
                 if self.tableWidget_4.item(i,0).isSelected():
                     for j in range(self.tableWidget_4.columnCount()):
-                        form.append(self.tableWidget_4.item(i,j).text())
+                        form.append(self.tableWidget_4.item(i,j).text().strip())
             if len(form) != 0:
                 llog = deleteDB.delete( form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                    form[8], form[9], form[10]
@@ -1176,8 +1251,9 @@ class Ui_MainWindow(object):
                 form = []
 
                 for j in range(self.tableWidget_4.columnCount()):
-                    if self.tableWidget_3.item(0,i) != None and self.tableWidget_3.item(0,i).text() != '' and ~self.tableWidget_3.item(0,i).text().isspace():
-                        form.append(self.tableWidget_4.item(i,j).text())
+                    if self.tableWidget_4.item(0,i) != None and self.tableWidget_4.item(0,i).text() != '' and self.tableWidget_4.item(0,i).text().isspace() == False:
+
+                        form.append(self.tableWidget_4.item(i,j).text().strip())
                     else:
                         QMessageBox.warning(self.stackedWidget_1,'提示','更改条目不可为空！')
 
@@ -1189,8 +1265,9 @@ class Ui_MainWindow(object):
                                        form[19], form[20],form[21], i, self.copy)
                 # self.upload_logs("更新 " + form[0] + '中的' + form[2] + '成功')
                 #lists 里面包含log信息和待执行sql
-                lists = list(llog)
-                sql_store.append(lists[1])
+                if llog != None and len(llog) != 0:
+                    lists = list(llog)
+                    sql_store.append(lists[1])
             updateDB.sql_excecute(sql_store)
             # if llog != '':
             #     self.upload_logs(llog)
@@ -1244,7 +1321,8 @@ class Ui_MainWindow(object):
 
             sheetname = ''
             xlsxOpenpyxl.helper(dir)
-            print(self.content)
+            self.revise_to_excel(dir)
+
             for i in range(len(self.content)):
                 onesheet = []
                 if len(self.content[i]) == 1 and i % 2 == 0:
@@ -1265,6 +1343,19 @@ class Ui_MainWindow(object):
             xlsxOpenpyxl.cur_head(dir)
         except Exception as e:
             print("browse_to_excel error")
+
+    def revise_to_excel(self, dir):
+        sheetname = self.revise_content[0]
+        xlsxOpenpyxl.add_sheet(dir, sheetname)
+        onesheet = []
+        for i in self.revise_content[1]:
+            onesheet.append(list(i))
+        onesheet.insert(0,constants.head_name_logs)
+        xlsxOpenpyxl.add_content_to_sheet(dir, sheetname, onesheet)
+
+
+
+
     def clear_search(self):
         self.tableWidget_3.clearContents()
 
@@ -1289,7 +1380,7 @@ class Ui_MainWindow(object):
             form = []
             for i in range(len(constants.head_name_logs_input)):
                 if self.tableWidget_5.item(0, i) != None:
-                    text = self.tableWidget_5.item(0, i).text()
+                    text = self.tableWidget_5.item(0, i).text().strip()
                     # print(text)
 
                     form.append(text)
@@ -1313,7 +1404,7 @@ class Ui_MainWindow(object):
             for i in range(self.tableWidget_6.rowCount()):
                 form = []
                 for j in range(self.tableWidget_6.columnCount()):
-                    form.append(self.tableWidget_6.item(i,j).text())
+                    form.append(self.tableWidget_6.item(i,j).text().strip())
                 if len(form) != 0:
                     print(self.copy_logs)
                     updateDB.update_revise_db( self.comboBox_2.currentText(), form[0], form[1], form[2], form[3], form[4], form[5], i, self.copy_logs)
@@ -1342,7 +1433,7 @@ class Ui_MainWindow(object):
             for i in range(self.tableWidget_6.rowCount()):
                 if self.tableWidget_6.item(i,0).isSelected():
                     for j in range(self.tableWidget_6.columnCount()):
-                        form.append(self.tableWidget_6.item(i,j).text())
+                        form.append(self.tableWidget_6.item(i,j).text().strip())
             if len(form) != 0:
                 deleteDB.delete_revise( self.comboBox_2.currentText(),form[0], form[1], form[2], form[3], form[4], form[5])
 

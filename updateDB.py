@@ -7,6 +7,7 @@ def update_db(tablename, algo, name, algoId, subTidN, bit, numK
               , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU,algoSpe,
               testSpe, castType, iOrd,
               TBLM_ID, dpt, dpt_person, confirmation, index, copy):
+
     if algo == '' or algo.isspace():
         algo = 'N/A'
 
@@ -118,6 +119,7 @@ def update_db(tablename, algo, name, algoId, subTidN, bit, numK
         loginfo.append(constants.head_name['dpt_person'] + ' 从 ' + copy[index][20] +' 更改为 '+ dpt_person +'。 ')
     if copy[index][21] != confirmation:
         loginfo.append(constants.head_name['confirmation'] + ' 从 ' + copy[index][21] +' 更改为 '+ confirmation +'。 ')
+
 
 
 

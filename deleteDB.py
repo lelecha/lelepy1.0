@@ -138,6 +138,7 @@ def delete(tablename, algo, name, algoId, subTidN, bit, numK
         list[20] = 'confirmation'
 
     sql_search = "delete from '{tablename}' where {algo} = '{algo_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' " \
+                 "and {numK} = '{numK_}' " \
         .format(tablename=tablename, algo=list[0],
                 algo_=algo,
                 name=list[1],
@@ -146,6 +147,8 @@ def delete(tablename, algo, name, algoId, subTidN, bit, numK
                 subTidN_=subTidN,
                 algoId=list[2],
                 algoId_=algoId,
+                numK = list[5],
+                numK_= numK
 
                 )
     try:
