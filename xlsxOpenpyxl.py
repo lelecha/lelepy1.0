@@ -381,17 +381,25 @@ def write_excel_newLine(path, sheet_name, value):  # 这里的value是新的内�
     print("insert new line into excel")
 
 
-def read_excel_xlsx(path, sheet_name):
+def read_excel_xlsx(path):
     workbook = openpyxl.load_workbook(path)
+    sheets = workbook.get_sheet_names()
+    sheets = list(sheets)
     lists = []
-    sheet = workbook[sheet_name]
-    for row in sheet.values:
-        temp = list(row)
-        for i in range(len(temp)):
-            temp[i] = str(temp[i])
-        lists.append(temp)
-    del (lists[0])
-    print(lists)
+    for i in sheets:
+        onesheet = []
+        sheet = workbook[i]
+        for row in sheet.values:
+            temp = list(row)
+            for j in range(len(temp)):
+                temp[j] = str(temp[j])
+            onesheet.append(temp)
+        del (onesheet[0])
+        lists.append(onesheet)
+    lists.insert(0,sheets)
+
+
+
     return lists
     # for j in row:
     #     print(j)

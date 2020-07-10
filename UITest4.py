@@ -60,6 +60,19 @@ class Ui_MainWindow(object):
         self.pushButton_5.setObjectName("pushButton_5")
         self.verticalLayout.addWidget(self.pushButton_5)
 
+        #编辑单板
+        self.pushButton_edit = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_edit.setMinimumSize(QtCore.QSize(100, 40))
+        self.pushButton_edit.setObjectName("pushButton_edit")
+        self.verticalLayout.addWidget(self.pushButton_edit)
+        self
+
+        # self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton_3.setMinimumSize(QtCore.QSize(100, 40))
+        # self.pushButton_3.setObjectName("pushButton_3")
+        # self.verticalLayout.addWidget(self.pushButton_3)
+
+
         self.white = QtWidgets.QWidget(self.centralwidget)
         self.white.setObjectName("white")
         self.verticalLayout.addWidget(self.white)
@@ -71,6 +84,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.line)
         self.stackedWidget_1 = QtWidgets.QStackedWidget(self.centralwidget)
         self.stackedWidget_1.setObjectName("stackedWidget_1")
+
+
+        self.page_6 = QtWidgets.QWidget()
+        self.page_6.setObjectName("编辑单板")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.page_6)
+        self.stackedWidget_1.addWidget(self.page_6)
+
         self.page_3 = QtWidgets.QWidget()
         self.page_3.setObjectName("page_3")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.page_3)
@@ -301,10 +321,50 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addWidget(self.tabWidget)
         self.pushButton_12 = QtWidgets.QPushButton(self.page_5)
         self.pushButton_12.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_12.setMinimumSize(QtCore.QSize(100, 30))
         self.pushButton_12.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.pushButton_12.setObjectName("pushButton_12")
-        self.verticalLayout_5.addWidget(self.pushButton_12)
+
+
+        #导入excel 浏览界面
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.pushButton_20 = QtWidgets.QPushButton(self.page_5)
+        self.pushButton_20.setObjectName("pushButton_20")
+        self.pushButton_20.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_20.setMinimumSize(QtCore.QSize(100, 30))
+
+
+
+        self.pushButton_21 = QtWidgets.QPushButton(self.page_5)
+        self.pushButton_21.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_21.setMinimumSize(QtCore.QSize(100, 30))
+
+        self.pushButton_21.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.pushButton_21.setObjectName("退出预览")
+        self.pushButton_21.hide()
+
+
+
+        self.pushButton_22 = QtWidgets.QPushButton(self.page_5)
+        self.pushButton_22.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_22.setMinimumSize(QtCore.QSize(100, 30))
+        self.pushButton_22.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.pushButton_22.setObjectName("保存")
+        self.pushButton_22.hide()
+        #!!!!!!!!!!!!!!!!!!!!!!!!!
+        #这个顺序千万别改 气死我了！！！！！！！！！！！！！！！！！！
+        self.horizontalLayout_9.addWidget(self.pushButton_20, 1, QtCore.Qt.AlignRight)
+        self.horizontalLayout_9.addWidget(self.pushButton_12)
+        self.horizontalLayout_9.addWidget(self.pushButton_21, 1, QtCore.Qt.AlignLeft)
+        self.horizontalLayout_9.addWidget(self.pushButton_22)
+
+        self.verticalLayout_5.addLayout(self.horizontalLayout_9)
+
         self.stackedWidget_1.addWidget(self.page_5)
+
+
+
         #修订页
         self.page = QtWidgets.QWidget()
         self.page.setObjectName("page")
@@ -507,7 +567,7 @@ class Ui_MainWindow(object):
         self.pushButton_6.setMaximumSize(QtCore.QSize(100, 30))
         self.pushButton_6.setObjectName("pushButton_6")
         self.verticalLayout_11.addWidget(self.pushButton_6)
- #提交键
+#提交键
         self.pushButton = QtWidgets.QPushButton(self.page_4)
         self.pushButton.setMinimumSize(QtCore.QSize(100, 30))
         self.pushButton.setMaximumSize(QtCore.QSize(100, 30))
@@ -577,7 +637,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget_1.setCurrentIndex(3)
+        self.stackedWidget_1.setCurrentIndex(2)
         self.comboBox.setCurrentIndex(-1)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -596,12 +656,13 @@ class Ui_MainWindow(object):
         # treewidget
         self.treeWidget.itemChanged.connect(self.check_item)
 
-        # 监听按钮
+        # 监听切换页面按钮
         self.pushButton_1.clicked.connect(self.show_page)
         # self.pushButton_2.clicked.connect(self.show_page)
         # self.pushButton_3.clicked.connect(self.show_page)
         self.pushButton_4.clicked.connect(self.show_page)
         self.pushButton_5.clicked.connect(self.show_page)
+        self.pushButton_edit.clicked.connect(self.show_page)
 
         # 监听checkbox的状态改变  先写一部分进行测试
         self.checkBox.stateChanged.connect(self.select_text)
@@ -629,6 +690,9 @@ class Ui_MainWindow(object):
         #修订页下拉资源单
         self.comboBox_2.addItems(constants.resources)
         self.comboBox_2.currentTextChanged.connect(self.select_from_logs)
+
+        #编辑单板
+        self.stackedWidget_1.addWidget(self.page_6)
 
         # 从constants初始化tree下拉表单（状态表）
         for i in range(len(constants.resources)):
@@ -679,7 +743,12 @@ class Ui_MainWindow(object):
         # 修订保存键
         self.pushButton_14.clicked.connect(self.update_revise)
 
+        #从excel导入
+        self.pushButton_20.clicked.connect(self.open_excel)
+        #退出预览
+        self.pushButton_21.clicked.connect(self.close_browse)
 
+        self.pushButton_22.clicked.connect(self.save_browse)
 
     # def resize(self):
     #     self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -725,6 +794,9 @@ class Ui_MainWindow(object):
         self.checkBox_16.setText(_translate("MainWindow", "CheckBox"))
         self.checkBox_25.setText(_translate("MainWindow", "CheckBox"))
         self.pushButton_12.setText(_translate("MainWindow", "导出到Excel"))
+        self.pushButton_20.setText(_translate("MainWindow", "从Excel导入"))
+        self.pushButton_21.setText(_translate("MainWindow", "退出预览"))
+        self.pushButton_22.setText(_translate("MainWindow", "保存至单板"))
         self.label.setText(_translate("MainWindow", "检索结果："))
         self.pushButton_10.setText(_translate("MainWindow", "导出到Excel"))
         self.label_3.setText(_translate("MainWindow", "形态表："))
@@ -759,6 +831,9 @@ class Ui_MainWindow(object):
         self.pushButton_15.setText(_translate("MainWindow", "提交"))
         self.label_8.setText(_translate("MainWindow", "请输入修订内容："))
 
+        #编辑单板页
+        self.pushButton_edit.setText(_translate("MainWindow","编辑单板"))
+
 
     def show_page(self):
         dic = {
@@ -766,7 +841,8 @@ class Ui_MainWindow(object):
             # "pushButton_2": 0,
             # "pushButton_3": 2,
             "pushButton_4": 3,
-            "pushButton_5": 2
+            "pushButton_5": 2,
+            "pushButton_edit": 4
         }
         index = dic[self.stackedWidget_1.sender().objectName()]
         self.stackedWidget_1.setCurrentIndex(index)
@@ -834,7 +910,7 @@ class Ui_MainWindow(object):
 
             #查询修订表
             revise_results = quarryDB.quarry_logs(resource)
-            self.revise_tab(revise_results)
+            self.revise_tab(resource + '修订记录', revise_results)
             self.revise_content.append(resource + "修订记录")
             self.revise_content.append(revise_results)
             for i in resource_list:
@@ -854,8 +930,9 @@ class Ui_MainWindow(object):
         except Exception as a:
             traceback.print_exc()
 
-    def revise_tab(self, results):
+    def revise_tab(self, tablename, results):
         # 初始化一个tab页
+        print(sys._getframe(1).f_code.co_name)
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         # 设置成垂直排列
@@ -869,7 +946,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addWidget(self.tableWidget)
         self.tabWidget.addTab(self.tab, "")
         _translate = QtCore.QCoreApplication.translate
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", self.comboBox.currentText() + '修订记录'))
+
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", tablename))
 
         # # 贴到table上
         if results != None and len(results) != 0 and len(results[0]) - 1 > 0:
@@ -941,6 +1019,48 @@ class Ui_MainWindow(object):
         #             self.tableWidget.setItem(i, j - 1, QTableWidgetItem(results[i][j]))
         # self.rander_table_background_browse(self.tableWidget)
 
+    def excel_to_browse(self, tablename, results):
+
+
+        # 初始化一个tab页
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        # 设置成垂直排列
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.tab)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        # 把table放到tab里
+        self.tableWidget = QtWidgets.QTableWidget(self.tab)
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setRowCount(0)
+        self.verticalLayout_6.addWidget(self.tableWidget)
+        self.tabWidget.addTab(self.tab, "")
+        _translate = QtCore.QCoreApplication.translate
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", tablename))
+
+
+        # # 贴到table上
+        if results != None and len(results) != 0 and len(results[0]) - 1 > 0:
+            self.tableWidget.setRowCount(len(results))
+            self.tableWidget.setColumnCount(len(results[0]))
+            for i in range(len(results)):
+                for j in range(len(results[0])):
+
+                    self.tableWidget.setItem(i, j, QTableWidgetItem(results[i][j]))
+            self.rander_table_background_browse(self.tableWidget)
+        # #表头 设置成中文
+        # headName = quarryDB.get_head_name(tablename)
+        # for i in range(len(headName)):
+        #     headName[i] = constants.head_name[headName[i]]
+        #常量表头
+        headName = constants.head_name_cn
+        self.tableWidget.setHorizontalHeaderLabels(headName)
+
+        # for i in range(len(results)):
+        #     for j in range(len(results[0])):
+        #         if j != 0:
+        #             self.tableWidget.setItem(i, j - 1, QTableWidgetItem(results[i][j]))
+        # self.rander_table_background_browse(self.tableWidget)
 
 
     def check_item(self,item,col):
@@ -1443,8 +1563,66 @@ class Ui_MainWindow(object):
                 print('no item selected')
         except Exception as e :
             traceback.print_exc()
-
             print('delete error')
+    #一个sheet name 和 数据 就可以有一个tab
+    def open_excel(self):
+        _translate = QtCore.QCoreApplication.translate
+        try:
+            #清空tab
+
+            fileName = QFileDialog.getOpenFileName(self.stackedWidget_1,'','',"*.xlsx")
+            fileName = list(fileName)
+            self.tabWidget.clear()
+            #lists结构 lists 里第一行数据是sheet页名字  sheet页第一个是修订后面是单板 [[一个sheet页[一行数据]]]
+            lists = xlsxOpenpyxl.read_excel_xlsx(fileName[0])
+            print(lists)
+            self.revise_tab(lists[0][0], lists[1])
+            for i in range(len(lists[0])):
+                if i == 0 :
+                    continue
+                print()
+                self.excel_to_browse(lists[0][i], lists[1 + i])
+
+            self.label_4.setText(_translate("MainWindow", "预览：" + fileName[0]))
+            self.pushButton_20.hide()
+            self.pushButton_12.hide()
+            self.pushButton_13.hide()
+            self.comboBox.hide()
+            self.label_3.hide()
+
+
+            self.pushButton_21.show()
+            self.pushButton_22.show()
+
+
+
+
+            QMessageBox.about(self.stackedWidget_1,'提示','导入成功')
+
+
+
+        except Exception :
+            traceback.print_exc()
+
+    #退出预览
+    def close_browse(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.pushButton_21.hide()
+        self.pushButton_22.hide()
+        self.pushButton_20.show()
+        self.pushButton_12.show()
+        self.pushButton_13.show()
+        self.comboBox.show()
+        self.label_3.show()
+        self.label_4.setText(_translate("MainWindow", "当前形态"))
+        self.tabWidget.clear()
+
+    #先判断形态表已经存在
+    def save_browse(self):
+        excelName = self.tabWidget.tabText(0).replace('修订记录','').strip()
+
+
+
 
 
 
