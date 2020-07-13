@@ -3,6 +3,9 @@ import sqlite3
 
 
 #建立单板表
+import traceback
+
+
 def create_table(tablename):
     # try:
     # tablename 需要是单板名字
@@ -18,26 +21,26 @@ def create_table(tablename):
     cur.execute("CREATE TABLE IF NOT EXISTS '{tablename}' ("
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 "algo varchar(50),"
-                "name varchar(50),"
-                "algoId char(20),"
-                "subTidN char(20),"
-                "bit char(20),"
-                "numK char(20),"
-                "tidW char(20),"
-                "tidN char(20),"
-                "subTidW char(20),"
+                "name varchar(50) NOT NULL UNIQUE ,"
+                "algoId varchar(20) NOT NULL,"
+                "subTidN varchar(20) NOT NULL,"
+                "bit varchar(20) NOT NULL,"
+                "numK varchar(20) NOT NULL,"
+                "tidW varchar(20),"
+                "tidN varchar(20),"
+                "subTidW varchar(20),"
                 
                 "sTypeW_bit varchar(50),"
-                "sType char(20),"
+                "sType varchar(20),"
                 "storeLocation varchar(50),"
                 
-                "ISSU char(20),"  # 新加入  好多没有
-                "algoSpe char(20),"
-                "testSpe char(20),"
-                "castType char(20),"
-                "iOrd char(20),"
+                "ISSU varchar(20),"  # 新加入  好多没有
+                "algoSpe varchar(20),"
+                "testSpe varchar(20),"
+                "castType varchar(20),"
+                "iOrd varchar(20),"
                 "TBLM_ID varchar(50),"
-                "dpt char(20),"
+                "dpt varchar(20),"
                 "dpt_person varchar(50),"
                 "confirmation varchar(50)"
                 ");".format(tablename=tablename))
@@ -70,6 +73,47 @@ def create_log(tablename):
     #     raise e
     # finally:
     con.close()
+def create_form(formname):
+    try:
+        con = sqlite3.connect('test2.db')
+
+        cur = con.cursor()
+
+        cur.execute("CREATE TABLE IF NOT EXISTS '{formname}' (tablename varchar(50) UNIQUE NOT NULL)".format(formname=formname))
+        # except Exception as e:
+        #     raise e
+        # finally:
+        con.close()
+    except Exception as e :
+        raise e
+
+def form_store():
+    con = sqlite3.connect('test2.db')
+
+    cur = con.cursor()
+
+    cur.execute("CREATE TABLE IF NOT EXISTS form_store (formname varchar(50) UNIQUE NOT NULL)")
+    # except Exception as e:
+    #     raise e
+    # finally:
+    con.close()
 
 
+def rename_table(old, new):
+    try:
+        sql = "ALTER TABLE '{old}' RENAME TO '{new}';".format(old = old, new = new)
+        con = sqlite3.connect('test2.db')
+        cur = con.cursor()
+        cur.execute(sql)
 
+        con.close()
+    except Exception:
+        traceback.print_exc()
+def drop_table(name):
+    try:
+        con = sqlite3.connect('test2.db')
+        cur = con.cursor()
+        cur.execute("DROP TABLE '{name}';".format(name = name))
+        con.close()
+    except Exception:
+        traceback.print_exc()

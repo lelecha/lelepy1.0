@@ -12,8 +12,8 @@ import traceback
 
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtGui import QColor, QBrush
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtGui import QColor, QBrush, QCursor
+from PyQt5.QtWidgets import QFileDialog, QMenu, QInputDialog, QLineEdit
 
 import updateDB
 import xlsxOpenpyxl
@@ -21,6 +21,7 @@ import quarryDB
 import constants
 import insertDB
 import deleteDB
+import sqlite3DB
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -488,15 +489,10 @@ class Ui_MainWindow(object):
         self.label_31.setObjectName("label_31")
         self.verticalLayout_7.addWidget(self.label_31)
         self.treeWidget = QtWidgets.QTreeWidget(self.page_4)
-        # self.treeWidget.setMaximumSize(QtCore.QSize(300, 200))
         self.treeWidget.setObjectName("treeWidget")
-        # item_0 = QtWidgets.QTreeWidgetItem(self.treeWidget)
-        # item_0.setCheckState(0, QtCore.Qt.Unchecked)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setCheckState(0, QtCore.Qt.Unchecked)
-        # item_1 = QtWidgets.QTreeWidgetItem(item_0)
-        # item_1.setCheckState(0, QtCore.Qt.Unchecked)
+
         self.verticalLayout_7.addWidget(self.treeWidget)
+
 
 
 
@@ -748,13 +744,20 @@ class Ui_MainWindow(object):
         #退出预览
         self.pushButton_21.clicked.connect(self.close_browse)
 
-        self.pushButton_22.clicked.connect(self.save_browse)
+        self.pushButton_22.clicked.connect(self.double_check_overwrite)
 
-    # def resize(self):
-    #     self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-    #     # self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        #添加单板菜单
+        self.treeWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.treeWidget.customContextMenuRequested.connect(self.showContextMenu)
 
+        self.contextMenu = QMenu(self.treeWidget)
+        self.actionA = self.contextMenu.addAction('新建形态表')
+        self.actionB = self.contextMenu.addAction('新建单板')
+        self.actionC = self.contextMenu.addAction('删除')
 
+        self.actionA.triggered.connect(self.menu_newForm)
+        self.actionB.triggered.connect(self.menu_newHardware)
+        # self.actionC.triggered.connect(self.menu_delete)
 
 
 
@@ -1154,9 +1157,9 @@ class Ui_MainWindow(object):
                     form.append(text)
                     emptyflag = 0
                 else:
-                    form.append('N/A')
+                    form.append('')
             if emptyflag == 1:
-                A = QMessageBox.warning(self.stackedWidget_1, '提示', '插入信息不可为空')
+                A = QMessageBox.warning(self.stackedWidget_1, '提示', '插入信息不可全空')
                 return
 
 
@@ -1180,11 +1183,14 @@ class Ui_MainWindow(object):
                 self.upload_logs('向 ' + logs_3[i] + '中的算法：' + logs_1[i] + ' 插入 ' + logs_2[i] + ' 成功')
             self.search()
         except Exception as e :
-            traceback.print_exc()
-            print('submit_form error')
-            A = QMessageBox.warning(self.stackedWidget_1, '提示', '插入条目失败，存在相同业务名')  # 创建一个二次确认框
+            if str(e).find('name') != -1:
+                texts = '业务名重复'
+            else :
+                texts = str(e)
 
-            self.upload_logs('插入失败 ,业务名重复')
+            QMessageBox.warning(self.stackedWidget_1, '提示', texts)  # 创建一个二次确认框
+
+            self.upload_logs('插入失败 ,' + str(e) + texts  )
     #备份搜索结果 用来进行更新
     copy = []
     def search(self):
@@ -1371,11 +1377,12 @@ class Ui_MainWindow(object):
                 form = []
 
                 for j in range(self.tableWidget_4.columnCount()):
-                    if self.tableWidget_4.item(0,i) != None and self.tableWidget_4.item(0,i).text() != '' and self.tableWidget_4.item(0,i).text().isspace() == False:
+                    if self.tableWidget_4.item(i,j) != None and self.tableWidget_4.item(i,j).text() != '' and self.tableWidget_4.item(i,j).text().isspace() == False:
 
                         form.append(self.tableWidget_4.item(i,j).text().strip())
                     else:
                         QMessageBox.warning(self.stackedWidget_1,'提示','更改条目不可为空！')
+                        return
 
 
                 if len(form) != 0:
@@ -1393,7 +1400,7 @@ class Ui_MainWindow(object):
             #     self.upload_logs(llog)
             self.search()
 
-        except Exception:
+        except Exception as e:
 
             # self.upload_logs('更新失败，' + form[0] + ' 中存在相同业务名')
             A = QMessageBox.warning(self.stackedWidget_1, '提示', '更新失败，存在相同业务名')  # 创建一个二次确认框
@@ -1564,7 +1571,8 @@ class Ui_MainWindow(object):
         except Exception as e :
             traceback.print_exc()
             print('delete error')
-    #一个sheet name 和 数据 就可以有一个tab
+
+    browse_store = []
     def open_excel(self):
         _translate = QtCore.QCoreApplication.translate
         try:
@@ -1574,14 +1582,14 @@ class Ui_MainWindow(object):
             fileName = list(fileName)
             self.tabWidget.clear()
             #lists结构 lists 里第一行数据是sheet页名字  sheet页第一个是修订后面是单板 [[一个sheet页[一行数据]]]
-            lists = xlsxOpenpyxl.read_excel_xlsx(fileName[0])
-            print(lists)
-            self.revise_tab(lists[0][0], lists[1])
-            for i in range(len(lists[0])):
+            self.browse_store = xlsxOpenpyxl.read_excel_xlsx(fileName[0])
+            print(self.browse_store)
+            self.revise_tab(self.browse_store[0][0], self.browse_store[1])
+            for i in range(len(self.browse_store[0])):
                 if i == 0 :
                     continue
                 print()
-                self.excel_to_browse(lists[0][i], lists[1 + i])
+                self.excel_to_browse(self.browse_store[0][i], self.browse_store[1 + i])
 
             self.label_4.setText(_translate("MainWindow", "预览：" + fileName[0]))
             self.pushButton_20.hide()
@@ -1589,18 +1597,9 @@ class Ui_MainWindow(object):
             self.pushButton_13.hide()
             self.comboBox.hide()
             self.label_3.hide()
-
-
             self.pushButton_21.show()
             self.pushButton_22.show()
-
-
-
-
             QMessageBox.about(self.stackedWidget_1,'提示','导入成功')
-
-
-
         except Exception :
             traceback.print_exc()
 
@@ -1619,29 +1618,160 @@ class Ui_MainWindow(object):
 
     #先判断形态表已经存在
     def save_browse(self):
-        excelName = self.tabWidget.tabText(0).replace('修订记录','').strip()
+        try:
+            excelName = self.tabWidget.tabText(0).replace('修订记录','').strip()
+            flag = 1
+            droptable = []
+            oldname = []
+            newname = []
+            for i in constants.resources:
+
+                if excelName == i:
+                    flag = 0
+            if flag == 0:
+                #先建表 成功后再删表 然后
+
+                for i in range(self.tabWidget.count()):
+                    sqls = []
+                    if i == 0:
+                        print(self.browse_store)
+                        sqlite3DB.create_log(excelName + '_tmp')
+                        for j in self.browse_store[1]:
+                            insertDB.insert_logs(excelName+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5])
+                        # sqlite3DB.drop_table(excelName+'_logs')
+                        droptable.append(excelName+'_logs')
+                        # sqlite3DB.rename_table(excelName+'_tmp_logs', excelName+'_logs')
+                        oldname.append(excelName+'_tmp_logs')
+                        newname.append(excelName+'_logs')
+                    else:
+                        sqlite3DB.create_table(self.tabWidget.tabText(i) + '_tmp')
+                        #开始插入数据
+
+                        # for k in range(2, len(self.browse_store) - 2):
+                        for j in self.browse_store[i + 1]:
+
+                            sql = insertDB.insert_db(self.tabWidget.tabText(i)+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5],j[6]
+                                                   ,j[7],j[8],j[9],j[10],j[11],j[12],j[13],j[14],j[15],j[16],j[17],
+                                                   j[18],j[19],j[20])
+                            sqls.append(sql)
+                        insertDB.excecute_sql(sqls)
+                        # sqlite3DB.drop_table(self.tabWidget.tabText(i))
+                        droptable.append(self.tabWidget.tabText(i))
+                        # sqlite3DB.rename_table(self.tabWidget.tabText(i)+'_tmp', self.tabWidget.tabText(i))
+                        oldname.append(self.tabWidget.tabText(i)+'_tmp')
+                        newname.append(self.tabWidget.tabText(i))
+                #等所有新表都更新后  删掉旧表
+                for i in range(len(droptable)):
+                    sqlite3DB.drop_table(droptable[i])
+                    sqlite3DB.rename_table(oldname[i], newname[i])
+
+
+                QMessageBox.about(self.stackedWidget_1, '提示', '覆盖成功')
 
 
 
+            else:
+                QMessageBox.warning(self.stackedWidget_1,'提示','该形态表尚不存在，请先注册后添加')
+        except Exception:
+            traceback.print_exc()
+
+    def double_check_overwrite(self):
+        A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确定覆盖该形态表？',
+                                 QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+        if A == QMessageBox.Yes:
+            self.save_browse()
+        else:
+            print('cancel')
 
 
+    # 菜单
+    def showContextMenu(self):
+        self.contextMenu.exec_(QCursor.pos())
+
+    def menu_newForm(self):
+        try:
+
+            # 第三个参数表示显示类型，可选，有正常（QLineEdit.Normal）、密碼（ QLineEdit. Password）、不显示（ QLineEdit. NoEcho）三种情况
+            formname, ok = QInputDialog.getText(self.treeWidget, "新建形态表", "命名新的形态表:", QLineEdit.Normal, "")
+            if ok == True:
+                formname.strip()
+                print("侧事故啊啊啊")
+                print(ok)
+                if formname == None or formname == '' or formname.isspace == True:
+                    raise Exception('形态表不可为空')
+                else:
+                    form_list = list(quarryDB.quarry_form_store())
+                    print(form_list)
+                    for i in form_list:
+                        if i == formname:
+                            raise Exception('形态表已存在')
+                    #二次确认插入
+                    A = QMessageBox.question(self.stackedWidget_1, '确认', '确定新建形态表：'+formname+' ？',
+                                             QMessageBox.Yes | QMessageBox.No)
+                    if A == QMessageBox.Yes:
+                        #注册到form store里
+                        insertDB.insert_form(formname)
+                        #创建一个存储新的单板的form表
+                        sqlite3DB.create_form(formname)
+                        sqlite3DB.create_log(formname)
+                        QMessageBox.warning(self.stackedWidget_1, '提示', '形态表 ' + formname + ' 新建成功')
+                        self.upload_logs('新建形态表:' + formname)
+                    else:
+                        print('取消创建')
 
 
+        except Exception as e:
+            A = QMessageBox.warning(self.stackedWidget_1, '提示', '新建失败,' + str(e))
+
+            self.upload_logs('新建失败，' + str(e))
 
 
+    def menu_newHardware(self):
+
+        try:
+            #获得被点击的条目
+            if self.treeWidget.currentItem().parent() == None:
+                formname = self.treeWidget.currentItem().text(0)
+            else:
+                formname = self.treeWidget.currentItem().parent().text(0)
+
+            # 第三个参数表示显示类型，可选，有正常（QLineEdit.Normal）、密碼（ QLineEdit. Password）、不显示（ QLineEdit. NoEcho）三种情况
+            tablename, ok = QInputDialog.getText(self.treeWidget, "新建单板", "在" + formname + "中命名新的单板:", QLineEdit.Normal, "")
+            if ok == True:
+                tablename.strip()
+                print(tablename)
+                if tablename == None or tablename == '' or tablename.isspace == True:
+                    raise Exception('单板名称不可为空')
+                else:
+                    form_list = list(quarryDB.quarry_form(formname))
+                    print("现在有的单板" + str(form_list))
+                    for i in form_list:
+                        i = list(i)
+
+                        # print("当前表" + i)
+                        # print('新表'+ tablename)
+
+                        if i[0] == tablename:
+                            raise Exception('该单板已存在')
+                    # 二次确认插入
+                    A = QMessageBox.question(self.stackedWidget_1, '确认', '确定新建单板：' + tablename + ' ？',
+                                             QMessageBox.Yes | QMessageBox.No)
+                    if A == QMessageBox.Yes:
+                        # 将单板注册到form里
+                        insertDB.insert_hardware(formname, tablename)
+                        # 创建一个存储新的单板的form表 和logs
+                        sqlite3DB.create_table(tablename)
+
+                        QMessageBox.warning(self.stackedWidget_1, '提示', '新建成功')
+                        self.upload_logs('新建单板:' + tablename)
+                    else:
+                        print('取消创建')
 
 
+        except Exception as e:
+            A = QMessageBox.warning(self.stackedWidget_1, '提示', '新建失败,' + str(e))
 
-
-
-
-
-
-
-
-
-
-
+            self.upload_logs('新建失败，' + str(e))
 
 
         # for i in range(self.tabWidget.count()):
