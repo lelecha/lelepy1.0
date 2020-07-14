@@ -193,6 +193,47 @@ def delete_revise(tablename, date, ver, intro, decision, content, reviser):
     finally:
         db.close()
 
+def delete_table_from_form(formname, tablename):
+    sql_delete = "delete from '{formname}'" \
+                 " where tablename = '{tablename}';".format( tablename = tablename,formname = formname )
+    sql_delete2 = "DROP TABLE '{tablename}';".format(tablename = tablename)
+    try:
+        print(sql_delete)
+        db = sqlite3.connect('test2.db')
+        cur_search = db.cursor()
+        cur_search.execute(sql_delete)
+        cur_search.execute(sql_delete2)
+
+        print(cur_search.fetchall())
+        db.commit()
+        print('success delete')
+
+    except Exception as e:
+        raise e
+    finally:
+        db.close()
+
+def delete_form_from_formstore(formname):
+    sql_delete = "delete from form_store" \
+                 " where formname = '{formname}';".format(formname=formname)
+    sql_delete2 = "DROP TABLE '{formname}';".format(formname=formname)
+    sql_delete3 = "DROP TABLE '{formname}_logs';".format(formname=formname)
+    try:
+        print(sql_delete)
+        db = sqlite3.connect('test2.db')
+        cur_search = db.cursor()
+        cur_search.execute(sql_delete)
+        cur_search.execute(sql_delete2)
+        cur_search.execute(sql_delete3)
+        print(cur_search.fetchall())
+        db.commit()
+        print('success delete')
+
+    except Exception as e:
+        raise e
+    finally:
+        db.close()
+
     #
     # "and {bit} = {bit_}" \
     # " and {numK} = {numK_} and {tidW} = {tidW_} and {tidN} = {tidN_} and {subTidW} = {subTidW_}" \

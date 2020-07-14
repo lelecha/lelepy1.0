@@ -9,74 +9,74 @@ def insert_db(tablename, algo, name, algoId, subTidN, bit, numK
               TBLM_ID, dpt, dpt_person, confirmation):
 
     try:
-        if algo == '' or algo.isspace():
+        if algo == '' or algo.isspace() or algo == 'None':
             raise Exception('算法名不可为空')
             algo = 'N/A'
 
 
-        if name == '' or name.isspace():
+        if name == '' or name.isspace() or name == 'None':
             print("名字为空")
             raise Exception('业务名不可为空')
             name = 'N/A'
 
-        if algoId == '' or algoId.isspace():
+        if algoId == '' or algoId.isspace() or algoId == 'None':
             raise Exception('算法表ID不可为空')
             algoId = 'N/A'
 
-        if subTidN == '' or subTidN.isspace():
+        if subTidN == '' or subTidN.isspace() or subTidN == 'None':
             raise Exception('SubTid不可为空')
             subTidN = 'N/A'
-        if bit == '' or bit.isspace():
+        if bit == '' or bit.isspace() or bit == 'None':
             raise Exception('位宽不可为空')
             bit = 'N/A'
-        if numK == '' or numK.isspace():
+        if numK == '' or numK.isspace() or numK == 'None' :
             raise Exception('条数不可为空')
             numK = 'N/A'
 
         if tidW == '' or tidW.isspace():
-            tidW = 'N/A'
+            tidW = 'None'
 
         if tidN == '' or tidN.isspace():
-            tidN = 'N/A'
+            tidN = 'None'
 
         if subTidW == '' or subTidW.isspace():
-            subTidW = 'N/A'
+            subTidW = 'None'
 
         if sTypeW_bit == '' or sTypeW_bit.isspace():
-            sTypeW_bit = 'N/A'
+            sTypeW_bit = 'None'
 
         if  sType == '' or sType.isspace():
-            sType = 'N/A'
+            sType = 'None'
 
         if storeLocation == '' or storeLocation.isspace():
-            storeLocation = 'N/A'
+            storeLocation = 'None'
 
         if ISSU == '' or ISSU.isspace():
-            ISSU = 'N/A'
+            ISSU = 'None'
 
         if algoSpe == '' or algoSpe.isspace():
-            algoSpe = 'N/A'
+            algoSpe = 'None'
 
         if testSpe == '' or testSpe.isspace():
-            testSpe = 'N/A'
+            testSpe = 'None'
 
         if castType == '' or castType.isspace():
-            castType = 'N/A'
+            castType = 'None'
 
         if iOrd == '' or iOrd.isspace():
-            iOrd = 'N/A'
+            iOrd = 'None'
 
         if TBLM_ID == '' or TBLM_ID.isspace():
-            TBLM_ID = 'N/A'
+            TBLM_ID = 'None'
 
         if dpt == '' or dpt.isspace():
-            dpt = 'N/A'
+            dpt = 'None'
 
         if dpt_person == '' or dpt_person.isspace():
-            dpt_person = 'N/A'
+            dpt_person = 'None'
 
         if confirmation == '' or confirmation.isspace():
-            confirmation = 'N/A'
+            confirmation = 'None'
 
         sql_insert = "insert into '{tablename}' (id, algo, name, bit, numK, tidW, tidN, subTidW, subTidN, sTypeW_bit, sType, " \
                      "storeLocation, algoId,ISSU,algoSpe, testSpe, " \
@@ -194,9 +194,9 @@ def excecute_sql(sql_store):
     try:
         db = sqlite3.connect('test2.db')
         cur_insert = db.cursor()
-        for i in sql_store:
+        for i in range(len(sql_store)):
             print(i)
-            cur_insert.execute(i)
+            cur_insert.execute(sql_store[i])
         db.commit()
     except Exception as e:
         # db.rollback()

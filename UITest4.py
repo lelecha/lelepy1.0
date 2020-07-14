@@ -9,7 +9,7 @@
 
 import time
 import traceback
-
+from sqlite3 import IntegrityError
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import QColor, QBrush, QCursor
@@ -678,26 +678,23 @@ class Ui_MainWindow(object):
         self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_form)
         # self.buttonBox.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(self.reset_form)
 
+
+
+
+        resources_list = self.tree_init()
+
         # 批量插入表下拉资源单监听
-        self.comboBox.addItems(constants.resources)
+        self.comboBox.addItems(resources_list)
         self.comboBox.currentIndexChanged.connect(self.select_from_resources)
         self.selected_hardware = []
 
         #修订页下拉资源单
-        self.comboBox_2.addItems(constants.resources)
+        self.comboBox_2.addItems(resources_list)
         self.comboBox_2.currentTextChanged.connect(self.select_from_logs)
 
         #编辑单板
         self.stackedWidget_1.addWidget(self.page_6)
 
-        # 从constants初始化tree下拉表单（状态表）
-        for i in range(len(constants.resources)):
-            if i == 0:  # 跳过第一条 也就是“形态表”
-                continue
-            root = self.add_root(constants.resources[i])
-            # 从constants初始化tree 下拉表单的子表（单板）
-            for j in range(len(constants.resources_dic[constants.resources[i]])):
-                self.add_child(constants.resources_dic[constants.resources[i]][j], j, root)
 
         # 添加提交键监听
         # self.pushButton.clicked.connect(self.submit_form)
@@ -730,7 +727,7 @@ class Ui_MainWindow(object):
         self.pushButton_11.clicked.connect(self.clear_search)
 
         #注册浏览刷新
-        self.pushButton_13.clicked.connect(self.select_from_resources)
+        self.pushButton_13.clicked.connect(self.refresh_browse)
 
         #注册修订确认
         self.pushButton_15.clicked.connect(self.double_check_revise)
@@ -757,7 +754,7 @@ class Ui_MainWindow(object):
 
         self.actionA.triggered.connect(self.menu_newForm)
         self.actionB.triggered.connect(self.menu_newHardware)
-        # self.actionC.triggered.connect(self.menu_delete)
+        self.actionC.triggered.connect(self.menu_delete)
 
 
 
@@ -903,8 +900,16 @@ class Ui_MainWindow(object):
     revise_content = []
     def select_from_resources(self):
         try:
+
             resource = self.comboBox.currentText()
-            resource_list = constants.resources_dic[resource]  # 获得一串 tablename
+            cur = quarryDB.quarry_form(resource)
+
+            resource_list = []
+            for i in cur:
+                i = list(i)
+                resource_list.append(i[0])
+
+             # 获得一串 tablename
 
             #初始化tab
             self.tabWidget.clear()
@@ -1280,7 +1285,7 @@ class Ui_MainWindow(object):
 
             results = quarryDB.quarry_logs(resource)  # 查询一个table返回所有搜索结果
 
-            if len(results) != 0:
+            if results != None and len(results) != 0:
                 self.tableWidget_6.setRowCount(len(results))
                 self.tableWidget_6.setColumnCount(len(results[0]))
                 headName = constants.head_name_logs
@@ -1437,6 +1442,9 @@ class Ui_MainWindow(object):
 
     def browse_to_excel(self):
         try:
+            if self.tabWidget.tabText(0) == None or self.tabWidget.tabText(0) == '' :
+                QMessageBox.warning(self.stackedWidget_1,'提示','请先选择形态表')
+                return
             fileName = QFileDialog.getSaveFileName(self.stackedWidget_1, "", "", ".xlsx")
             # print(fileName)
             fileName = list(fileName)
@@ -1578,8 +1586,11 @@ class Ui_MainWindow(object):
         try:
             #清空tab
 
+
             fileName = QFileDialog.getOpenFileName(self.stackedWidget_1,'','',"*.xlsx")
             fileName = list(fileName)
+            if fileName[0] == None or len(fileName[0]) == 0:
+                return
             self.tabWidget.clear()
             #lists结构 lists 里第一行数据是sheet页名字  sheet页第一个是修订后面是单板 [[一个sheet页[一行数据]]]
             self.browse_store = xlsxOpenpyxl.read_excel_xlsx(fileName[0])
@@ -1602,6 +1613,7 @@ class Ui_MainWindow(object):
             QMessageBox.about(self.stackedWidget_1,'提示','导入成功')
         except Exception :
             traceback.print_exc()
+            self.comboBox.setcurrentText()
 
     #退出预览
     def close_browse(self):
@@ -1619,18 +1631,43 @@ class Ui_MainWindow(object):
     #先判断形态表已经存在
     def save_browse(self):
         try:
+
             excelName = self.tabWidget.tabText(0).replace('修订记录','').strip()
             flag = 1
             droptable = []
             oldname = []
             newname = []
-            for i in constants.resources:
+            hardware = self.get_table_from_form(excelName)
+            rootlist = quarryDB.quarry_form_store()
+            rootlist = list(rootlist)
+            rootlist.insert(0,"形态表")
+
+            resources_list = []
+            for i in rootlist:
+                if i == '形态表':
+                    resources_list.append(i)
+                else:
+                    i = list(i)
+                    resources_list.append(i[0])
+
+            #判断这个excel中的形态表是否存在
+            for i in resources_list:
 
                 if excelName == i:
                     flag = 0
+            for i in range(self.tabWidget.count()):
+                if i == 0:
+                    if '修订记录' not in self.tabWidget.tabText(0):
+                        QMessageBox.about(self.stackedWidget_1, '提示', 'excel格式错误' )
+                    else:
+                        continue
+
+                if self.tabWidget.tabText(i) not in hardware:
+                    QMessageBox.about(self.stackedWidget_1, '提示', 'Excel存在未注册单板：'+self.tabWidget.tabText(i))
+                    return
+            droplog = ''
             if flag == 0:
                 #先建表 成功后再删表 然后
-
                 for i in range(self.tabWidget.count()):
                     sqls = []
                     if i == 0:
@@ -1639,15 +1676,22 @@ class Ui_MainWindow(object):
                         for j in self.browse_store[1]:
                             insertDB.insert_logs(excelName+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5])
                         # sqlite3DB.drop_table(excelName+'_logs')
-                        droptable.append(excelName+'_logs')
+
+                        droplog = excelName+'_logs'
                         # sqlite3DB.rename_table(excelName+'_tmp_logs', excelName+'_logs')
                         oldname.append(excelName+'_tmp_logs')
                         newname.append(excelName+'_logs')
                     else:
-                        sqlite3DB.create_table(self.tabWidget.tabText(i) + '_tmp')
-                        #开始插入数据
+                        #从db调出单板列表
+                        hardware = self.get_table_from_form(excelName)
+                        for j in hardware:
+                            if j == self.tabWidget.tabText(i):
+                                sqlite3DB.create_table(self.tabWidget.tabText(i) + '_tmp')
 
-                        # for k in range(2, len(self.browse_store) - 2):
+
+
+
+
                         for j in self.browse_store[i + 1]:
 
                             sql = insertDB.insert_db(self.tabWidget.tabText(i)+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5],j[6]
@@ -1656,30 +1700,55 @@ class Ui_MainWindow(object):
                             sqls.append(sql)
                         insertDB.excecute_sql(sqls)
                         # sqlite3DB.drop_table(self.tabWidget.tabText(i))
-                        droptable.append(self.tabWidget.tabText(i))
+
+                        # droptable.append(self.tabWidget.tabText(i))
                         # sqlite3DB.rename_table(self.tabWidget.tabText(i)+'_tmp', self.tabWidget.tabText(i))
                         oldname.append(self.tabWidget.tabText(i)+'_tmp')
                         newname.append(self.tabWidget.tabText(i))
+
                 #等所有新表都更新后  删掉旧表
+                droptable = self.get_table_from_form(excelName)
+                droptable.insert(0,droplog)
                 for i in range(len(droptable)):
                     sqlite3DB.drop_table(droptable[i])
+                for i in range(len(oldname)):
                     sqlite3DB.rename_table(oldname[i], newname[i])
 
 
                 QMessageBox.about(self.stackedWidget_1, '提示', '覆盖成功')
+                self.close_browse()
 
 
 
             else:
                 QMessageBox.warning(self.stackedWidget_1,'提示','该形态表尚不存在，请先注册后添加')
-        except Exception:
+                return
+
+        except IntegrityError as e:
             traceback.print_exc()
+            QMessageBox.warning(self.stackedWidget_1,'提示', '业务名重复，覆盖失败')
+
+        except IndexError as e:
+            traceback.print_exc()
+            QMessageBox.warning(self.stackedWidget_1,'提示','Excel格式错误')
+
+
+        except Exception :
+            traceback.print_exc()
+            error= str(e)
+            QMessageBox.warning(self.stackedWidget_1, '提示', error)
+
+        finally:
+            sqlite3DB.delete_tmp()
+            self.close_browse()
 
     def double_check_overwrite(self):
+
         A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确定覆盖该形态表？',
                                  QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
         if A == QMessageBox.Yes:
             self.save_browse()
+
         else:
             print('cancel')
 
@@ -1716,6 +1785,7 @@ class Ui_MainWindow(object):
                         sqlite3DB.create_log(formname)
                         QMessageBox.warning(self.stackedWidget_1, '提示', '形态表 ' + formname + ' 新建成功')
                         self.upload_logs('新建形态表:' + formname)
+                        self.refresh_tree()
                     else:
                         print('取消创建')
 
@@ -1764,6 +1834,7 @@ class Ui_MainWindow(object):
 
                         QMessageBox.warning(self.stackedWidget_1, '提示', '新建成功')
                         self.upload_logs('新建单板:' + tablename)
+                        self.refresh_tree()
                     else:
                         print('取消创建')
 
@@ -1785,8 +1856,114 @@ class Ui_MainWindow(object):
         #     result.insert(0,constants.head_name_search)
         #     xlsxOpenpyxl.write_excel_xlsx(dir,'sheet1',result)
 
+    def refresh_tree(self):
+
+        self.treeWidget.clear()
+        rootlist = quarryDB.quarry_form_store()
+        rootlist = list(rootlist)
+        # rootlist.insert(0,"形态表")
+        for i in range(len(rootlist)):
+            # if i == 0:  # 跳过第一条 也就是“形态表”
+            #     continue
+            cur = list(rootlist[i])
+            root = self.add_root(cur[0])
+            print(root)
+            # 从constants初始化tree 下拉表单的子表（单板）
+            childlist = quarryDB.quarry_form(root.text(0))
+            childlist = list(childlist)
+
+            for j in range(len(childlist)):
+                tmp = list(childlist[j])
+                self.add_child(tmp[0], j, root)
+        resources_list = []
+        for i in rootlist:
+            # if i == '形态表':
+            #     resources_list.append(i)
+            # else:
+            i = list(i)
+            resources_list.append(i[0])
 
 
+        self.comboBox_2.clear()
+        self.comboBox_2.addItems(resources_list)
+
+    def menu_delete(self):
+        try:
+            form = self.treeWidget.currentItem()
+            if form.parent() != None:
+                #警告
+                A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确认删除单板' + form.text(0)+'？',
+                                         QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+                if A == QMessageBox.Yes:
+                    deleteDB.delete_table_from_form(form.parent().text(0), form.text(0))
+                    self.upload_logs('成功删除单板 '+form.text(0))
+                    self.refresh_tree()
+                else:
+                    print('cancel')
+                    return
+            #父节点
+            elif form.parent() == None and form.childCount() != 0:
+                QMessageBox.warning(self.stackedWidget_1,'警告','无法删除，' + form.text(0) +'形态表尚存在单板')
+                return
+            else:
+                # 警告
+                A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确认删除形态表' + form.text(0) + '？',
+                                         QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+                if A == QMessageBox.Yes:
+                    deleteDB.delete_form_from_formstore(form.text(0))
+                    self.upload_logs('成功删除单板 ' + form.text(0))
+                    self.refresh_tree()
+                else:
+                    print('cancel')
+                    return
+        except Exception as e:
+            traceback.print_exc()
+            self.upload_logs(e)
+
+    def get_table_from_form(self,formname):
+        cur = quarryDB.quarry_form(formname)
+
+        resource_list = []
+        for i in cur:
+            i = list(i)
+            resource_list.append(i[0])
+        return resource_list
+
+    #返回所有形态表名 初始化tree窗口
+    def tree_init(self):
+        rootlist = quarryDB.quarry_form_store()
+        rootlist = list(rootlist)
+
+        for i in range(len(rootlist)):
+            cur = list(rootlist[i])
+            root = self.add_root(cur[0])
+            print(root)
+
+            childlist = quarryDB.quarry_form(root.text(0))
+            childlist = list(childlist)
+
+            for j in range(len(childlist)):
+                tmp = list(childlist[j])
+                self.add_child(tmp[0], j, root)
+        resources_list = []
+        for i in rootlist:
+            i = list(i)
+            resources_list.append(i[0])
+        return resources_list
+
+    def get_all_form_name(self):
+        rootlist = quarryDB.quarry_form_store()
+        rootlist = list(rootlist)
+        resources_list = []
+        for i in rootlist:
+            i = list(i)
+            resources_list.append(i[0])
+        return resources_list
+    def refresh_browse(self):
+        num = self.comboBox.currentIndex()
+        self.comboBox.clear()
+        self.comboBox.addItems(self.get_all_form_name())
+        self.comboBox.setCurrentIndex(num)
 
 
 

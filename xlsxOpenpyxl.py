@@ -389,12 +389,15 @@ def read_excel_xlsx(path):
     for i in sheets:
         onesheet = []
         sheet = workbook[i]
-        for row in sheet.values:
+        curlist = list(sheet.values)
+        if curlist != None and len(curlist) != 0:
+            del(curlist[0])
+        for row in curlist:
             temp = list(row)
             for j in range(len(temp)):
                 temp[j] = str(temp[j])
             onesheet.append(temp)
-        del (onesheet[0])
+        # del (onesheet[0])
         lists.append(onesheet)
     lists.insert(0,sheets)
 

@@ -109,11 +109,28 @@ def rename_table(old, new):
         con.close()
     except Exception:
         traceback.print_exc()
+
 def drop_table(name):
     try:
         con = sqlite3.connect('test2.db')
         cur = con.cursor()
         cur.execute("DROP TABLE '{name}';".format(name = name))
+        con.close()
+    except Exception:
+        traceback.print_exc()
+
+def delete_tmp():
+    try:
+        con = sqlite3.connect('test2.db')
+        cur = con.cursor()
+
+        lists =  cur.execute("SELECT name FROM sqlite_master where type='table' order by name;")
+
+        lists = list(lists)
+        for i in lists:
+            i = list(i)
+            if 'tmp' in i[0]:
+                drop_table(i[0])
         con.close()
     except Exception:
         traceback.print_exc()
