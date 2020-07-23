@@ -36,7 +36,7 @@ def add_content_to_sheet(path, sheet_name,content):
         for j in range(0, len(content[i])):
 
             sheet.cell(row=i + 1, column=j + 1, value=str(content[i][j]))
-    list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T']
+    list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T','U','V']
     for i in list:
         sheet.column_dimensions[i].width = 20
 
@@ -50,73 +50,6 @@ def add_content_to_sheet(path, sheet_name,content):
 
     for index, row in enumerate(sheet.rows):
         if index > 0:
-            cell = row[2]
-            if cell.value.isdigit():
-                if int(cell.value) == 0:
-                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
-                if int(cell.value) == 1:
-                    cell.fill = PatternFill("solid", fgColor="91E4CB")
-                if int(cell.value) == 2:
-                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
-                if int(cell.value) == 3:
-                    cell.fill = PatternFill("solid", fgColor="FFFF00")
-                if int(cell.value) == 4:
-                    cell.fill = PatternFill("solid", fgColor="99CCCC")
-                if int(cell.value) == 5:
-                    cell.fill = PatternFill("solid", fgColor="FFCC99")
-                if int(cell.value) == 6:
-                    cell.fill = PatternFill("solid", fgColor="CCCC99")
-                if int(cell.value) == 7:
-                    cell.fill = PatternFill("solid", fgColor="0099CC")
-                if int(cell.value) == 8:
-                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
-                if int(cell.value) == 9:
-                    cell.fill = PatternFill("solid", fgColor="91E4CB")
-                if int(cell.value) == 10:
-                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
-                if int(cell.value) == 11:
-                    cell.fill = PatternFill("solid", fgColor="FFFF00")
-                if int(cell.value) == 12:
-                    cell.fill = PatternFill("solid", fgColor="99CCCC")
-                if int(cell.value) == 13:
-                    cell.fill = PatternFill("solid", fgColor="FFCC99")
-                if int(cell.value) == 14:
-                    cell.fill = PatternFill("solid", fgColor="CCCC99")
-                if int(cell.value) == 15:
-                    cell.fill = PatternFill("solid", fgColor="0099CC")
-                if int(cell.value) == 16:
-                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
-                if int(cell.value) == 17:
-                    cell.fill = PatternFill("solid", fgColor="91E4CB")
-                if int(cell.value) == 18:
-                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
-                if int(cell.value) == 19:
-                    cell.fill = PatternFill("solid", fgColor="FFFF00")
-                if int(cell.value) == 20:
-                    cell.fill = PatternFill("solid", fgColor="99CCCC")
-                if int(cell.value) == 21:
-                    cell.fill = PatternFill("solid", fgColor="FFCC99")
-                if int(cell.value) == 22:
-                    cell.fill = PatternFill("solid", fgColor="CCCC99")
-                if int(cell.value) == 23:
-                    cell.fill = PatternFill("solid", fgColor="0099CC")
-                if int(cell.value) == 24:
-                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
-                if int(cell.value) == 25:
-                    cell.fill = PatternFill("solid", fgColor="91E4CB")
-                if int(cell.value) == 26:
-                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
-                if int(cell.value) == 27:
-                    cell.fill = PatternFill("solid", fgColor="FFFF00")
-                if int(cell.value) == 28:
-                    cell.fill = PatternFill("solid", fgColor="99CCCC")
-                if int(cell.value) == 29:
-                    cell.fill = PatternFill("solid", fgColor="FFCC99")
-                if int(cell.value) == 30:
-                    cell.fill = PatternFill("solid", fgColor="CCCC99")
-                if int(cell.value) == 31:
-                    cell.fill = PatternFill("solid", fgColor="0099CC")
-
             cell = row[3]
             if cell.value.isdigit():
                 if int(cell.value) == 0:
@@ -182,6 +115,117 @@ def add_content_to_sheet(path, sheet_name,content):
                 if int(cell.value) == 30:
                     cell.fill = PatternFill("solid", fgColor="CCCC99")
                 if int(cell.value) == 31:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+                if int(cell.value) == 32:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 33:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 34:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+                if int(cell.value) == 35:
+                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
+                if int(cell.value) == 36:
+                    cell.fill = PatternFill("solid", fgColor="91E4CB")
+                if int(cell.value) == 37:
+                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
+                if int(cell.value) == 38:
+                    cell.fill = PatternFill("solid", fgColor="FFFF00")
+                if int(cell.value) == 39:
+                    cell.fill = PatternFill("solid", fgColor="99CCCC")
+                if int(cell.value) == 40:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 41:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 42:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+
+            cell = row[4]
+            if cell.value.isdigit():
+                if int(cell.value) == 0:
+                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
+                if int(cell.value) == 1:
+                    cell.fill = PatternFill("solid", fgColor="91E4CB")
+                if int(cell.value) == 2:
+                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
+                if int(cell.value) == 3:
+                    cell.fill = PatternFill("solid", fgColor="FFFF00")
+                if int(cell.value) == 4:
+                    cell.fill = PatternFill("solid", fgColor="99CCCC")
+                if int(cell.value) == 5:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 6:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 7:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+                if int(cell.value) == 8:
+                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
+                if int(cell.value) == 9:
+                    cell.fill = PatternFill("solid", fgColor="91E4CB")
+                if int(cell.value) == 10:
+                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
+                if int(cell.value) == 11:
+                    cell.fill = PatternFill("solid", fgColor="FFFF00")
+                if int(cell.value) == 12:
+                    cell.fill = PatternFill("solid", fgColor="99CCCC")
+                if int(cell.value) == 13:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 14:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 15:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+                if int(cell.value) == 16:
+                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
+                if int(cell.value) == 17:
+                    cell.fill = PatternFill("solid", fgColor="91E4CB")
+                if int(cell.value) == 18:
+                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
+                if int(cell.value) == 19:
+                    cell.fill = PatternFill("solid", fgColor="FFFF00")
+                if int(cell.value) == 20:
+                    cell.fill = PatternFill("solid", fgColor="99CCCC")
+                if int(cell.value) == 21:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 22:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 23:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+                if int(cell.value) == 24:
+                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
+                if int(cell.value) == 25:
+                    cell.fill = PatternFill("solid", fgColor="91E4CB")
+                if int(cell.value) == 26:
+                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
+                if int(cell.value) == 27:
+                    cell.fill = PatternFill("solid", fgColor="FFFF00")
+                if int(cell.value) == 28:
+                    cell.fill = PatternFill("solid", fgColor="99CCCC")
+                if int(cell.value) == 29:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 30:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 31:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+                if int(cell.value) == 32:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 33:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 34:
+                    cell.fill = PatternFill("solid", fgColor="0099CC")
+                if int(cell.value) == 35:
+                    cell.fill = PatternFill("solid", fgColor="FFFFCC")
+                if int(cell.value) == 36:
+                    cell.fill = PatternFill("solid", fgColor="91E4CB")
+                if int(cell.value) == 37:
+                    cell.fill = PatternFill("solid", fgColor="FFCCCC")
+                if int(cell.value) == 38:
+                    cell.fill = PatternFill("solid", fgColor="FFFF00")
+                if int(cell.value) == 39:
+                    cell.fill = PatternFill("solid", fgColor="99CCCC")
+                if int(cell.value) == 40:
+                    cell.fill = PatternFill("solid", fgColor="FFCC99")
+                if int(cell.value) == 41:
+                    cell.fill = PatternFill("solid", fgColor="CCCC99")
+                if int(cell.value) == 42:
                     cell.fill = PatternFill("solid", fgColor="0099CC")
     excel.save(path)
 

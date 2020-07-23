@@ -1,159 +1,175 @@
 import sqlite3
+import traceback
 
 
-
-
-
-def delete(tablename, algo, name, algoId, subTidN, bit, numK
+def delete(tablename, version, algo, name, algoId, subTidN, bit, numK
                   , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU, algoSpe,
                   testSpe, castType, iOrd,
-                  TBLM_ID, dpt, dpt_person, confirmation):
-    list = [None] * 21
+                  TBLM_ID, dpt, dpt_person, confirmation, info,db_file):
+    list = [None] * 23
 
-    if algo == 'N/A' or algo == '':
+    if algo == 'None' or algo == '':
         list[0] = "'1'"
         algo = '1'
     else:
         list[0] = 'algo'
 
-    if name == 'N/A' or name == '':
+
+    if version == 'None' or version == '':
         list[1] = "'1'"
+        version = '1'
+    else:
+        list[1] = 'version'
+
+
+
+    if name == 'None' or name == '':
+        list[2] = "'1'"
         name = '1'
     else:
-        list[1] = 'name'
+        list[2] = 'name'
 
-    if algoId == 'N/A' or algoId == '':
-        list[2] = "'1'"
+    if algoId == 'None' or algoId == '':
+        list[3] = "'1'"
         algoId = '1'
     else:
-        list[2] = 'algoId'
+        list[3] = 'algoId'
 
-    if numK == 'N/A' or numK == '':
-        list[5] = "'1'"
+    if numK == 'None' or numK == '':
+        list[6] = "'1'"
         numK = '1'
     else:
-        list[5] = 'numK'
+        list[6] = 'numK'
 
-    if tidW == 'N/A' or tidW == '':
-        list[6] = '1'
+    if tidW == 'None' or tidW == '':
+        list[7] = '1'
         tidW = '1'
     else:
-        list[6] = 'tidW'
+        list[7] = 'tidW'
 
-    if tidN == 'N/A' or tidN == '':
-        list[7] = '1'
+    if tidN == 'None' or tidN == '':
+        list[8] = '1'
         tidN = '1'
     else:
-        list[7] = 'tidN'
+        list[8] = 'tidN'
 
-    if subTidW == 'N/A' or subTidW == '':
-        list[8] = '1'
+    if subTidW == 'None' or subTidW == '':
+        list[9] = '1'
         subTidW = '1'
     else:
-        list[8] = 'subTidW'
+        list[9] = 'subTidW'
 
-    if subTidN == 'N/A' or subTidN == '':
-        list[3] = "'1'"
+    if subTidN == 'None' or subTidN == '':
+        list[4] = "'1'"
         subTidN = '1'
     else:
-        list[3] = 'subTidN'
+        list[4] = 'subTidN'
 
-    if sTypeW_bit == 'N/A' or sTypeW_bit == '':
-        list[9] = '1'
+    if sTypeW_bit == 'None' or sTypeW_bit == '':
+        list[10] = '1'
         sTypeW_bit = '1'
     else:
-        list[9] = 'sTypeW_bit'
+        list[10] = 'sTypeW_bit'
 
-    if sType == 'N/A' or sType == '':
-        list[10] = '1'
+    if sType == 'None' or sType == '':
+        list[11] = '1'
         sType = '1'
     else:
-        list[10] = 'sType'
+        list[11] = 'sType'
 
-    if storeLocation == 'N/A' or storeLocation == '':
-        list[11] = '1'
+    if storeLocation == 'None' or storeLocation == '':
+        list[12] = '1'
         storeLocation = '1'
     else:
-        list[11] = 'storeLocation'
+        list[12] = 'storeLocation'
 
-    if bit == 'N/A' or bit == '':
-        list[4] = "'1'"
+    if bit == 'None' or bit == '':
+        list[5] = "'1'"
         bit = '1'
     else:
-        list[4] = 'bit'
+        list[5] = 'bit'
 
-    if ISSU == 'N/A' or ISSU == '':
-        list[12] = '1'
+    if ISSU == 'None' or ISSU == '':
+        list[13] = '1'
         ISSU = '1'
     else:
-        list[12] = 'ISSU'
+        list[13] = 'ISSU'
 
 
-    if algoSpe == 'N/A' or algoSpe == '':
-        list[13] = '1'
+    if algoSpe == 'None' or algoSpe == '':
+        list[14] = '1'
         algoSpe = '1'
     else:
-        list[13] = 'algoSpe'
+        list[14] = 'algoSpe'
 
-    if testSpe == 'N/A' or testSpe == '':
-        list[14] = '1'
+    if testSpe == 'None' or testSpe == '':
+        list[15] = '1'
         testSpe = '1'
     else:
-        list[14] = 'testSpe'
+        list[15] = 'testSpe'
 
-    if castType == 'N/A' or castType == '':
-        list[15] = '1'
+    if castType == 'None' or castType == '':
+        list[16] = '1'
         castType = '1'
     else:
-        list[15] = 'castType'
+        list[16] = 'castType'
 
-    if iOrd == 'N/A' or iOrd == '':
-        list[16] = '1'
+    if iOrd == 'None' or iOrd == '':
+        list[17] = '1'
         iOrd = '1'
     else:
-        list[16] = 'iOrd'
+        list[17] = 'iOrd'
 
-    if TBLM_ID == 'N/A' or TBLM_ID == '':
-        list[17] = "'1'"
+    if TBLM_ID == 'None' or TBLM_ID == '':
+        list[18] = "'1'"
         TBLM_ID = '1'
     else:
-        list[17] = 'TBLM_ID'
+        list[18] = 'TBLM_ID'
 
-    if dpt == 'N/A' or dpt == '':
-        list[18] = "'1'"
+    if dpt == 'None' or dpt == '':
+        list[19] = "'1'"
         dpt = '1'
     else:
-        list[18] = 'dpt'
+        list[19] = 'dpt'
 
-    if dpt_person == 'N/A' or dpt_person == '':
-        list[19] = "'1'"
+    if dpt_person == 'None' or dpt_person == '':
+        list[20] = "'1'"
         dpt_person = '1'
     else:
-        list[19] = 'dpt_person'
+        list[20] = 'dpt_person'
 
-    if confirmation == 'N/A' or confirmation == '':
-        list[20] = "'1'"
+    if confirmation == 'None' or confirmation == '':
+        list[21] = "'1'"
         confirmation = '1'
     else:
-        list[20] = 'confirmation'
+        list[21] = 'confirmation'
 
-    sql_search = "delete from '{tablename}' where {algo} = '{algo_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' " \
+    if info == 'None' or info == '':
+        list[22] = "'1'"
+        info = '1'
+    else:
+        list[22] = 'info'
+
+    sql_search = "delete from '{tablename}' where {version} = '{version_}' and {algo} = '{algo_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' " \
                  "and {numK} = '{numK_}' " \
-        .format(tablename=tablename, algo=list[0],
+        .format(tablename=tablename,
+                version = list[0],
+                version_ = version,
+                algo=list[1],
                 algo_=algo,
-                name=list[1],
+                name=list[2],
                 name_=name,
-                subTidN=list[3],
+                subTidN=list[4],
                 subTidN_=subTidN,
-                algoId=list[2],
+                algoId=list[3],
                 algoId_=algoId,
-                numK = list[5],
+                numK = list[6],
                 numK_= numK
 
                 )
     try:
         print(sql_search)
-        db = sqlite3.connect('test2.db')
+        db = sqlite3.connect(db_file)
         cur_search = db.cursor()
         cur_search.execute(sql_search)
         results = cur_search.fetchall()
@@ -168,7 +184,7 @@ def delete(tablename, algo, name, algoId, subTidN, bit, numK
     finally:
         db.close()
 
-def delete_revise(tablename, date, ver, intro, decision, content, reviser):
+def delete_revise(tablename, date, ver, intro, decision, content, reviser, db_file):
     sql_delete = "delete from '{tablename}_logs'" \
                  " where date = '{date}' and ver = '{ver}' and intro = '{intro}' and decision = '{decision}' and content = '{content}' and reviser = '{reviser}'".format( tablename = tablename,
                                                                                                                                          date = date,
@@ -180,7 +196,7 @@ def delete_revise(tablename, date, ver, intro, decision, content, reviser):
                                                                                                                                          )
     try:
         print(sql_delete)
-        db = sqlite3.connect('test2.db')
+        db = sqlite3.connect(db_file)
         cur_search = db.cursor()
         cur_search.execute(sql_delete)
         print(cur_search.fetchall())
@@ -193,13 +209,13 @@ def delete_revise(tablename, date, ver, intro, decision, content, reviser):
     finally:
         db.close()
 
-def delete_table_from_form(formname, tablename):
+def delete_table_from_form(formname, tablename, db_file):
     sql_delete = "delete from '{formname}'" \
                  " where tablename = '{tablename}';".format( tablename = tablename,formname = formname )
     sql_delete2 = "DROP TABLE '{tablename}';".format(tablename = tablename)
     try:
         print(sql_delete)
-        db = sqlite3.connect('test2.db')
+        db = sqlite3.connect(db_file)
         cur_search = db.cursor()
         cur_search.execute(sql_delete)
         cur_search.execute(sql_delete2)
@@ -213,14 +229,14 @@ def delete_table_from_form(formname, tablename):
     finally:
         db.close()
 
-def delete_form_from_formstore(formname):
+def delete_form_from_formstore(formname, db_file):
     sql_delete = "delete from form_store" \
                  " where formname = '{formname}';".format(formname=formname)
     sql_delete2 = "DROP TABLE '{formname}';".format(formname=formname)
     sql_delete3 = "DROP TABLE '{formname}_logs';".format(formname=formname)
     try:
         print(sql_delete)
-        db = sqlite3.connect('test2.db')
+        db = sqlite3.connect(db_file)
         cur_search = db.cursor()
         cur_search.execute(sql_delete)
         cur_search.execute(sql_delete2)
@@ -234,10 +250,39 @@ def delete_form_from_formstore(formname):
     finally:
         db.close()
 
-    #
-    # "and {bit} = {bit_}" \
-    # " and {numK} = {numK_} and {tidW} = {tidW_} and {tidN} = {tidN_} and {subTidW} = {subTidW_}" \
-    # " and {sTypeW_bit} = {sTypeW_bit_} and {sType} = {sType_} and {storeLocation} = '{storeLocation_}'" \
-    # " and {ISSU} = {ISSU_} and {algoSpe} = {algoSpe_} and {testSpe} = {testSpe_}" \
-    # " and {castType} = '{castType_}' and {iOrd} = '{iOrd_}' and {TBLM_ID} = {TBLM_ID_} and {dpt} = '{dpt_}'" \
-    # " and {dpt_person} = '{dpt_person_}' and {confirmation} = '{confirmation_}' "\
+def delete_hardware_info(name, version, form, algo_core, tcam, algo, algo_engine, multi_core, core_type, cpu_type, makefile, cmake, ko, info, db_file):
+    sql_delete = "delete from hardware_info where name = '{name}' and version = '{version}' and form = '{form}' and algo_core = '{algo_core}' " \
+                 "and tcam = '{tcam}' and algo = '{algo}' and algo_engine = '{algo_engine}' and multi_core = '{multi_core}' and core_type = '{core_type}' and cpu_type = '{cpu_type}' and makefile = '{makefile}'" \
+                 " and cmake = '{cmake}' and ko = '{ko}' and info = '{info}' ;" \
+        .format(name=name,
+                version=version,
+                form=form,
+                algo_core=algo_core,
+                tcam=tcam,
+                algo=algo,
+                algo_engine=algo_engine,
+                multi_core=multi_core,
+                core_type=core_type,
+                cpu_type=cpu_type,
+                makefile=makefile,
+                cmake=cmake,
+                ko=ko,
+                info=info
+                )
+    try:
+        print(sql_delete)
+        db = sqlite3.connect(db_file)
+        cur_search = db.cursor()
+        cur_search.execute(sql_delete)
+        results = cur_search.fetchall()
+        print(cur_search.fetchall())
+        db.commit()
+        log = '删除单板信息 ' + name +' 成功'
+        print('success delete')
+        return log
+    except Exception as e:
+        # db.rollback()
+        traceback.print_exc()
+        print('rollback')
+    finally:
+        db.close()

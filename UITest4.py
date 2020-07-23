@@ -9,8 +9,7 @@
 
 import time
 import traceback
-from sqlite3 import IntegrityError
-
+# from sqlite3 import IntegrityError
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import QColor, QBrush, QCursor
 from PyQt5.QtWidgets import QFileDialog, QMenu, QInputDialog, QLineEdit
@@ -22,9 +21,12 @@ import constants
 import insertDB
 import deleteDB
 import sqlite3DB
+from shutil import copyfile
 
 class Ui_MainWindow(object):
+    db_file = ''
     def setupUi(self, MainWindow):
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1142, 782)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -66,7 +68,7 @@ class Ui_MainWindow(object):
         self.pushButton_edit.setMinimumSize(QtCore.QSize(100, 40))
         self.pushButton_edit.setObjectName("pushButton_edit")
         self.verticalLayout.addWidget(self.pushButton_edit)
-        self
+
 
         # self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         # self.pushButton_3.setMinimumSize(QtCore.QSize(100, 40))
@@ -89,8 +91,159 @@ class Ui_MainWindow(object):
 
         self.page_6 = QtWidgets.QWidget()
         self.page_6.setObjectName("编辑单板")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.page_6)
+        # self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.page_6)
+
+        self.verticalLayout_v8 = QtWidgets.QVBoxLayout(self.page_6)
+        self.verticalLayout_v8.setObjectName("verticalLayout_v8")
+        self.verticalLayout_v8show = QtWidgets.QVBoxLayout()
+        self.verticalLayout_v8show.setObjectName("verticalLayout_v8show")
+        self.label_13 = QtWidgets.QLabel(self.page_6)
+        self.label_13.setObjectName("label_13")
+        self.verticalLayout_v8show.addWidget(self.label_13)
+        self.horizontalLayout_v8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_v8.setObjectName("horizontalLayout_v8")
+        self.tableWidget_v8 = QtWidgets.QTableWidget(self.page_6)
+        self.tableWidget_v8.setObjectName("tableWidget_v8")
+        self.tableWidget_v8.setColumnCount(14)
+        self.tableWidget_v8.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(6, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(7, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(8, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(9, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(10, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(11, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(12, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8.setHorizontalHeaderItem(13, item)
+
+        self.tableWidget_v8.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableWidget_v8.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+
+        # self.quarry_hardware_info()
+
+        self.horizontalLayout_v8.addWidget(self.tableWidget_v8)
+        self.verticalLayout_19 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_19.setObjectName("verticalLayout_19")
+        self.pushButton_32 = QtWidgets.QPushButton(self.page_6)
+        self.pushButton_32.setMinimumSize(QtCore.QSize(100, 30))
+        self.pushButton_32.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_32.setObjectName("pushButton_32")
+        self.verticalLayout_19.addWidget(self.pushButton_32)
+        self.pushButton_31 = QtWidgets.QPushButton(self.page_6)
+        self.pushButton_31.setMinimumSize(QtCore.QSize(100, 30))
+        self.pushButton_31.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_31.setObjectName("pushButton_31")
+        self.verticalLayout_19.addWidget(self.pushButton_31)
+        self.pushButton_33 = QtWidgets.QPushButton(self.page_6)
+        self.pushButton_33.setMinimumSize(QtCore.QSize(100, 30))
+        self.pushButton_33.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_33.setObjectName("pushButton_33")
+        self.verticalLayout_19.addWidget(self.pushButton_33)
+
+        self.pushButton_34 = QtWidgets.QPushButton(self.page_6)
+        self.pushButton_34.setMinimumSize(QtCore.QSize(100, 30))
+        self.pushButton_34.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_34.setObjectName("pushButton_34")
+        self.verticalLayout_19.addWidget(self.pushButton_34)
+        self.pushButton_34.hide()
+
+        self.pushButton_35 = QtWidgets.QPushButton(self.page_6)
+        self.pushButton_35.setMinimumSize(QtCore.QSize(100, 30))
+        self.pushButton_35.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_35.setObjectName("pushButton_35")
+        self.verticalLayout_19.addWidget(self.pushButton_35)
+        self.pushButton_35.hide()
+
+        self.horizontalLayout_v8.addLayout(self.verticalLayout_19)
+        self.verticalLayout_v8show.addLayout(self.horizontalLayout_v8)
+        self.verticalLayout_v8.addLayout(self.verticalLayout_v8show)
+        self.verticalLayout_v8input = QtWidgets.QVBoxLayout()
+        self.verticalLayout_v8input.setObjectName("verticalLayout_v8input")
+        self.label_14 = QtWidgets.QLabel(self.page_6)
+        self.label_14.setObjectName("label_14")
+        self.verticalLayout_v8input.addWidget(self.label_14)
+        self.horizontalLayout_v8input = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_v8input.setObjectName("horizontalLayout_v8input")
+        self.verticalLayout_20 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_20.setObjectName("verticalLayout_20")
+        self.tableWidget_v8Input = QtWidgets.QTableWidget(self.page_6)
+        self.tableWidget_v8Input.setObjectName("tableWidget_v8Input")
+        self.tableWidget_v8Input.setColumnCount(14)
+        self.tableWidget_v8Input.setRowCount(1)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(6, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(7, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(8, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(9, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(10, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(11, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(12, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_v8Input.setHorizontalHeaderItem(13, item)
+
+
+        # self.tableWidget_v8Input.setRowCount(1)
+        # self.tableWidget_v8Input.setColumnCount(14)
+
+        self.tableWidget_v8Input.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableWidget_v8Input.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+
+
+
+
+        self.verticalLayout_20.addWidget(self.tableWidget_v8Input)
+        self.horizontalLayout_v8input.addLayout(self.verticalLayout_20)
+        self.pushButton_30 = QtWidgets.QPushButton(self.page_6)
+        self.pushButton_30.setMinimumSize(QtCore.QSize(100, 30))
+        self.pushButton_30.setMaximumSize(QtCore.QSize(100, 30))
+        self.pushButton_30.setObjectName("pushButton_30")
+        self.horizontalLayout_v8input.addWidget(self.pushButton_30)
+        self.verticalLayout_v8input.addLayout(self.horizontalLayout_v8input)
+        self.verticalLayout_v8.addLayout(self.verticalLayout_v8input)
+        self.verticalLayout_v8.setStretch(0, 12)
+        self.verticalLayout_v8.setStretch(1, 2)
+
         self.stackedWidget_1.addWidget(self.page_6)
+
+
+
 
         self.page_3 = QtWidgets.QWidget()
         self.page_3.setObjectName("page_3")
@@ -468,11 +621,16 @@ class Ui_MainWindow(object):
 
         self.page_4 = QtWidgets.QWidget()
         self.page_4.setObjectName("page_4")
+##############################
+        # self.horizontalLayout_20 = QtWidgets.QVBoxLayout(self.page_4)
+##############################
         self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.page_4)
+
         self.verticalLayout_13.setObjectName("verticalLayout_13")
-        # self.verticalLayout_13.setStretch(0, 1)
-        # self.verticalLayout_13.setStretch(1, 1)
-        # self.verticalLayout_13.setStretch(2, 4)
+##################################
+        # self.verticalLayout_20 = QtWidgets.QVBoxLayout(self.page_4)
+        # self.verticalLayout_20.setObjectName("verticalLayout_20")
+#########################################
 
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
@@ -495,8 +653,12 @@ class Ui_MainWindow(object):
 
 
 
-
+        #list 和日志的水平布局
+        ##########################################################
         self.horizontalLayout_5.addLayout(self.verticalLayout_7)
+        ############################################################
+        # self.horizontalLayout_20.addLayout(self.verticalLayout_7)
+        ########################################################
         self.verticalLayout_8 = QtWidgets.QVBoxLayout()
         self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.label_33 = QtWidgets.QLabel(self.page_4)
@@ -507,17 +669,33 @@ class Ui_MainWindow(object):
         self.listWidget = QtWidgets.QListWidget(self.page_4)
         self.listWidget.setMinimumSize(QtCore.QSize(560, 0))
         self.listWidget.setObjectName("listWidget")
+        #导出日志键 暂时用不上
+        # self.logs_output = QtWidgets.QPushButton(self.page_4)
+        # self.logs_output.setMinimumSize(QtCore.QSize(100, 30))
+        # self.logs_output.setMaximumSize(QtCore.QSize(100, 30))
+        # self.logs_output.setLayoutDirection(QtCore.Qt.RightToLeft)
+        # self.logs_output.setObjectName("logs_output")
+
+
         self.verticalLayout_8.addWidget(self.listWidget)
 
+    ################################################################
         self.horizontalLayout_5.addLayout(self.verticalLayout_8)
+        # self.horizontalLayout_5.addWidget(self.logs_output)
+    ##################################################################
+        # self.verticalLayout_20.addLayout(self.verticalLayout_8)
+    #####################################################################
         self.pushButton_11 = QtWidgets.QPushButton(self.page_4)
         self.pushButton_11.setMinimumSize(QtCore.QSize(100, 30))
         self.pushButton_11.setMaximumSize(QtCore.QSize(100, 30))
         self.pushButton_11.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.pushButton_11.setObjectName("pushButton_11")
         #清空键搬家到ver11
-        # self.horizontalLayout_5.addWidget(self.pushButton_11)
+##############################################
         self.verticalLayout_13.addLayout(self.horizontalLayout_5)
+#############################################
+
+######################################################
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.verticalLayout_9 = QtWidgets.QVBoxLayout()
@@ -534,11 +712,7 @@ class Ui_MainWindow(object):
         self.tableWidget_3.setHorizontalHeaderLabels(constants.head_name_cn)
         self.verticalLayout_7.addWidget(self.tableWidget_3)
 
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.widget = QtWidgets.QWidget(self.page_4)
-        self.widget.setObjectName("widget")
-        self.horizontalLayout_4.addWidget(self.widget)
+
 
         # 提交键
         # self.pushButton = QtWidgets.QPushButton(self.page_4)
@@ -572,7 +746,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_11.addWidget(self.pushButton)
 
         self.horizontalLayout_3.addLayout(self.verticalLayout_11)
+        ########################################
         self.verticalLayout_13.addLayout(self.horizontalLayout_3)
+        ##########################################
+        # self.verticalLayout_20.addLayout(self.horizontalLayout_3)
+        ##############################################
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout()
@@ -587,9 +765,17 @@ class Ui_MainWindow(object):
         self.tableWidget_4.setObjectName("tableWidget_4")
         self.tableWidget_4.setColumnCount(0)
         self.tableWidget_4.setRowCount(0)
+        self.tableWidget_4.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
 
         self.verticalLayout_10.addWidget(self.tableWidget_4)
+
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.widget = QtWidgets.QWidget(self.page_4)
+        self.widget.setObjectName("widget")
+        self.horizontalLayout_4.addWidget(self.widget)
+
         self.horizontalLayout_4.addLayout(self.verticalLayout_10)
         self.verticalLayout_12 = QtWidgets.QVBoxLayout()
         self.verticalLayout_12.setSizeConstraint(QtWidgets.QLayout.SetMaximumSize)
@@ -613,8 +799,13 @@ class Ui_MainWindow(object):
         self.pushButton_7.setObjectName("pushButton_7")
         self.verticalLayout_12.addWidget(self.pushButton_7)
         self.horizontalLayout_4.addLayout(self.verticalLayout_12)
+        #####################################################
         self.verticalLayout_13.addLayout(self.horizontalLayout_4)
-
+#############################################################
+        # self.verticalLayout_20.addLayout(self.horizontalLayout_4)
+        #
+        # self.horizontalLayout_20.addLayout(self.verticalLayout_20)
+#########################################################
 
         self.stackedWidget_1.addWidget(self.page_4)
         self.horizontalLayout.addWidget(self.stackedWidget_1)
@@ -628,6 +819,19 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1142, 23))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
+
+        self.menu = self.menubar.addMenu("打开")
+
+        self.action_open_db = self.menu.addAction('选择数据库')
+        self.action_open_db.triggered.connect(self.open_db)
+
+        self.menu2 = self.menubar.addMenu("备份")
+        self.action_save_db = self.menu2.addAction('备份当前数据库')
+        self.action_save_db.triggered.connect(self.save_db)
+
+
+
+
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
@@ -675,22 +879,22 @@ class Ui_MainWindow(object):
         self.lineEdit_5.setReadOnly(1)
 
         # 提交和重置按钮
-        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_form)
+        # self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_form)
         # self.buttonBox.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(self.reset_form)
 
 
 
 
-        resources_list = self.tree_init()
+        resources_list = []
 
         # 批量插入表下拉资源单监听
-        self.comboBox.addItems(resources_list)
-        self.comboBox.currentIndexChanged.connect(self.select_from_resources)
+        # self.comboBox.addItems(resources_list)
+        # self.comboBox.currentIndexChanged.connect(self.select_from_resources)
         self.selected_hardware = []
 
         #修订页下拉资源单
-        self.comboBox_2.addItems(resources_list)
-        self.comboBox_2.currentTextChanged.connect(self.select_from_logs)
+        # self.comboBox_2.addItems(resources_list)
+        # self.comboBox_2.currentTextChanged.connect(self.select_from_logs)
 
         #编辑单板
         self.stackedWidget_1.addWidget(self.page_6)
@@ -704,9 +908,11 @@ class Ui_MainWindow(object):
         self.pushButton_6.clicked.connect(self.search)
 
         #设置CURD界面比例layout
-        self.verticalLayout_13.setStretch(0, 2)
+######################################################
+        self.verticalLayout_13.setStretch(0, 4)
         self.verticalLayout_13.setStretch(1, 2)
         self.verticalLayout_13.setStretch(2, 10)
+################################################################
 
         #注册删除按钮
         self.pushButton_8.clicked.connect(self.double_check_delete)
@@ -715,7 +921,7 @@ class Ui_MainWindow(object):
         self.pushButton_17.clicked.connect(self.double_check_delete_revise)
 
         #注册更新键
-        self.pushButton_9.clicked.connect(self.update)
+        self.pushButton_9.clicked.connect(self.double_check_update)
 
         #注册curd页导出键
         self.pushButton_7.clicked.connect(self.search_to_excel)
@@ -749,12 +955,107 @@ class Ui_MainWindow(object):
 
         self.contextMenu = QMenu(self.treeWidget)
         self.actionA = self.contextMenu.addAction('新建形态表')
-        self.actionB = self.contextMenu.addAction('新建单板')
+        self.actionB = self.contextMenu.addAction('新建空单板')
+        self.second = self.contextMenu.addMenu('新建继承单板')
         self.actionC = self.contextMenu.addAction('删除')
+
 
         self.actionA.triggered.connect(self.menu_newForm)
         self.actionB.triggered.connect(self.menu_newHardware)
         self.actionC.triggered.connect(self.menu_delete)
+
+        # self.init_menu()
+
+
+        #单板信息
+        self.pushButton_30.clicked.connect(self.double_check_insert_hardware_info)
+
+        #单板信息删除
+        self.pushButton_32.clicked.connect(self.double_check_delete_hardware_info)
+        #到处到excel hardware info
+        self.pushButton_33.clicked.connect(self.hardware_info_to_excel)
+        #
+        self.pushButton_31.clicked.connect(self.excel_to_hardware_info)
+
+        #覆盖单板信息
+        self.pushButton_34.clicked.connect(self.double_check_save_hardware_info)
+
+        #推出预览单板信息
+        self.pushButton_35.clicked.connect(self.close_hardware_info)
+
+
+
+    def init_menu(self):
+        try:
+            self.second.clear()
+            form = self.get_all_form_name()
+            for i in form:
+                self.submenu = self.second.addMenu(i)
+                self.submenu.setTitle(i)
+                table = self.get_table_from_form(i)
+                for j in table:
+                    self.action = self.submenu.addAction(j)
+                    self.action.setText(j)
+                    self.action.triggered.connect(self.menu_decHardware)
+        except Exception:
+            traceback.print_exc()
+
+    def menu_decHardware(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+
+            select_hardware = self.stackedWidget_1.sender().text()
+            print(select_hardware)
+            formname = self.stackedWidget_1.sender().parent().title()
+            tablename, ok = QInputDialog.getText(self.treeWidget, "新建继承单板", "在中命名新的单板:", QLineEdit.Normal,
+                                                 "")
+            if ok == True:
+                tablename.strip()
+                print(tablename)
+                if tablename == None or tablename == '' or tablename.isspace == True:
+                    raise Exception('单板名称不可为空')
+                else:
+                    form_list = self.get_table_from_form(formname)
+
+                    for i in form_list:
+                        if i == tablename:
+                            QMessageBox.warning(self.stackedWidget_1,'提示','单板名重复')
+                            raise Exception('该单板已存在')
+                    # 二次确认插入
+                    A = QMessageBox.question(self.stackedWidget_1, '确认', '确定新建继承自'+ select_hardware + '的单板：' + tablename + ' ？',
+                                             QMessageBox.Yes | QMessageBox.No)
+                    if A == QMessageBox.Yes:
+                        # 将单板注册到form里
+                        insertDB.insert_hardware(formname, tablename,self.db_file)
+                        # 创建一个存储新的单板的form表 和logs
+
+                        sqlite3DB.copy_table(select_hardware, tablename,self.db_file)
+                        QMessageBox.warning(self.stackedWidget_1, '提示', '新建成功')
+                        self.upload_logs('新建单板:' + tablename)
+                        self.refresh_tree()
+                        self.init_menu()
+                        A = QMessageBox.question(self.stackedWidget_1, '确认', '新建成功，是否立即录入单板信息？',
+                                                 QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+                        if A == QMessageBox.Yes:
+                            self.redirect_to_hardware_info(formname, tablename)
+                        else:
+                            print('cancel')
+                    else:
+                        print('取消创建')
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception as e:
+            traceback.print_exc()
+            self.upload_logs(str(e))
+            try:
+                if str(e) == '复制失败':
+                    deleteDB.delete_table_from_form(formname, tablename, self.db_file)
+            except Exception:
+                traceback.print_exc()
+                print('清理失败')
+
+
 
 
 
@@ -796,7 +1097,7 @@ class Ui_MainWindow(object):
         self.pushButton_12.setText(_translate("MainWindow", "导出到Excel"))
         self.pushButton_20.setText(_translate("MainWindow", "从Excel导入"))
         self.pushButton_21.setText(_translate("MainWindow", "退出预览"))
-        self.pushButton_22.setText(_translate("MainWindow", "保存至单板"))
+        self.pushButton_22.setText(_translate("MainWindow", "保存并覆盖形态表"))
         self.label.setText(_translate("MainWindow", "检索结果："))
         self.pushButton_10.setText(_translate("MainWindow", "导出到Excel"))
         self.label_3.setText(_translate("MainWindow", "形态表："))
@@ -832,7 +1133,74 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "请输入修订内容："))
 
         #编辑单板页
-        self.pushButton_edit.setText(_translate("MainWindow","编辑单板"))
+        self.pushButton_edit.setText(_translate("MainWindow","单板信息"))
+
+        self.label_13.setText(_translate("MainWindow", "V8算法组支持单板："))
+        item = self.tableWidget_v8.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "接口板名称"))
+        item = self.tableWidget_v8.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "所落版本"))
+        item = self.tableWidget_v8.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "所属产品形态"))
+        item = self.tableWidget_v8.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "算法芯片"))
+        item = self.tableWidget_v8.horizontalHeaderItem(4)
+        item.setText(_translate("MainWindow", "TCAM型号"))
+        item = self.tableWidget_v8.horizontalHeaderItem(5)
+        item.setText(_translate("MainWindow", "对应算法"))
+        item = self.tableWidget_v8.horizontalHeaderItem(6)
+        item.setText(_translate("MainWindow", "算法引擎个数"))
+        item = self.tableWidget_v8.horizontalHeaderItem(7)
+        item.setText(_translate("MainWindow", "算法是否放从核及多核形态"))
+        item = self.tableWidget_v8.horizontalHeaderItem(8)
+        item.setText(_translate("MainWindow", "从核上表类型"))
+        item = self.tableWidget_v8.horizontalHeaderItem(9)
+        item.setText(_translate("MainWindow", "CPU类型"))
+        item = self.tableWidget_v8.horizontalHeaderItem(10)
+        item.setText(_translate("MainWindow", "makefile编so"))
+        item = self.tableWidget_v8.horizontalHeaderItem(11)
+        item.setText(_translate("MainWindow", "cmake编so"))
+        item = self.tableWidget_v8.horizontalHeaderItem(12)
+        item.setText(_translate("MainWindow", "ko编译命令"))
+        item = self.tableWidget_v8.horizontalHeaderItem(13)
+        item.setText(_translate("MainWindow", "备注"))
+        self.pushButton_32.setText(_translate("MainWindow", "删除选中条目"))
+        self.pushButton_31.setText(_translate("MainWindow", "从excel导入"))
+        self.pushButton_33.setText(_translate("MainWindow", "导出到excel"))
+        self.pushButton_34.setText(_translate("MainWindow", "覆盖单板信息"))
+        self.pushButton_35.setText(_translate("MainWindow", "退出预览"))
+        self.label_14.setText(_translate("MainWindow", "添加单板信息："))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "接口板名称"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "所落版本"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "所属产品形态"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "算法芯片"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(4)
+        item.setText(_translate("MainWindow", "TCAM型号"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(5)
+        item.setText(_translate("MainWindow", "对应算法"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(6)
+        item.setText(_translate("MainWindow", "算法引擎个数"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(7)
+        item.setText(_translate("MainWindow", "算法是否放从核及多核形态"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(8)
+        item.setText(_translate("MainWindow", "从核上表类型"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(9)
+        item.setText(_translate("MainWindow", "CPU类型"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(10)
+        item.setText(_translate("MainWindow", "makefile编so"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(11)
+        item.setText(_translate("MainWindow", "cmake编so"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(12)
+        item.setText(_translate("MainWindow", "ko编译指令"))
+        item = self.tableWidget_v8Input.horizontalHeaderItem(13)
+        item.setText(_translate("MainWindow", "备注"))
+        self.pushButton_30.setText(_translate("MainWindow", "提交"))
+
+        # self.logs_output.setText(_translate("MainWindow","导出日志"))
 
 
     def show_page(self):
@@ -867,42 +1235,44 @@ class Ui_MainWindow(object):
             index.setReadOnly(1)
         # 提交查询表单 试用 先提交两个
 
-    def apply_form(self):
-        list = []
-        # 插入三个数据
-        list.append(self.lineEdit_2.text())
-        list.append(self.lineEdit_3.text())
-        list.append(self.lineEdit.text())
-        print(list)
-        result = quarryDB.quarry_search(list[0], list[1], list[2])  # 搜索结果
-        # 贴到table上
-        self.tableWidget_2.setRowCount(len(result))
-        self.tableWidget_2.setColumnCount(len(result[0]))
-        # 表头
-        headName = quarryDB.get_head_name('test')
-        print(headName)
-        self.tableWidget_2.setHorizontalHeaderLabels(headName)
-
-        for i in range(len(result)):
-            for j in range(len(result[0])):
-                print(i)
-                self.tableWidget_2.setItem(i, j, QTableWidgetItem(result[i][j]))
-
-        # def show_data_table(self, data):
-        #     self.tableWidget_2.setRowCount()
-
-        # 重置表单
-        # def reset_form(self):
-
-        # 从下拉栏中选择形态表
+    # def apply_form(self):
+    #     list = []
+    #     # 插入三个数据
+    #     list.append(self.lineEdit_2.text())
+    #     list.append(self.lineEdit_3.text())
+    #     list.append(self.lineEdit.text())
+    #     print(list)
+    #     result = quarryDB.quarry_search(list[0], list[1], list[2])  # 搜索结果
+    #     # 贴到table上
+    #     self.tableWidget_2.setRowCount(len(result))
+    #     self.tableWidget_2.setColumnCount(len(result[0]))
+    #     # 表头
+    #     headName = quarryDB.get_head_name('test')
+    #     print(headName)
+    #     self.tableWidget_2.setHorizontalHeaderLabels(headName)
+    #
+    #     for i in range(len(result)):
+    #         for j in range(len(result[0])):
+    #             print(i)
+    #             self.tableWidget_2.setItem(i, j, QTableWidgetItem(result[i][j]))
+    #
+    #     # def show_data_table(self, data):
+    #     #     self.tableWidget_2.setRowCount()
+    #
+    #     # 重置表单
+    #     # def reset_form(self):
+    #
+    #     # 从下拉栏中选择形态表
 
     content = []
     revise_content = []
     def select_from_resources(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
 
             resource = self.comboBox.currentText()
-            cur = quarryDB.quarry_form(resource)
+            cur = quarryDB.quarry_form(resource,self.db_file)
 
             resource_list = []
             for i in cur:
@@ -917,14 +1287,14 @@ class Ui_MainWindow(object):
             self.revise_content = []
 
             #查询修订表
-            revise_results = quarryDB.quarry_logs(resource)
+            revise_results = quarryDB.quarry_logs(resource,self.db_file)
             self.revise_tab(resource + '修订记录', revise_results)
             self.revise_content.append(resource + "修订记录")
             self.revise_content.append(revise_results)
             for i in resource_list:
                 print('当前表' + i)
 
-                results = quarryDB.quarry_all(i)  # 查询一个table返回所有搜索结果
+                results = quarryDB.quarry_all(i,self.db_file)  # 查询一个table返回所有搜索结果
 
 
                 # if len(results) != 0:
@@ -935,6 +1305,8 @@ class Ui_MainWindow(object):
 
                 # else:
                 #     print (i, "is empty")
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as a:
             traceback.print_exc()
 
@@ -1002,7 +1374,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab, "")
         _translate = QtCore.QCoreApplication.translate
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", tablename))
-
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
         # # 贴到table上
         if results != None and len(results) != 0 and len(results[0]) - 1 > 0:
@@ -1041,10 +1413,12 @@ class Ui_MainWindow(object):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(0)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.verticalLayout_6.addWidget(self.tableWidget)
         self.tabWidget.addTab(self.tab, "")
         _translate = QtCore.QCoreApplication.translate
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", tablename))
+
 
 
         # # 贴到table上
@@ -1055,6 +1429,7 @@ class Ui_MainWindow(object):
                 for j in range(len(results[0])):
 
                     self.tableWidget.setItem(i, j, QTableWidgetItem(results[i][j]))
+
             self.rander_table_background_browse(self.tableWidget)
         # #表头 设置成中文
         # headName = quarryDB.get_head_name(tablename)
@@ -1146,6 +1521,8 @@ class Ui_MainWindow(object):
     #提交查找/插入条件表单
     def submit_form(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             #检测是否为全空
             emptyflag = 1
             #表单
@@ -1171,35 +1548,43 @@ class Ui_MainWindow(object):
             logs_1 = []
             logs_2 = []
             logs_3 = []
+            logs_version = []
+            logs_algoId = []
             for i in self.selected_hardware:
                 # print(i, form)
                 sql = insertDB.insert_db(i, form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                    form[8], form[9], form[10]
                                    , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                   form[19], form[20])
+                                   form[19], form[20], form[21], form[22])
                 sql_store.append(sql)
                 #记录日志
                 logs_1.append(form[0])
-                logs_2.append(form[1])
+                logs_2.append(form[3])
                 logs_3.append(i)
+                logs_version.append(form[1])
+                logs_algoId.append(form[4])
                 # self.upload_logs('向 ' + i + '中 ' + form[0] + ' 插入 ' + form[1] + ' 成功')
-            insertDB.excecute_sql(sql_store)
+            insertDB.excecute_sql(sql_store, self.db_file)
             for i in range(len(logs_1)):
-                self.upload_logs('向 ' + logs_3[i] + '中的算法：' + logs_1[i] + ' 插入 ' + logs_2[i] + ' 成功')
+                self.upload_logs('成功向 ' + logs_3[i] + '插入版本号为：'+ logs_version[i] + ' 业务名为：' + logs_2[i] + '算法表ID为：' + logs_algoId[i] + ' 的条目')
             self.search()
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
             if str(e).find('name') != -1:
                 texts = '业务名重复'
             else :
                 texts = str(e)
 
-            QMessageBox.warning(self.stackedWidget_1, '提示', texts)  # 创建一个二次确认框
+            QMessageBox.warning(self.stackedWidget_1, '提示', texts)
 
             self.upload_logs('插入失败 ,' + str(e) + texts  )
     #备份搜索结果 用来进行更新
     copy = []
     def search(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             #初始化table
             self.tableWidget_4.clearContents()
             self.tableWidget_4.setRowCount(0)
@@ -1215,7 +1600,7 @@ class Ui_MainWindow(object):
                     form.append(text)
 
                 else:
-                    form.append('N/A')
+                    form.append('None')
 
 
 
@@ -1225,12 +1610,13 @@ class Ui_MainWindow(object):
                 results = quarryDB.quarry_search(i, form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                    form[8], form[9], form[10]
                                    , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                   form[19], form[20])
+                                   form[19], form[20], form[21],form[22], self.db_file)
                 print(results)
                 self.show_search_results(results,i)
             # self.show_search_results(results)
             # self.upload_logs('在 '+ i +' 中搜索 算法为 '+ form[0] +' 业务名为 ' + form[1] + '; 算法表ID = ' + form[2] + '; SubTID = ' + form[3]+ ' 的条目')
-
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
             traceback.print_exc()
             print('search error')
@@ -1272,6 +1658,8 @@ class Ui_MainWindow(object):
     copy_logs = []
     def select_from_logs(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             resource = self.comboBox_2.currentText()
 
 
@@ -1283,7 +1671,7 @@ class Ui_MainWindow(object):
 
                 # print(i)
 
-            results = quarryDB.quarry_logs(resource)  # 查询一个table返回所有搜索结果
+            results = quarryDB.quarry_logs(resource, self.db_file)  # 查询一个table返回所有搜索结果
 
             if results != None and len(results) != 0:
                 self.tableWidget_6.setRowCount(len(results))
@@ -1313,34 +1701,37 @@ class Ui_MainWindow(object):
             else:
                 print("is empty")
 
-
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as a:
             traceback.print_exc()
 
     def rander_table_background(self, table):
         for i in range(table.rowCount()):
+            if table.item(i,4).text().isdigit():
+                num = int(table.item(i,4).text()) + 3
+
+                table.item(i,4).setBackground(QBrush(QColor(num*111%255,num*99%255,120)))
+
+            if table.item(i,5).text().isdigit():
+                num = int(table.item(i, 5).text()) + 3
+                table.item(i, 5).setBackground(QBrush(QColor(num * 130 % 255, num * 120 % 255, 120)))
+    def rander_table_background_browse(self, table):
+        for i in range(table.rowCount()):
             if table.item(i,3).text().isdigit():
-                num = int(table.item(i,3).text()) + 1
+                num = int(table.item(i,3).text()) + 3
 
                 table.item(i,3).setBackground(QBrush(QColor(num*111%255,num*99%255,120)))
 
             if table.item(i,4).text().isdigit():
-                num = int(table.item(i, 4).text()) + 1
+                num = int(table.item(i, 4).text()) + 3
                 table.item(i, 4).setBackground(QBrush(QColor(num * 130 % 255, num * 120 % 255, 120)))
-    def rander_table_background_browse(self, table):
-        for i in range(table.rowCount()):
-            if table.item(i,2).text().isdigit():
-                num = int(table.item(i,2).text()) + 1
-
-                table.item(i,2).setBackground(QBrush(QColor(num*111%255,num*99%255,120)))
-
-            if table.item(i,3).text().isdigit():
-                num = int(table.item(i, 3).text()) + 1
-                table.item(i, 3).setBackground(QBrush(QColor(num * 130 % 255, num * 120 % 255, 120)))
 
 
     def delete(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             form = []
             llog = ''
             for i in range(self.tableWidget_4.rowCount()):
@@ -1351,7 +1742,7 @@ class Ui_MainWindow(object):
                 llog = deleteDB.delete( form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                    form[8], form[9], form[10]
                                    , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                   form[19], form[20],form[21])
+                                   form[19], form[20],form[21],form[22],form[23],self.db_file)
 
 
                 self.search()
@@ -1359,13 +1750,17 @@ class Ui_MainWindow(object):
                 print('no item selected')
             if llog != '':
                 self.upload_logs(llog)
-
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
             traceback.print_exc()
             self.upload_logs("删除 " + form[0] + '中的' + form[2] + '失败')
             print('delete error')
     #确认删除
     def double_check_delete(self):
+        if self.tableWidget_4.currentItem() == None:
+            QMessageBox.warning(self.stackedWidget_1,'提示','尚未选择条目')
+            return
         A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确定删除该条目？', QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
         if A == QMessageBox.Yes:
             self.delete()
@@ -1373,11 +1768,23 @@ class Ui_MainWindow(object):
             print('cancel')
 
     #更新整张表 需要原子性
+
+    def double_check_update(self):
+        A = QMessageBox.question(self.stackedWidget_1, '确认', '确认更新？', QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+        if A == QMessageBox.Yes:
+            self.update()
+        else:
+            print('cancel')
+
     def update(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+
             llog = ''
-            emptyflag = 1
             sql_store = []
+            lists = []
+            upload_log = ''
             for i in range(self.tableWidget_4.rowCount()):
                 form = []
 
@@ -1391,19 +1798,28 @@ class Ui_MainWindow(object):
 
 
                 if len(form) != 0:
+
+
                     llog = updateDB.update_db( form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                        form[8], form[9], form[10]
                                        , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                       form[19], form[20],form[21], i, self.copy)
+                                       form[19], form[20],form[21],form[22],form[23], i, self.copy)
                 # self.upload_logs("更新 " + form[0] + '中的' + form[2] + '成功')
                 #lists 里面包含log信息和待执行sql
+
                 if llog != None and len(llog) != 0:
                     lists = list(llog)
                     sql_store.append(lists[1])
-            updateDB.sql_excecute(sql_store)
-            # if llog != '':
-            #     self.upload_logs(llog)
+                    upload_log += lists[0]
+            updateDB.sql_excecute(sql_store,self.db_file)
+            print(lists[0])
+            if upload_log != None and upload_log != '' :
+                self.upload_logs(upload_log)
             self.search()
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+            traceback.print_exc()
+
 
         except Exception as e:
 
@@ -1414,12 +1830,16 @@ class Ui_MainWindow(object):
             self.search()
 
     def search_to_excel(self):
-
+        if self.tableWidget_4.rowCount() == None or self.tableWidget_4.rowCount() == 0:
+            QMessageBox.warning(self.stackedWidget_1,'提示','搜索结果为空')
+            return
         # openfile_name = QFileDialog.getOpenFileNames(self.stackedWidget_1,'选择文件')
         # print(openfile_name)
         fileName = QFileDialog.getSaveFileName(self.stackedWidget_1, "", "",".xlsx")
         # print(fileName)
         fileName = list(fileName)
+
+
         if fileName[0].find('.xlsx') != -1:
             dir = fileName[0]
         else :
@@ -1442,12 +1862,45 @@ class Ui_MainWindow(object):
 
     def browse_to_excel(self):
         try:
+
             if self.tabWidget.tabText(0) == None or self.tabWidget.tabText(0) == '' :
                 QMessageBox.warning(self.stackedWidget_1,'提示','请先选择形态表')
                 return
+
+            version, ok = QInputDialog.getMultiLineText(self.stackedWidget_1, "导出版本", "请输入想要导出的版本号，以回车隔开\n\n"
+                                                                         "默认导出所有版本\n\n版本号:")
+            if ok == True:
+                version_list = []
+                version_list1 = version.split('\n')
+                for i in version_list1:
+                    if i.isspace() == True :
+                        continue
+                    if i == '':
+                        continue
+                    version_list.append(i.strip())
+                print(version_list)
+            else :
+                return
+
+
+
+
+            # version, ok = QInputDialog.getText(self.stackedWidget_1, "导出版本", "请输入想要导出的版本号，以空格隔开\n\n"
+            #                                                              "默认导出所有版本\n\n版本号:", QLineEdit.Normal, "")
+            #
+            # if ok == True:
+            #     version.strip()
+            #     version_list = version.split()
+            #     print(version_list)
+            # else :
+            #     print('quxiao ')
+            #     return
+
             fileName = QFileDialog.getSaveFileName(self.stackedWidget_1, "", "", ".xlsx")
             # print(fileName)
             fileName = list(fileName)
+            if fileName[0] == None or fileName[0] == '':
+                return
             if fileName[0].find('.xlsx') != -1:
                 dir = fileName[0]
             else:
@@ -1472,11 +1925,19 @@ class Ui_MainWindow(object):
                     for j in self.content[i]:
                         row = list(j)
                         del[row[0]]
-                        onesheet.append(row)
+                        print('看这里')
+                        print(row)
+                        print( row[0] in version_list)
+                        if (row[0] in version_list) == True :
+                            print("进来了@@@@！！！！！！！！！！！！！！")
+                            onesheet.append(row)
                     onesheet.insert(0, constants.head_name_cn)
+                    print('sheet内容')
+                    print(onesheet)
                     xlsxOpenpyxl.add_content_to_sheet(dir,sheetname,onesheet)
             xlsxOpenpyxl.cur_head(dir)
         except Exception as e:
+            traceback.print_exc()
             print("browse_to_excel error")
 
     def revise_to_excel(self, dir):
@@ -1497,6 +1958,11 @@ class Ui_MainWindow(object):
     def upload_logs(self, log):
         log = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '  ' + log
         self.listWidget.addItem(log)
+        self.statusbar.clearMessage()
+        self.statusbar.showMessage('最近一次修改 ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        log_file = open('修改日志.txt',mode = 'a')
+        log_file.write(log + '\n')
+        log_file.close()
 
     def double_check_revise(self):
 
@@ -1511,7 +1977,8 @@ class Ui_MainWindow(object):
 
     def revise_form(self):
         try:
-
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             form = []
             for i in range(len(constants.head_name_logs_input)):
                 if self.tableWidget_5.item(0, i) != None:
@@ -1521,13 +1988,14 @@ class Ui_MainWindow(object):
                     form.append(text)
 
                 else:
-                    form.append('N/A')
+                    form.append('None')
             tablename = self.comboBox_2.currentText()
             form.insert(0, time.strftime("%Y-%m-%d", time.localtime()))
 
-            insertDB.insert_logs(tablename, form[0], form[1], form[2], form[3], form[4], form[5])
+            insertDB.insert_logs(tablename, form[0], form[1], form[2], form[3], form[4], form[5], self.db_file)
 
-
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             traceback.print_exc()
             print('submit_log error')
@@ -1536,13 +2004,16 @@ class Ui_MainWindow(object):
     #更新整张表 需要原子性
     def update_revise(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+
             for i in range(self.tableWidget_6.rowCount()):
                 form = []
                 for j in range(self.tableWidget_6.columnCount()):
                     form.append(self.tableWidget_6.item(i,j).text().strip())
                 if len(form) != 0:
                     print(self.copy_logs)
-                    updateDB.update_revise_db( self.comboBox_2.currentText(), form[0], form[1], form[2], form[3], form[4], form[5], i, self.copy_logs)
+                    updateDB.update_revise_db( self.comboBox_2.currentText(), form[0], form[1], form[2], form[3], form[4], form[5], i, self.copy_logs,self.db_file)
                 # self.upload_logs("更新 " + form[0] + '中的' + form[2] + '成功')
                 #更改成功后 备份变成当前
 
@@ -1550,6 +2021,8 @@ class Ui_MainWindow(object):
             # else:
             #     print('')
             self.select_from_logs()
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             print('update error')
 
@@ -1564,18 +2037,22 @@ class Ui_MainWindow(object):
 
     def delete_revise(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             form = []
             for i in range(self.tableWidget_6.rowCount()):
                 if self.tableWidget_6.item(i,0).isSelected():
                     for j in range(self.tableWidget_6.columnCount()):
                         form.append(self.tableWidget_6.item(i,j).text().strip())
             if len(form) != 0:
-                deleteDB.delete_revise( self.comboBox_2.currentText(),form[0], form[1], form[2], form[3], form[4], form[5])
+                deleteDB.delete_revise( self.comboBox_2.currentText(),form[0], form[1], form[2], form[3], form[4], form[5],self.db_file)
 
 
                 self.select_from_logs()
             else:
                 print('no item selected')
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
             traceback.print_exc()
             print('delete error')
@@ -1587,7 +2064,7 @@ class Ui_MainWindow(object):
             #清空tab
 
 
-            fileName = QFileDialog.getOpenFileName(self.stackedWidget_1,'','',"*.xlsx")
+            fileName = QFileDialog.getOpenFileName(self.stackedWidget_1,'','',"(*.xls *.xlsx)")
             fileName = list(fileName)
             if fileName[0] == None or len(fileName[0]) == 0:
                 return
@@ -1631,6 +2108,8 @@ class Ui_MainWindow(object):
     #先判断形态表已经存在
     def save_browse(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
 
             excelName = self.tabWidget.tabText(0).replace('修订记录','').strip()
             flag = 1
@@ -1638,7 +2117,7 @@ class Ui_MainWindow(object):
             oldname = []
             newname = []
             hardware = self.get_table_from_form(excelName)
-            rootlist = quarryDB.quarry_form_store()
+            rootlist = quarryDB.quarry_form_store(self.db_file)
             rootlist = list(rootlist)
             rootlist.insert(0,"形态表")
 
@@ -1672,9 +2151,9 @@ class Ui_MainWindow(object):
                     sqls = []
                     if i == 0:
                         print(self.browse_store)
-                        sqlite3DB.create_log(excelName + '_tmp')
+                        sqlite3DB.create_log(excelName + '_tmp',self.db_file)
                         for j in self.browse_store[1]:
-                            insertDB.insert_logs(excelName+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5])
+                            insertDB.insert_logs(excelName+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5], self.db_file)
                         # sqlite3DB.drop_table(excelName+'_logs')
 
                         droplog = excelName+'_logs'
@@ -1686,7 +2165,7 @@ class Ui_MainWindow(object):
                         hardware = self.get_table_from_form(excelName)
                         for j in hardware:
                             if j == self.tabWidget.tabText(i):
-                                sqlite3DB.create_table(self.tabWidget.tabText(i) + '_tmp')
+                                sqlite3DB.create_table(self.tabWidget.tabText(i) + '_tmp',self.db_file)
 
 
 
@@ -1696,9 +2175,9 @@ class Ui_MainWindow(object):
 
                             sql = insertDB.insert_db(self.tabWidget.tabText(i)+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5],j[6]
                                                    ,j[7],j[8],j[9],j[10],j[11],j[12],j[13],j[14],j[15],j[16],j[17],
-                                                   j[18],j[19],j[20])
+                                                   j[18],j[19],j[20],j[21],j[22])
                             sqls.append(sql)
-                        insertDB.excecute_sql(sqls)
+                        insertDB.excecute_sql(sqls, self.db_file)
                         # sqlite3DB.drop_table(self.tabWidget.tabText(i))
 
                         # droptable.append(self.tabWidget.tabText(i))
@@ -1710,9 +2189,9 @@ class Ui_MainWindow(object):
                 droptable = self.get_table_from_form(excelName)
                 droptable.insert(0,droplog)
                 for i in range(len(droptable)):
-                    sqlite3DB.drop_table(droptable[i])
+                    sqlite3DB.drop_table(droptable[i], self.db_file)
                 for i in range(len(oldname)):
-                    sqlite3DB.rename_table(oldname[i], newname[i])
+                    sqlite3DB.rename_table(oldname[i], newname[i], self.db_file)
 
 
                 QMessageBox.about(self.stackedWidget_1, '提示', '覆盖成功')
@@ -1724,22 +2203,24 @@ class Ui_MainWindow(object):
                 QMessageBox.warning(self.stackedWidget_1,'提示','该形态表尚不存在，请先注册后添加')
                 return
 
-        except IntegrityError as e:
-            traceback.print_exc()
-            QMessageBox.warning(self.stackedWidget_1,'提示', '业务名重复，覆盖失败')
+        # except Error as e:
+        #     traceback.print_exc()
+        #     QMessageBox.warning(self.stackedWidget_1,'提示', '业务名重复，覆盖失败')
 
         except IndexError as e:
             traceback.print_exc()
             QMessageBox.warning(self.stackedWidget_1,'提示','Excel格式错误')
 
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
 
-        except Exception :
+        except Exception as e:
             traceback.print_exc()
             error= str(e)
             QMessageBox.warning(self.stackedWidget_1, '提示', error)
 
         finally:
-            sqlite3DB.delete_tmp()
+            sqlite3DB.delete_tmp(self.db_file)
             self.close_browse()
 
     def double_check_overwrite(self):
@@ -1759,17 +2240,17 @@ class Ui_MainWindow(object):
 
     def menu_newForm(self):
         try:
-
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             # 第三个参数表示显示类型，可选，有正常（QLineEdit.Normal）、密碼（ QLineEdit. Password）、不显示（ QLineEdit. NoEcho）三种情况
             formname, ok = QInputDialog.getText(self.treeWidget, "新建形态表", "命名新的形态表:", QLineEdit.Normal, "")
             if ok == True:
                 formname.strip()
-                print("侧事故啊啊啊")
-                print(ok)
+
                 if formname == None or formname == '' or formname.isspace == True:
                     raise Exception('形态表不可为空')
                 else:
-                    form_list = list(quarryDB.quarry_form_store())
+                    form_list = list(quarryDB.quarry_form_store(self.db_file))
                     print(form_list)
                     for i in form_list:
                         if i == formname:
@@ -1779,17 +2260,19 @@ class Ui_MainWindow(object):
                                              QMessageBox.Yes | QMessageBox.No)
                     if A == QMessageBox.Yes:
                         #注册到form store里
-                        insertDB.insert_form(formname)
+                        insertDB.insert_form(formname, self.db_file)
                         #创建一个存储新的单板的form表
-                        sqlite3DB.create_form(formname)
-                        sqlite3DB.create_log(formname)
+                        sqlite3DB.create_form(formname, self.db_file)
+                        sqlite3DB.create_log(formname, self.db_file)
                         QMessageBox.warning(self.stackedWidget_1, '提示', '形态表 ' + formname + ' 新建成功')
                         self.upload_logs('新建形态表:' + formname)
                         self.refresh_tree()
+                        self.init_menu()
                     else:
                         print('取消创建')
 
-
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             A = QMessageBox.warning(self.stackedWidget_1, '提示', '新建失败,' + str(e))
 
@@ -1799,6 +2282,8 @@ class Ui_MainWindow(object):
     def menu_newHardware(self):
 
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             #获得被点击的条目
             if self.treeWidget.currentItem().parent() == None:
                 formname = self.treeWidget.currentItem().text(0)
@@ -1813,7 +2298,7 @@ class Ui_MainWindow(object):
                 if tablename == None or tablename == '' or tablename.isspace == True:
                     raise Exception('单板名称不可为空')
                 else:
-                    form_list = list(quarryDB.quarry_form(formname))
+                    form_list = list(quarryDB.quarry_form(formname,self.db_file))
                     print("现在有的单板" + str(form_list))
                     for i in form_list:
                         i = list(i)
@@ -1828,17 +2313,30 @@ class Ui_MainWindow(object):
                                              QMessageBox.Yes | QMessageBox.No)
                     if A == QMessageBox.Yes:
                         # 将单板注册到form里
-                        insertDB.insert_hardware(formname, tablename)
+                        insertDB.insert_hardware(formname, tablename, self.db_file)
                         # 创建一个存储新的单板的form表 和logs
-                        sqlite3DB.create_table(tablename)
+                        sqlite3DB.create_table(tablename, self.db_file)
 
-                        QMessageBox.warning(self.stackedWidget_1, '提示', '新建成功')
+
+
+
                         self.upload_logs('新建单板:' + tablename)
                         self.refresh_tree()
+                        self.init_menu()
+
+                        A = QMessageBox.question(self.stackedWidget_1, '确认', '新建成功，是否立即录入单板信息？',
+                                                 QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+                        if A == QMessageBox.Yes:
+                            self.redirect_to_hardware_info(formname, tablename)
+                        else:
+                            print('cancel')
+
+
                     else:
                         print('取消创建')
 
-
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             A = QMessageBox.warning(self.stackedWidget_1, '提示', '新建失败,' + str(e))
 
@@ -1855,49 +2353,68 @@ class Ui_MainWindow(object):
         #         result.append(row)
         #     result.insert(0,constants.head_name_search)
         #     xlsxOpenpyxl.write_excel_xlsx(dir,'sheet1',result)
+    def redirect_to_hardware_info(self, formname, tablename):
+        self.pushButton_edit.click()
+
+        print(self.tableWidget_v8Input.item(0,2))
+        self.tableWidget_v8Input.setItem(0,2, QTableWidgetItem(formname))
+        self.tableWidget_v8Input.setItem(0,0, QTableWidgetItem(tablename))
+
+
+
 
     def refresh_tree(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
 
-        self.treeWidget.clear()
-        rootlist = quarryDB.quarry_form_store()
-        rootlist = list(rootlist)
-        # rootlist.insert(0,"形态表")
-        for i in range(len(rootlist)):
-            # if i == 0:  # 跳过第一条 也就是“形态表”
-            #     continue
-            cur = list(rootlist[i])
-            root = self.add_root(cur[0])
-            print(root)
-            # 从constants初始化tree 下拉表单的子表（单板）
-            childlist = quarryDB.quarry_form(root.text(0))
-            childlist = list(childlist)
+            self.treeWidget.clear()
+            rootlist = quarryDB.quarry_form_store(self.db_file)
+            rootlist = list(rootlist)
+            # rootlist.insert(0,"形态表")
+            for i in range(len(rootlist)):
+                # if i == 0:  # 跳过第一条 也就是“形态表”
+                #     continue
+                cur = list(rootlist[i])
+                root = self.add_root(cur[0])
+                print(root)
+                # 从constants初始化tree 下拉表单的子表（单板）
+                childlist = quarryDB.quarry_form(root.text(0), self.db_file)
+                childlist = list(childlist)
 
-            for j in range(len(childlist)):
-                tmp = list(childlist[j])
-                self.add_child(tmp[0], j, root)
-        resources_list = []
-        for i in rootlist:
-            # if i == '形态表':
-            #     resources_list.append(i)
-            # else:
-            i = list(i)
-            resources_list.append(i[0])
+                for j in range(len(childlist)):
+                    tmp = list(childlist[j])
+                    self.add_child(tmp[0], j, root)
+            resources_list = []
+            for i in rootlist:
+                # if i == '形态表':
+                #     resources_list.append(i)
+                # else:
+                i = list(i)
+                resources_list.append(i[0])
 
 
-        self.comboBox_2.clear()
-        self.comboBox_2.addItems(resources_list)
+            self.comboBox_2.clear()
+            self.comboBox_2.addItems(resources_list)
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception :
+            traceback.print_exc()
 
     def menu_delete(self):
         try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
             form = self.treeWidget.currentItem()
             if form.parent() != None:
                 #警告
                 A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确认删除单板' + form.text(0)+'？',
                                          QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
                 if A == QMessageBox.Yes:
-                    deleteDB.delete_table_from_form(form.parent().text(0), form.text(0))
+                    deleteDB.delete_table_from_form(form.parent().text(0), form.text(0),self.db_file)
                     self.upload_logs('成功删除单板 '+form.text(0))
                     self.refresh_tree()
+                    self.init_menu()
                 else:
                     print('cancel')
                     return
@@ -1910,62 +2427,384 @@ class Ui_MainWindow(object):
                 A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确认删除形态表' + form.text(0) + '？',
                                          QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
                 if A == QMessageBox.Yes:
-                    deleteDB.delete_form_from_formstore(form.text(0))
+                    deleteDB.delete_form_from_formstore(form.text(0), self.db_file)
                     self.upload_logs('成功删除单板 ' + form.text(0))
                     self.refresh_tree()
                 else:
                     print('cancel')
                     return
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             traceback.print_exc()
             self.upload_logs(e)
 
     def get_table_from_form(self,formname):
-        cur = quarryDB.quarry_form(formname)
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+            cur = quarryDB.quarry_form(formname, self.db_file)
 
-        resource_list = []
-        for i in cur:
-            i = list(i)
-            resource_list.append(i[0])
-        return resource_list
+            resource_list = []
+            for i in cur:
+                i = list(i)
+                resource_list.append(i[0])
+            return resource_list
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception :
+            traceback.print_exc()
 
     #返回所有形态表名 初始化tree窗口
     def tree_init(self):
-        rootlist = quarryDB.quarry_form_store()
-        rootlist = list(rootlist)
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
 
-        for i in range(len(rootlist)):
-            cur = list(rootlist[i])
-            root = self.add_root(cur[0])
-            print(root)
+            rootlist = quarryDB.quarry_form_store(self.db_file)
+            rootlist = list(rootlist)
 
-            childlist = quarryDB.quarry_form(root.text(0))
-            childlist = list(childlist)
+            for i in range(len(rootlist)):
+                cur = list(rootlist[i])
+                root = self.add_root(cur[0])
+                print(root)
 
-            for j in range(len(childlist)):
-                tmp = list(childlist[j])
-                self.add_child(tmp[0], j, root)
-        resources_list = []
-        for i in rootlist:
-            i = list(i)
-            resources_list.append(i[0])
-        return resources_list
+                childlist = quarryDB.quarry_form(root.text(0), self.db_file)
+                childlist = list(childlist)
+
+                for j in range(len(childlist)):
+                    tmp = list(childlist[j])
+                    self.add_child(tmp[0], j, root)
+            resources_list = []
+            for i in rootlist:
+                i = list(i)
+                resources_list.append(i[0])
+            return resources_list
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception:
+            traceback.print_exc()
 
     def get_all_form_name(self):
-        rootlist = quarryDB.quarry_form_store()
-        rootlist = list(rootlist)
-        resources_list = []
-        for i in rootlist:
-            i = list(i)
-            resources_list.append(i[0])
-        return resources_list
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+            rootlist = quarryDB.quarry_form_store(self.db_file)
+            rootlist = list(rootlist)
+            resources_list = []
+            for i in rootlist:
+                i = list(i)
+                resources_list.append(i[0])
+            return resources_list
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception:
+            traceback.print_exc()
+
     def refresh_browse(self):
-        num = self.comboBox.currentIndex()
-        self.comboBox.clear()
-        self.comboBox.addItems(self.get_all_form_name())
-        self.comboBox.setCurrentIndex(num)
+        try:
+            num = self.comboBox.currentIndex()
+            self.comboBox.clear()
+            self.comboBox.addItems(self.get_all_form_name())
+            self.comboBox.setCurrentIndex(num)
+        except Exception:
+            traceback.print_exc()
+
+    def quarry_hardware_info(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+            result = quarryDB.quarry_hardware_info(self.db_file)
+
+            # 贴到table上
+            self.tableWidget_v8.setRowCount(len(result))
+            self.tableWidget_v8.setColumnCount(len(result[0]))
+            # 表头
+            for i in range(len(result)):
+                for j in range(len(result[0])):
+                    self.tableWidget_v8.setItem(i, j, QTableWidgetItem(result[i][j]))
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception:
+            traceback.print_exc()
+
+    def double_check_insert_hardware_info(self):
+        A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确定插入该单板信息？', QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+        if A == QMessageBox.Yes:
+            self.insert_hardware_info()
+        else:
+            print('cancel')
+
+    def insert_hardware_info(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+            emptyflag = 0;
+            form = []
+            for i in range(self.tableWidget_v8Input.columnCount()):
+                if self.tableWidget_v8Input.item(0, i) != None and self.tableWidget_v8Input.item(0,i).text() != '' and self.tableWidget_v8Input.item(0,i).text().isspace() == False:
+                    text = self.tableWidget_v8Input.item(0, i).text().strip()
+                    # print(text)
+                    emptyflag = 1
+                    form.append(text)
+
+                else:
+                    form.append('N/A')
+            if emptyflag == 0:
+                QMessageBox.warning(self.stackedWidget_1,'提示','输入不可全空')
+                return
 
 
+
+            insertDB.insert_hardware_info(form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7], form[8], form[9],form[10],form[11],form[12],form[13], self.db_file)
+
+            self.quarry_hardware_info()
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception as e:
+            traceback.print_exc()
+            print('submit_hardware_info error')
+
+    def double_check_delete_hardware_info(self):
+
+        A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确定删除该条目？',
+                                 QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+        if A == QMessageBox.Yes:
+            self.delete_hardware_info()
+        else:
+            print('cancel')
+
+
+    def delete_hardware_info(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+            form = []
+            llog = ''
+            for i in range(self.tableWidget_v8.rowCount()):
+                if self.tableWidget_v8.item(i,0).isSelected():
+                    for j in range(self.tableWidget_v8.columnCount()):
+                        form.append(self.tableWidget_v8.item(i,j).text().strip())
+            if len(form) != 0:
+                llog = deleteDB.delete_hardware_info( form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
+                                   form[8], form[9], form[10]
+                                   , form[11], form[12], form[13],self.db_file)
+
+
+                self.quarry_hardware_info()
+            else:
+                QMessageBox.warning(self.stackedWidget_1,'提示','没有选中条目')
+                print('no item selected')
+            if llog != '':
+                self.upload_logs(llog)
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception as e :
+            traceback.print_exc()
+            print('delete error')
+
+    def hardware_info_to_excel(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+            fileName = QFileDialog.getSaveFileName(self.stackedWidget_1, "", "", ".xlsx")
+            # print(fileName)
+            fileName = list(fileName)
+            if fileName[0] == None or fileName[0] == '':
+                return
+            if fileName[0].find('.xlsx') != -1:
+                dir = fileName[0]
+            else:
+
+                dir = fileName[0] + fileName[1]
+
+
+            xlsxOpenpyxl.helper(dir)
+            hardware_info = quarryDB.quarry_hardware_info(self.db_file)
+
+            xlsxOpenpyxl.add_sheet(dir, '单板信息')
+            onesheet = []
+            for i in hardware_info:
+                onesheet.append(list(i))
+            onesheet.insert(0, constants.head_name_hardware_info)
+            xlsxOpenpyxl.cur_head(dir)
+            xlsxOpenpyxl.add_content_to_sheet(dir, '单板信息', onesheet)
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception as e:
+            traceback.print_exc()
+            print("browse_to_excel error")
+
+    hardware_info_excel_name = ''
+    def excel_to_hardware_info(self):
+        _translate = QtCore.QCoreApplication.translate
+        try:
+            #清空tab
+
+
+            fileName = QFileDialog.getOpenFileName(self.stackedWidget_1,'','',"*.xlsx")
+            fileName = list(fileName)
+
+            if fileName[0] == None or len(fileName[0]) == 0:
+                return
+            self.tableWidget_v8.clear()
+            self.hardware_info_excel_name = fileName[0]
+            #lists结构 lists 里第一行数据是sheet页名字  sheet页第一个是修订后面是单板 [[一个sheet页[一行数据]]]
+            hardware_info = xlsxOpenpyxl.read_excel_xlsx(fileName[0])
+            print(hardware_info)
+            for i in range(len(hardware_info[1])):
+
+
+
+                if hardware_info[1] != None and len(hardware_info[1]) != 0 :
+                    self.tableWidget_v8.setRowCount(len(hardware_info[1]))
+                    self.tableWidget_v8.setColumnCount(len(hardware_info[1][0]))
+                    for i in range(len(hardware_info[1])):
+                        for j in range(len(hardware_info[1][0])):
+                            cur = hardware_info[1]
+                            self.tableWidget_v8.setItem(i, j, QTableWidgetItem(cur[i][j]))
+
+                # #表头 设置成中文
+                # headName = quarryDB.get_head_name(tablename)
+                # for i in range(len(headName)):
+                #     headName[i] = constants.head_name[headName[i]]
+                # 常量表头
+            headName = constants.head_name_hardware_info
+            self.tableWidget_v8.setHorizontalHeaderLabels(headName)
+
+            self.tableWidget_v8Input.hide()
+            self.pushButton_30.hide()
+            self.pushButton_31.hide()
+            self.pushButton_32.hide()
+            self.pushButton_33.hide()
+            self.pushButton_34.show()
+            self.pushButton_35.show()
+            self.label_14.hide()
+            self.label_13.setText('预览单板信息：' + fileName[0])
+
+
+
+
+
+
+
+            # QMessageBox.about(self.stackedWidget_1,'提示','导入成功')
+        except Exception :
+            traceback.print_exc()
+            self.comboBox.setcurrentText()
+
+    def close_hardware_info(self):
+        self.tableWidget_v8Input.show()
+        self.pushButton_30.show()
+        self.pushButton_31.show()
+        self.pushButton_32.show()
+        self.pushButton_33.show()
+        self.pushButton_34.hide()
+        self.pushButton_35.hide()
+        self.label_14.show()
+        self.label_13.setText('V8算法组支持单板：')
+        self.quarry_hardware_info()
+
+    def double_check_save_hardware_info(self):
+        A = QMessageBox.question(self.stackedWidget_1, '确认', '是否确定覆盖单板信息？', QMessageBox.Yes | QMessageBox.No)  # 创建一个二次确认框
+        if A == QMessageBox.Yes:
+            self.save_hardware_info()
+        else:
+            print('cancel')
+
+    def save_hardware_info(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+            if self.hardware_info_excel_name != None and self.hardware_info_excel_name != '':
+                hardware_info = xlsxOpenpyxl.read_excel_xlsx(self.hardware_info_excel_name)
+                #先建表
+                sqlite3DB.create_hardware_info(self.db_file)
+
+                for i in hardware_info[1]:
+                    insertDB.insert_hardware_info_tmp(i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7],i[8],i[9],i[10],i[11],i[12],i[13], self.db_file)
+                sqlite3DB.drop_table('hardware_info', self.db_file)
+                sqlite3DB.rename_table('hardware_info_tmp','hardware_info',self.db_file)
+
+                QMessageBox.warning(self.stackedWidget_1,'提示','覆盖成功')
+
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception :
+            traceback.print_exc()
+            try:
+                sqlite3DB.drop_table('hardware_info_tmp', self.db_file)
+            except Exception:
+                traceback.print_exc()
+
+    # 打开db
+
+    def open_db(self):
+        try:
+
+            fileName = QFileDialog.getOpenFileName(self.stackedWidget_1, '', '', "*.db")
+            fileName = list(fileName)
+            if fileName[0] == None or len(fileName[0]) == 0:
+                return
+            self.db_file = fileName[0]
+            print(self.db_file)
+    ##################################################
+    #初始化#############################################
+            self.comboBox.clear()
+            self.comboBox_2.clear()
+            self.treeWidget.clear()
+            resources_list = self.tree_init()
+            self.quarry_hardware_info()
+            # 批量插入表下拉资源单监听
+            self.comboBox.addItems(resources_list)
+            self.comboBox.currentIndexChanged.connect(self.select_from_resources)
+            self.selected_hardware = []
+            #修订页下拉资源单
+            self.comboBox_2.addItems(resources_list)
+            self.comboBox_2.currentTextChanged.connect(self.select_from_logs)
+            self.init_menu()
+        except Exception:
+            traceback.print_exc()
+
+    def save_db(self):
+        try:
+            if self.db_file == None or self.db_file == '':
+                raise noDBException
+
+            dir = ''
+            fileName = QFileDialog.getSaveFileName(self.stackedWidget_1, "", "", ".db")
+            # print(fileName)
+            fileName = list(fileName)
+
+            if fileName[0].find('.db') != -1:
+                dir = fileName[0]
+            else:
+
+                dir = fileName[0] + fileName[1]
+
+            copyfile(self.db_file, dir)
+
+        except IOError:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '备份失败，数据库可能已锁')
+            traceback.print_exc()
+
+
+        except noDBException:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
+        except Exception:
+            traceback.print_exc()
+
+
+
+
+
+
+class noDBException(Exception):
+
+    def __init__(self):
+        print('没有打开db')
+    def __str__(self):
+        print("没有打开db")
 
 
 
