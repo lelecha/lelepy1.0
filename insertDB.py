@@ -3,42 +3,47 @@ import sqlite3
 import traceback
 
 
-def insert_db(tablename, version, algo, name, algoId, subTidN, bit, numK
+def insert_db(tablename, version, end_version, algo, name, algoId, subTidN, bit, numK
               , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU,algoSpe,
               testSpe, castType, iOrd,
               TBLM_ID, dpt, dpt_person, confirmation, info):
 
     try:
         if algo == '' or algo.isspace() or algo == 'None':
-            raise Exception('算法名不可为空')
+            raise Exception(tablename + '算法名不可为空')
             algo = 'None'
 
         if version == '' or version.isspace() or version == 'None':
-            raise Exception('版本号不可为空')
+            raise Exception(tablename + '版本号不可为空')
             version = 'None'
+
 
 
         if name == '' or name.isspace() or name == 'None':
             print("名字为空")
-            raise Exception('业务名不可为空')
+            raise Exception(tablename + '业务名不可为空')
             name = 'None'
 
         if algoId == '' or algoId.isspace() or algoId == 'None':
-            raise Exception('算法表ID不可为空')
+            raise Exception(tablename + '算法表ID不可为空')
             algoId = 'None'
 
         if subTidN == '' or subTidN.isspace() or subTidN == 'None':
-            raise Exception('SubTid不可为空')
+            raise Exception(tablename  + 'SubTid不可为空')
             subTidN = 'None'
         if bit == '' or bit.isspace() or bit == 'None':
-            raise Exception('位宽不可为空')
+            raise Exception(tablename + '位宽不可为空')
             bit = 'None'
         if numK == '' or numK.isspace() or numK == 'None' :
-            raise Exception('条数不可为空')
+            raise Exception(tablename  + '条数不可为空')
             numK = 'None'
+
+        if end_version == '' or end_version.isspace():
+            end_version = 'None'
 
         if tidW == '' or tidW.isspace():
             tidW = 'None'
+
 
         if tidN == '' or tidN.isspace():
             tidN = 'None'
@@ -86,14 +91,15 @@ def insert_db(tablename, version, algo, name, algoId, subTidN, bit, numK
         if info == '' or info.isspace():
             info = 'None'
 
-        sql_insert = "insert into '{tablename}' (id, version ,algo, name, bit, numK, tidW, tidN, subTidW, subTidN, sTypeW_bit, sType, " \
+        sql_insert = "insert into '{tablename}' (id, version,end_version ,algo, name, bit, numK, tidW, tidN, subTidW, subTidN, sTypeW_bit, sType, " \
                      "storeLocation, algoId,ISSU,algoSpe, testSpe, " \
                      "castType, iOrd, TBLM_ID, dpt, dpt_person, confirmation, info) " \
-                     "values ( NULL,'{version}','{algo}','{name}', '{bit}', '{numK}', '{tidW}', '{tidN}', '{subTidW}', " \
+                     "values ( NULL,'{version}','{end_version}','{algo}','{name}', '{bit}', '{numK}', '{tidW}', '{tidN}', '{subTidW}', " \
                      "'{subTidN}', '{sTypeW_bit}', '{sType}', '{storeLocation}', '{algoId}','{ISSU}','{algoSpe}','{testSpe}', " \
                      "'{castType}', '{iOrd}', '{TBLM_ID}', '{dpt}', '{dpt_person}', '{confirmation}','{info}');".format(tablename=tablename,
                                                                                                                algo=algo,
                                                                                                                version = version,
+                                                                                                               end_version = end_version,
                                                                                                                info = info,
                                                                                                                name=name,
                                                                                                                bit=bit,

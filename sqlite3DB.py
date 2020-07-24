@@ -21,6 +21,7 @@ def create_table(tablename,db_file):
         cur.execute("CREATE TABLE IF NOT EXISTS '{tablename}' ("
                     "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     "version varchar(255) NOT NULL,"
+                    "end_version varchar(255) NOT NULL,"
                     "algo varchar(255),"
                     "name varchar(255) NOT NULL UNIQUE ,"
                     "algoId varchar(255) NOT NULL,"
@@ -45,7 +46,9 @@ def create_table(tablename,db_file):
                     "info varchar(255)"
                     ");".format(tablename=tablename))
     except Exception as e:
+        traceback.print_exc()
         raise e
+
     finally:
         con.close()
 def create_log(tablename,db_file):

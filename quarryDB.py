@@ -75,11 +75,11 @@ def quarry_form_store(db_file):
         db.close()
 
 
-def quarry_search(tablename, version ,algo, name, algoId, subTidN, bit, numK
+def quarry_search(tablename, version ,end_version, algo, name, algoId, subTidN, bit, numK
                   , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU, algoSpe,
                   testSpe, castType, iOrd,
                   TBLM_ID, dpt, dpt_person, confirmation, info,db_file):
-    list = [None] * 23
+    list = [None] * 24
 
     if algo == 'None' or algo == '':
         list[0] = "'1'"
@@ -88,10 +88,10 @@ def quarry_search(tablename, version ,algo, name, algoId, subTidN, bit, numK
         list[0] = 'algo'
 
     if info == 'None' or info == '':
-        list[22] = "'1'"
+        list[23] = "'1'"
         info = '1'
     else:
-        list[22] = 'info'
+        list[23] = 'info'
 
     if version == 'None' or version == '':
         list[1] = "'1'"
@@ -99,129 +99,136 @@ def quarry_search(tablename, version ,algo, name, algoId, subTidN, bit, numK
     else:
         list[1] = 'version'
 
-    if name == 'None' or name == '':
+
+    if end_version == 'None' or end_version == '':
         list[2] = "'1'"
+        end_version = '1'
+    else:
+        list[2] = 'end_version'
+
+    if name == 'None' or name == '':
+        list[3] = "'1'"
         name = '1'
     else:
-        list[2] = 'name'
+        list[3] = 'name'
 
     if algoId == 'None' or algoId == '':
-        list[3] = "'1'"
+        list[4] = "'1'"
         algoId = '1'
     else:
-        list[3] = 'algoId'
+        list[4] = 'algoId'
 
     if numK == 'None' or numK == '':
-        list[6] = "'1'"
+        list[7] = "'1'"
         numK = '1'
     else:
-        list[6] = 'numK'
+        list[7] = 'numK'
 
     if tidW == 'None' or tidW == '':
-        list[7] = "'1'"
+        list[8] = "'1'"
         tidW = '1'
     else:
-        list[7] = 'tidW'
+        list[8] = 'tidW'
 
     if tidN == 'None' or tidN == '':
-        list[8] = "'1'"
+        list[9] = "'1'"
         tidN = '1'
     else:
-        list[8] = 'tidN'
+        list[9] = 'tidN'
 
     if subTidW == 'None' or subTidW == '':
-        list[9] = "'1'"
+        list[10] = "'1'"
         subTidW = '1'
     else:
-        list[9] = 'subTidW'
+        list[10] = 'subTidW'
 
     if subTidN == 'None' or subTidN == '':
-        list[4] = "'1'"
+        list[5] = "'1'"
         subTidN = '1'
     else:
-        list[4] = 'subTidN'
+        list[5] = 'subTidN'
 
     if sTypeW_bit == 'None' or sTypeW_bit == '':
-        list[10] = "'1'"
+        list[11] = "'1'"
         sTypeW_bit = '1'
     else:
-        list[10] = 'sTypeW_bit'
+        list[11] = 'sTypeW_bit'
 
     if sType == 'None' or sType == '':
-        list[11] = "'1'"
+        list[12] = "'1'"
         sType = '1'
     else:
-        list[11] = 'sType'
+        list[12] = 'sType'
 
     if storeLocation == 'None' or storeLocation == '':
-        list[12] = "'1'"
+        list[13] = "'1'"
         storeLocation = '1'
     else:
-        list[12] = 'storeLocation'
+        list[13] = 'storeLocation'
 
     if bit == 'None' or bit == '':
-        list[5] = "'1'"
+        list[6] = "'1'"
         bit = '1'
     else:
-        list[5] = 'bit'
+        list[6] = 'bit'
 
     if ISSU == 'None' or ISSU == '':
-        list[13] = "'1'"
+        list[14] = "'1'"
         ISSU = '1'
     else:
-        list[13] = 'ISSU'
+        list[14] = 'ISSU'
 
 
     if algoSpe == 'None' or algoSpe == '':
-        list[14] = "'1'"
+        list[15] = "'1'"
         algoSpe = '1'
     else:
-        list[14] = 'algoSpe'
+        list[15] = 'algoSpe'
 
     if testSpe == 'None' or testSpe == '':
-        list[15] = "'1'"
+        list[16] = "'1'"
         testSpe = '1'
     else:
-        list[15] = 'testSpe'
+        list[16] = 'testSpe'
 
     if castType == 'None' or castType == '':
-        list[16] = "'1'"
+        list[17] = "'1'"
         castType = '1'
     else:
-        list[16] = 'castType'
+        list[17] = 'castType'
 
     if iOrd == 'None' or iOrd == '':
-        list[17] = "'1'"
+        list[18] = "'1'"
         iOrd = '1'
     else:
-        list[17] = 'iOrd'
+        list[18] = 'iOrd'
 
     if TBLM_ID == 'None' or TBLM_ID == '':
-        list[18] = "'1'"
+        list[19] = "'1'"
         TBLM_ID = '1'
     else:
-        list[18] = 'TBLM_ID'
+        list[19] = 'TBLM_ID'
 
     if dpt == 'None' or dpt == '':
-        list[19] = "'1'"
+        list[20] = "'1'"
         dpt = '1'
     else:
-        list[19] = 'dpt'
+        list[20] = 'dpt'
 
     if dpt_person == 'None' or dpt_person == '':
-        list[20] = "'1'"
+        list[21] = "'1'"
         dpt_person = '1'
     else:
-        list[20] = 'dpt_person'
+        list[21] = 'dpt_person'
 
     if confirmation == 'None' or confirmation == '':
-        list[21] = "'1'"
+        list[22] = "'1'"
         confirmation = '1'
     else:
-        list[21] = 'confirmation'
+        list[22] = 'confirmation'
 
 
-    sql_search = "select * from '{tablename}' where {algo} = '{algo_}' and {version} = '{version_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' and {bit} = '{bit_}'" \
+    sql_search = "select * from '{tablename}' where {algo} = '{algo_}' and {version} = '{version_}' and {end_version} = '{end_version_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' and {bit} = '{bit_}'" \
                  " and {numK} = '{numK_}' and {tidW} = '{tidW_}' and {tidN} = '{tidN_}' and {subTidW} = '{subTidW_}'" \
                  " and {sTypeW_bit} = '{sTypeW_bit_}' and {sType} = '{sType_}' and {storeLocation} = '{storeLocation_}'" \
                  " and {ISSU} = '{ISSU_}' and {algoSpe} = '{algoSpe_}' and {testSpe} = '{testSpe_}'" \
@@ -231,47 +238,49 @@ def quarry_search(tablename, version ,algo, name, algoId, subTidN, bit, numK
                                                                                                  algo_=algo,
                                                                                                  version = list[1],
                                                                                                  version_ = version,
-                                                                                                 name=list[2],
+                                                                                                 end_version = list[2],
+                                                                                                 end_version_ = end_version,
+                                                                                                 name=list[3],
                                                                                                  name_=name,
-                                                                                                 bit=list[5],
+                                                                                                 bit=list[6],
                                                                                                  bit_=bit,
-                                                                                                 numK=list[6],
+                                                                                                 numK=list[7],
                                                                                                  numK_=numK,
-                                                                                                 tidW=list[7],
+                                                                                                 tidW=list[8],
                                                                                                  tidW_=tidW,
-                                                                                                 tidN=list[8],
+                                                                                                 tidN=list[9],
                                                                                                  tidN_=tidN,
-                                                                                                 subTidW=list[9],
+                                                                                                 subTidW=list[10],
                                                                                                  subTidW_=subTidW,
-                                                                                                 subTidN=list[4],
+                                                                                                 subTidN=list[5],
                                                                                                  subTidN_=subTidN,
-                                                                                                 sTypeW_bit=list[10],
+                                                                                                 sTypeW_bit=list[11],
                                                                                                  sTypeW_bit_=sTypeW_bit,
-                                                                                                 sType=list[11],
+                                                                                                 sType=list[12],
                                                                                                  sType_=sType,
-                                                                                                 storeLocation=list[12],
+                                                                                                 storeLocation=list[13],
                                                                                                  storeLocation_=storeLocation,
-                                                                                                 algoId=list[3],
+                                                                                                 algoId=list[4],
                                                                                                  algoId_=algoId,
-                                                                                                 ISSU=list[13],
+                                                                                                 ISSU=list[14],
                                                                                                  ISSU_=ISSU,
-                                                                                                 algoSpe=list[14],
+                                                                                                 algoSpe=list[15],
                                                                                                  algoSpe_=algoSpe,
-                                                                                                 testSpe=list[15],
+                                                                                                 testSpe=list[16],
                                                                                                  testSpe_=testSpe,
-                                                                                                 castType=list[16],
+                                                                                                 castType=list[17],
                                                                                                  castType_=castType,
-                                                                                                 iOrd=list[17],
+                                                                                                 iOrd=list[18],
                                                                                                  iOrd_=iOrd,
-                                                                                                 TBLM_ID=list[18],
+                                                                                                 TBLM_ID=list[19],
                                                                                                  TBLM_ID_=TBLM_ID,
-                                                                                                 dpt=list[19],
+                                                                                                 dpt=list[20],
                                                                                                  dpt_=dpt,
-                                                                                                 dpt_person=list[20],
+                                                                                                 dpt_person=list[21],
                                                                                                  dpt_person_=dpt_person,
-                                                                                                 confirmation=list[21],
+                                                                                                 confirmation=list[22],
                                                                                                  confirmation_=confirmation,
-                                                                                                 info = list[22],
+                                                                                                 info = list[23],
                                                                                                  info_ = info
                                                                                                  )
     try:
@@ -285,7 +294,7 @@ def quarry_search(tablename, version ,algo, name, algoId, subTidN, bit, numK
         print('success search')
         return results
     except Exception as e:
-        # db.rollback()
+        traceback.print_exc()
         print('rollback')
     finally:
         db.close()

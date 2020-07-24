@@ -997,7 +997,8 @@ class Ui_MainWindow(object):
                     self.action = self.submenu.addAction(j)
                     self.action.setText(j)
                     self.action.triggered.connect(self.menu_decHardware)
-        except Exception:
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '初始化继承单板菜单失败：'+ str(e))
             traceback.print_exc()
 
     def menu_decHardware(self):
@@ -1046,6 +1047,7 @@ class Ui_MainWindow(object):
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '新建继承单板失败：' + str(e))
             traceback.print_exc()
             self.upload_logs(str(e))
             try:
@@ -1062,7 +1064,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "资源表管理"))
         self.pushButton_1.setText(_translate("MainWindow", "浏览"))
         # self.pushButton_2.setText(_translate("MainWindow", "搜索"))
         # self.pushButton_3.setText(_translate("MainWindow", "对比"))
@@ -1308,11 +1310,12 @@ class Ui_MainWindow(object):
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as a:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '错误：'+ str(e))
             traceback.print_exc()
 
     def revise_tab(self, tablename, results):
         # 初始化一个tab页
-        print(sys._getframe(1).f_code.co_name)
+
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         # 设置成垂直排列
@@ -1341,7 +1344,7 @@ class Ui_MainWindow(object):
             self.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
             self.tableWidget.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
             self.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
-            self.tableWidget.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+            self.tableWidget.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
             self.tableWidget.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
             self.tableWidget.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeToContents)
         # #表头 设置成中文
@@ -1555,7 +1558,7 @@ class Ui_MainWindow(object):
                 sql = insertDB.insert_db(i, form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                    form[8], form[9], form[10]
                                    , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                   form[19], form[20], form[21], form[22])
+                                   form[19], form[20], form[21], form[22],form[23])
                 sql_store.append(sql)
                 #记录日志
                 logs_1.append(form[0])
@@ -1610,7 +1613,7 @@ class Ui_MainWindow(object):
                 results = quarryDB.quarry_search(i, form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                    form[8], form[9], form[10]
                                    , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                   form[19], form[20], form[21],form[22], self.db_file)
+                                   form[19], form[20], form[21],form[22], form[23], self.db_file)
                 print(results)
                 self.show_search_results(results,i)
             # self.show_search_results(results)
@@ -1618,6 +1621,7 @@ class Ui_MainWindow(object):
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
+            QMessageBox.warning(self.stackedWidget_1, '提示', '搜索失败：'+str(e))
             traceback.print_exc()
             print('search error')
             self.upload_logs("搜索失败")
@@ -1653,6 +1657,8 @@ class Ui_MainWindow(object):
 
 
         except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '显示搜索结果失败：'+ str(e))
+
             print("results is empty")
             traceback.print_exc()
     copy_logs = []
@@ -1703,10 +1709,21 @@ class Ui_MainWindow(object):
 
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception as a:
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '修订错误：'+str(e))
             traceback.print_exc()
 
     def rander_table_background(self, table):
+        for i in range(table.rowCount()):
+            if table.item(i,5).text().isdigit():
+                num = int(table.item(i,5).text()) + 3
+
+                table.item(i,5).setBackground(QBrush(QColor(num*111%255,num*99%255,120)))
+
+            if table.item(i,6).text().isdigit():
+                num = int(table.item(i, 6).text()) + 3
+                table.item(i, 6).setBackground(QBrush(QColor(num * 130 % 255, num * 120 % 255, 120)))
+    def rander_table_background_browse(self, table):
         for i in range(table.rowCount()):
             if table.item(i,4).text().isdigit():
                 num = int(table.item(i,4).text()) + 3
@@ -1716,16 +1733,6 @@ class Ui_MainWindow(object):
             if table.item(i,5).text().isdigit():
                 num = int(table.item(i, 5).text()) + 3
                 table.item(i, 5).setBackground(QBrush(QColor(num * 130 % 255, num * 120 % 255, 120)))
-    def rander_table_background_browse(self, table):
-        for i in range(table.rowCount()):
-            if table.item(i,3).text().isdigit():
-                num = int(table.item(i,3).text()) + 3
-
-                table.item(i,3).setBackground(QBrush(QColor(num*111%255,num*99%255,120)))
-
-            if table.item(i,4).text().isdigit():
-                num = int(table.item(i, 4).text()) + 3
-                table.item(i, 4).setBackground(QBrush(QColor(num * 130 % 255, num * 120 % 255, 120)))
 
 
     def delete(self):
@@ -1742,7 +1749,7 @@ class Ui_MainWindow(object):
                 llog = deleteDB.delete( form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                    form[8], form[9], form[10]
                                    , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                   form[19], form[20],form[21],form[22],form[23],self.db_file)
+                                   form[19], form[20],form[21],form[22],form[23],form[24],self.db_file)
 
 
                 self.search()
@@ -1754,7 +1761,8 @@ class Ui_MainWindow(object):
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
             traceback.print_exc()
-            self.upload_logs("删除 " + form[0] + '中的' + form[2] + '失败')
+            QMessageBox.warning(self.stackedWidget_1, '提示', '删除失败：' + str(e))
+            self.upload_logs("删除 " + form[0] + '中的' + form[4] + '失败')
             print('delete error')
     #确认删除
     def double_check_delete(self):
@@ -1803,7 +1811,7 @@ class Ui_MainWindow(object):
                     llog = updateDB.update_db( form[0], form[1], form[2], form[3], form[4], form[5], form[6], form[7],
                                        form[8], form[9], form[10]
                                        , form[11], form[12], form[13], form[14], form[15], form[16], form[17], form[18],
-                                       form[19], form[20],form[21],form[22],form[23], i, self.copy)
+                                       form[19], form[20],form[21],form[22],form[23],form[24], i, self.copy)
                 # self.upload_logs("更新 " + form[0] + '中的' + form[2] + '成功')
                 #lists 里面包含log信息和待执行sql
 
@@ -1812,7 +1820,7 @@ class Ui_MainWindow(object):
                     sql_store.append(lists[1])
                     upload_log += lists[0]
             updateDB.sql_excecute(sql_store,self.db_file)
-            print(lists[0])
+
             if upload_log != None and upload_log != '' :
                 self.upload_logs(upload_log)
             self.search()
@@ -1824,7 +1832,7 @@ class Ui_MainWindow(object):
         except Exception as e:
 
             # self.upload_logs('更新失败，' + form[0] + ' 中存在相同业务名')
-            A = QMessageBox.warning(self.stackedWidget_1, '提示', '更新失败，存在相同业务名')  # 创建一个二次确认框
+            QMessageBox.warning(self.stackedWidget_1, '提示', '更新失败:' + str(e))
 
             traceback.print_exc()
             self.search()
@@ -1855,9 +1863,10 @@ class Ui_MainWindow(object):
                 result.append(row)
             result.insert(0, constants.head_name_search)
             xlsxOpenpyxl.write_excel_xlsx(dir,'sheet1',result)
-
+            QMessageBox.about(self.stackedWidget_1,'提示','导出成功')
         except Exception as e:
-            print()
+            traceback.print_exc()
+            QMessageBox.about(self.stackedWidget_1,'提示','导出失败:' + str(e))
 
 
     def browse_to_excel(self):
@@ -1867,11 +1876,33 @@ class Ui_MainWindow(object):
                 QMessageBox.warning(self.stackedWidget_1,'提示','请先选择形态表')
                 return
 
-            version, ok = QInputDialog.getMultiLineText(self.stackedWidget_1, "导出版本", "请输入想要导出的版本号，以回车隔开\n\n"
-                                                                         "默认导出所有版本\n\n版本号:")
+            # version, ok = QInputDialog.getMultiLineText(self.stackedWidget_1, "导出版本", "请输入想要导出的版本号，以回车隔开\n\n"
+            #                                                              "默认导出所有版本\n\n版本号:")
+            # if ok == True:
+            #     version_list = []
+            #     version_list1 = version.split('\n')
+            #     for i in version_list1:
+            #         if i.isspace() == True :
+            #             continue
+            #         if i == '':
+            #             continue
+            #         version_list.append(i.strip())
+            #     print(version_list)
+            # else :
+            #     return
+
+
+
+
+
+            version, ok = QInputDialog.getText(self.stackedWidget_1, "导出版本", "请输入想要导出的版本号:\n\n"
+                                                                             "默认导出最新版本"
+                                                                         , QLineEdit.Normal, "")
+
             if ok == True:
                 version_list = []
-                version_list1 = version.split('\n')
+
+                version_list1 = version.split()
                 for i in version_list1:
                     if i.isspace() == True :
                         continue
@@ -1880,21 +1911,8 @@ class Ui_MainWindow(object):
                     version_list.append(i.strip())
                 print(version_list)
             else :
+
                 return
-
-
-
-
-            # version, ok = QInputDialog.getText(self.stackedWidget_1, "导出版本", "请输入想要导出的版本号，以空格隔开\n\n"
-            #                                                              "默认导出所有版本\n\n版本号:", QLineEdit.Normal, "")
-            #
-            # if ok == True:
-            #     version.strip()
-            #     version_list = version.split()
-            #     print(version_list)
-            # else :
-            #     print('quxiao ')
-            #     return
 
             fileName = QFileDialog.getSaveFileName(self.stackedWidget_1, "", "", ".xlsx")
             # print(fileName)
@@ -1912,6 +1930,7 @@ class Ui_MainWindow(object):
             self.revise_to_excel(dir)
 
             for i in range(len(self.content)):
+                dict = {}
                 onesheet = []
                 if len(self.content[i]) == 1 and i % 2 == 0:
                     sheetname = self.content[i][0]
@@ -1925,20 +1944,39 @@ class Ui_MainWindow(object):
                     for j in self.content[i]:
                         row = list(j)
                         del[row[0]]
-                        print('看这里')
-                        print(row)
-                        print( row[0] in version_list)
-                        if (row[0] in version_list) == True :
+                        #如果版本号等于要求的版本号 并且表里不存在这条 直接加进来
+                        print(len(version_list))
+                        if(len(version_list) == 0) :
+                            version_list.append('zzzzzzzz')
+                        if row[0] == version_list[0] and (dict.get(row[3],'notFound') == 'notFound'):
                             print("进来了@@@@！！！！！！！！！！！！！！")
-                            onesheet.append(row)
+                            # onesheet.append(row)
+                            dict[row[3]] = row
+
+                        elif row[0] < version_list[0] and (row[1] == None or row[1] == 'None' or row[1] >= version_list[0]) and (dict.get(row[3],'notFound')== 'notFound') :
+                            dict[row[3]] = row
+                            # onesheet.append(row)
+
+                        #如果 set里已经存在了一个相同的业务名 需要比较当前版本号和 dict里的大小 而且 最大不能超过要求的版本号
+                        elif (dict.get(row[3],'notFound') != 'notFound'):
+                            version_in_dict = dict[row[3]][0]
+                            version_current = row[0]
+                            if (version_current > version_in_dict) and (version_current <= version_list[0]) :
+                                dict[row[3]] = row
+                    #遍历dict 把条目加到one sheet里
+                    for key in dict.keys():
+                        onesheet.append(dict[key])
                     onesheet.insert(0, constants.head_name_cn)
                     print('sheet内容')
                     print(onesheet)
                     xlsxOpenpyxl.add_content_to_sheet(dir,sheetname,onesheet)
             xlsxOpenpyxl.cur_head(dir)
+
+            QMessageBox.about(self.stackedWidget_1,'提示','导出成功')
         except Exception as e:
             traceback.print_exc()
             print("browse_to_excel error")
+            QMessageBox.about(self.stackedWidget_1, '提示', '导出失败' + str(e))
 
     def revise_to_excel(self, dir):
         sheetname = self.revise_content[0]
@@ -1997,6 +2035,7 @@ class Ui_MainWindow(object):
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '插入修订记录失败：'+ str(e))
             traceback.print_exc()
             print('submit_log error')
 
@@ -2024,6 +2063,7 @@ class Ui_MainWindow(object):
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '更新修订失败：' + str(e))
             print('update error')
 
 
@@ -2054,6 +2094,7 @@ class Ui_MainWindow(object):
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
+            QMessageBox.warning(self.stackedWidget_1, '提示', '删除修订条目失败：' + str(e))
             traceback.print_exc()
             print('delete error')
 
@@ -2088,7 +2129,8 @@ class Ui_MainWindow(object):
             self.pushButton_21.show()
             self.pushButton_22.show()
             QMessageBox.about(self.stackedWidget_1,'提示','导入成功')
-        except Exception :
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '打开文件失败：' + str(e))
             traceback.print_exc()
             self.comboBox.setcurrentText()
 
@@ -2137,7 +2179,7 @@ class Ui_MainWindow(object):
             for i in range(self.tabWidget.count()):
                 if i == 0:
                     if '修订记录' not in self.tabWidget.tabText(0):
-                        QMessageBox.about(self.stackedWidget_1, '提示', 'excel格式错误' )
+                        QMessageBox.about(self.stackedWidget_1, '提示', 'excel格式错误，缺少修订记录' )
                     else:
                         continue
 
@@ -2175,7 +2217,7 @@ class Ui_MainWindow(object):
 
                             sql = insertDB.insert_db(self.tabWidget.tabText(i)+'_tmp', j[0],j[1],j[2],j[3],j[4],j[5],j[6]
                                                    ,j[7],j[8],j[9],j[10],j[11],j[12],j[13],j[14],j[15],j[16],j[17],
-                                                   j[18],j[19],j[20],j[21],j[22])
+                                                   j[18],j[19],j[20],j[21],j[22],j[23])
                             sqls.append(sql)
                         insertDB.excecute_sql(sqls, self.db_file)
                         # sqlite3DB.drop_table(self.tabWidget.tabText(i))
@@ -2217,7 +2259,7 @@ class Ui_MainWindow(object):
         except Exception as e:
             traceback.print_exc()
             error= str(e)
-            QMessageBox.warning(self.stackedWidget_1, '提示', error)
+            QMessageBox.warning(self.stackedWidget_1, '提示', '保存失败：'+str(e))
 
         finally:
             sqlite3DB.delete_tmp(self.db_file)
@@ -2398,7 +2440,8 @@ class Ui_MainWindow(object):
             self.comboBox_2.addItems(resources_list)
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception :
+        except Exception as e :
+            QMessageBox.warning(self.stackedWidget_1, '提示', '刷新单板列表失败：' + str(e))
             traceback.print_exc()
 
     def menu_delete(self):
@@ -2437,6 +2480,7 @@ class Ui_MainWindow(object):
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             traceback.print_exc()
+            QMessageBox.warning(self.stackedWidget_1, '提示', '删除失败：' + str(e))
             self.upload_logs(e)
 
     def get_table_from_form(self,formname):
@@ -2452,7 +2496,8 @@ class Ui_MainWindow(object):
             return resource_list
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception :
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '获取单板列表失败：'+ str(e))
             traceback.print_exc()
 
     #返回所有形态表名 初始化tree窗口
@@ -2482,7 +2527,8 @@ class Ui_MainWindow(object):
             return resources_list
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception:
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '初始化单板列表失败：'+ str(e))
             traceback.print_exc()
 
     def get_all_form_name(self):
@@ -2498,7 +2544,8 @@ class Ui_MainWindow(object):
             return resources_list
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception:
+        except Exception as e :
+            QMessageBox.warning(self.stackedWidget_1, '提示', '获取所有形态表名失败：' + str(e))
             traceback.print_exc()
 
     def refresh_browse(self):
@@ -2507,7 +2554,8 @@ class Ui_MainWindow(object):
             self.comboBox.clear()
             self.comboBox.addItems(self.get_all_form_name())
             self.comboBox.setCurrentIndex(num)
-        except Exception:
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '刷新失败：' + str(e))
             traceback.print_exc()
 
     def quarry_hardware_info(self):
@@ -2525,7 +2573,8 @@ class Ui_MainWindow(object):
                     self.tableWidget_v8.setItem(i, j, QTableWidgetItem(result[i][j]))
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception:
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '查询单板信息失败：'+ str(e))
             traceback.print_exc()
 
     def double_check_insert_hardware_info(self):
@@ -2563,6 +2612,7 @@ class Ui_MainWindow(object):
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             traceback.print_exc()
+            QMessageBox.warning(self.stackedWidget_1, '提示', '插入单板信息失败：' + str(e))
             print('submit_hardware_info error')
 
     def double_check_delete_hardware_info(self):
@@ -2601,6 +2651,7 @@ class Ui_MainWindow(object):
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e :
             traceback.print_exc()
+            QMessageBox.warning(self.stackedWidget_1, '提示', '删除单板信息失败：' + str(e))
             print('delete error')
 
     def hardware_info_to_excel(self):
@@ -2629,10 +2680,13 @@ class Ui_MainWindow(object):
             onesheet.insert(0, constants.head_name_hardware_info)
             xlsxOpenpyxl.cur_head(dir)
             xlsxOpenpyxl.add_content_to_sheet(dir, '单板信息', onesheet)
+            QMessageBox.about(self.stackedWidget_1,'提示','导出成功')
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
         except Exception as e:
             traceback.print_exc()
+            QMessageBox.warning(self.stackedWidget_1, '提示', '导出错误：'+ str(e))
+
             print("browse_to_excel error")
 
     hardware_info_excel_name = ''
@@ -2689,7 +2743,8 @@ class Ui_MainWindow(object):
 
 
             # QMessageBox.about(self.stackedWidget_1,'提示','导入成功')
-        except Exception :
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '导入失败：'+ str(e))
             traceback.print_exc()
             self.comboBox.setcurrentText()
 
@@ -2730,7 +2785,8 @@ class Ui_MainWindow(object):
 
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception :
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '覆盖失败：'+str(e))
             traceback.print_exc()
             try:
                 sqlite3DB.drop_table('hardware_info_tmp', self.db_file)
@@ -2763,7 +2819,8 @@ class Ui_MainWindow(object):
             self.comboBox_2.addItems(resources_list)
             self.comboBox_2.currentTextChanged.connect(self.select_from_logs)
             self.init_menu()
-        except Exception:
+        except Exception as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '打开数据库失败：' + str(e))
             traceback.print_exc()
 
     def save_db(self):
@@ -2784,15 +2841,17 @@ class Ui_MainWindow(object):
 
             copyfile(self.db_file, dir)
 
-        except IOError:
-            QMessageBox.warning(self.stackedWidget_1, '提示', '备份失败，数据库可能已锁')
+        except IOError as e:
+            QMessageBox.warning(self.stackedWidget_1, '提示', '备份失败，数据库可能已锁:' + str(e) )
             traceback.print_exc()
 
 
         except noDBException:
             QMessageBox.warning(self.stackedWidget_1, '提示', '请先选择数据库')
-        except Exception:
+
+        except Exception as e:
             traceback.print_exc()
+            QMessageBox.warning(self.stackedWidget_1, '提示', '备份失败：' + str(e))
 
 
 

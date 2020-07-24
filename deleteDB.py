@@ -2,169 +2,177 @@ import sqlite3
 import traceback
 
 
-def delete(tablename, version, algo, name, algoId, subTidN, bit, numK
+def delete(tablename, version, end_version, algo, name, algoId, subTidN, bit, numK
                   , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU, algoSpe,
                   testSpe, castType, iOrd,
                   TBLM_ID, dpt, dpt_person, confirmation, info,db_file):
-    list = [None] * 23
+    list = [None] * 24
 
     if algo == 'None' or algo == '':
-        list[0] = "'1'"
+        list[2] = "'1'"
         algo = '1'
     else:
-        list[0] = 'algo'
+        list[2] = 'algo'
 
 
     if version == 'None' or version == '':
-        list[1] = "'1'"
+        list[0] = "'1'"
         version = '1'
     else:
-        list[1] = 'version'
+        list[0] = 'version'
 
-
+    if end_version == 'None' or end_version == '':
+        list[1] = "'1'"
+        end_version = '1'
+    else:
+        list[1] = 'end_version'
 
     if name == 'None' or name == '':
-        list[2] = "'1'"
+        list[3] = "'1'"
         name = '1'
     else:
-        list[2] = 'name'
+        list[3] = 'name'
 
     if algoId == 'None' or algoId == '':
-        list[3] = "'1'"
+        list[4] = "'1'"
         algoId = '1'
     else:
-        list[3] = 'algoId'
+        list[4] = 'algoId'
 
     if numK == 'None' or numK == '':
-        list[6] = "'1'"
+        list[7] = "'1'"
         numK = '1'
     else:
-        list[6] = 'numK'
+        list[7] = 'numK'
 
     if tidW == 'None' or tidW == '':
-        list[7] = '1'
+        list[8] = '1'
         tidW = '1'
     else:
-        list[7] = 'tidW'
+        list[8] = 'tidW'
 
     if tidN == 'None' or tidN == '':
-        list[8] = '1'
+        list[9] = '1'
         tidN = '1'
     else:
-        list[8] = 'tidN'
+        list[9] = 'tidN'
 
     if subTidW == 'None' or subTidW == '':
-        list[9] = '1'
+        list[10] = '1'
         subTidW = '1'
     else:
-        list[9] = 'subTidW'
+        list[10] = 'subTidW'
 
     if subTidN == 'None' or subTidN == '':
-        list[4] = "'1'"
+        list[5] = "'1'"
         subTidN = '1'
     else:
-        list[4] = 'subTidN'
+        list[5] = 'subTidN'
 
     if sTypeW_bit == 'None' or sTypeW_bit == '':
-        list[10] = '1'
+        list[11] = '1'
         sTypeW_bit = '1'
     else:
-        list[10] = 'sTypeW_bit'
+        list[11] = 'sTypeW_bit'
 
     if sType == 'None' or sType == '':
-        list[11] = '1'
+        list[12] = '1'
         sType = '1'
     else:
-        list[11] = 'sType'
+        list[12] = 'sType'
 
     if storeLocation == 'None' or storeLocation == '':
-        list[12] = '1'
+        list[13] = '1'
         storeLocation = '1'
     else:
-        list[12] = 'storeLocation'
+        list[13] = 'storeLocation'
 
     if bit == 'None' or bit == '':
-        list[5] = "'1'"
+        list[6] = "'1'"
         bit = '1'
     else:
-        list[5] = 'bit'
+        list[6] = 'bit'
 
     if ISSU == 'None' or ISSU == '':
-        list[13] = '1'
+        list[14] = '1'
         ISSU = '1'
     else:
-        list[13] = 'ISSU'
+        list[14] = 'ISSU'
 
 
     if algoSpe == 'None' or algoSpe == '':
-        list[14] = '1'
+        list[15] = '1'
         algoSpe = '1'
     else:
-        list[14] = 'algoSpe'
+        list[15] = 'algoSpe'
 
     if testSpe == 'None' or testSpe == '':
-        list[15] = '1'
+        list[16] = '1'
         testSpe = '1'
     else:
-        list[15] = 'testSpe'
+        list[16] = 'testSpe'
 
     if castType == 'None' or castType == '':
-        list[16] = '1'
+        list[17] = '1'
         castType = '1'
     else:
-        list[16] = 'castType'
+        list[17] = 'castType'
 
     if iOrd == 'None' or iOrd == '':
-        list[17] = '1'
+        list[18] = '1'
         iOrd = '1'
     else:
-        list[17] = 'iOrd'
+        list[18] = 'iOrd'
 
     if TBLM_ID == 'None' or TBLM_ID == '':
-        list[18] = "'1'"
+        list[19] = "'1'"
         TBLM_ID = '1'
     else:
-        list[18] = 'TBLM_ID'
+        list[19] = 'TBLM_ID'
 
     if dpt == 'None' or dpt == '':
-        list[19] = "'1'"
+        list[20] = "'1'"
         dpt = '1'
     else:
-        list[19] = 'dpt'
+        list[20] = 'dpt'
 
     if dpt_person == 'None' or dpt_person == '':
-        list[20] = "'1'"
+        list[21] = "'1'"
         dpt_person = '1'
     else:
-        list[20] = 'dpt_person'
+        list[21] = 'dpt_person'
 
     if confirmation == 'None' or confirmation == '':
-        list[21] = "'1'"
+        list[22] = "'1'"
         confirmation = '1'
     else:
-        list[21] = 'confirmation'
+        list[22] = 'confirmation'
 
     if info == 'None' or info == '':
-        list[22] = "'1'"
+        list[23] = "'1'"
         info = '1'
     else:
-        list[22] = 'info'
+        list[23] = 'info'
 
-    sql_search = "delete from '{tablename}' where {version} = '{version_}' and {algo} = '{algo_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' " \
-                 "and {numK} = '{numK_}' " \
+    sql_search = "delete from '{tablename}' where {version} = '{version_}' and {end_version} = '{end_version_}' and {algo} = '{algo_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' " \
+                 "and {bit} = '{bit_}' and {numK} = '{numK_}' " \
         .format(tablename=tablename,
                 version = list[0],
                 version_ = version,
-                algo=list[1],
+                end_version = list[1],
+                end_version_ = end_version,
+                algo=list[2],
                 algo_=algo,
-                name=list[2],
+                name=list[3],
                 name_=name,
-                subTidN=list[4],
+                subTidN=list[5],
                 subTidN_=subTidN,
-                algoId=list[3],
+                algoId=list[4],
                 algoId_=algoId,
-                numK = list[6],
-                numK_= numK
+                numK = list[7],
+                numK_= numK,
+                bit = list[6],
+                bit_ = bit
 
                 )
     try:

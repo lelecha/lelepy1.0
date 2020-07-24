@@ -36,10 +36,19 @@ def add_content_to_sheet(path, sheet_name,content):
         for j in range(0, len(content[i])):
 
             sheet.cell(row=i + 1, column=j + 1, value=str(content[i][j]))
-    list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T','U','V']
+    list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T','U','V','W']
     for i in list:
         sheet.column_dimensions[i].width = 20
+    list2 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1','O1','P1','Q1','R1','S1','T1','U1','V1','W1','X1']
+    for i in list2:
+        sheet[i].font = openpyxl.styles.Font(bold = True)
+        # sheet[i].fill = openpyxl.styles.PatternFill(fill_type=None, end_color='91E4CB')
+        sheet[i].fill = openpyxl.styles.PatternFill("solid", fgColor="91E4CB")
 
+
+
+
+    sheet.freeze_panes = 'A2'
     # for row in sheet.values:
     #     temp = list(row)
     #     num1 = int(sheet.cell(row + 1, 3).value)
@@ -48,9 +57,11 @@ def add_content_to_sheet(path, sheet_name,content):
     #
     #     sheet.cell(2, 4).fill = PatternFill("solid", fgColor="1874CD")
 
+
     for index, row in enumerate(sheet.rows):
         if index > 0:
-            cell = row[3]
+
+            cell = row[4]
             if cell.value.isdigit():
                 if int(cell.value) == 0:
                     cell.fill = PatternFill("solid", fgColor="FFFFCC")
@@ -139,7 +150,7 @@ def add_content_to_sheet(path, sheet_name,content):
                 if int(cell.value) == 42:
                     cell.fill = PatternFill("solid", fgColor="0099CC")
 
-            cell = row[4]
+            cell = row[5]
             if cell.value.isdigit():
                 if int(cell.value) == 0:
                     cell.fill = PatternFill("solid", fgColor="FFFFCC")
@@ -242,6 +253,7 @@ def write_excel_xlsx(path, sheet_name, value):
     # sheet = workbook.create_sheet(sheet_name)
     sheet = workbook.active
     sheet.title = sheet_name
+    sheet.freeze_panes = 'A2'
     for i in range(0, index):
         for j in range(0, len(value[i])):
 
@@ -250,6 +262,11 @@ def write_excel_xlsx(path, sheet_name, value):
     for i in list:
         sheet.column_dimensions[i].width = 20
 
+    list2 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1','O1','P1','Q1','R1','S1','T1','U1','V1','W1','X1','Y1']
+    for i in list2:
+        sheet[i].font = openpyxl.styles.Font(bold = True)
+        # sheet[i].fill = openpyxl.styles.PatternFill(fill_type=None, end_color='91E4CB')
+        sheet[i].fill = openpyxl.styles.PatternFill("solid", fgColor="91E4CB")
     # for row in sheet.values:
     #     temp = list(row)
     #     num1 = int(sheet.cell(row + 1, 3).value)
