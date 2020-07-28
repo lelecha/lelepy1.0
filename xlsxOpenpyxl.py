@@ -27,7 +27,9 @@ def add_sheet(path, sheet_name):
     excel.create_sheet(sheet_name)
 
     excel.save(path)
-def add_content_to_sheet(path, sheet_name,content):
+def add_content_to_sheet(path, sheet_name,content, type):
+    print('当前sheet名字！！！！！！！！！！！！！！！！')
+    print(sheet_name)
     index = len(content)
     excel = load_workbook(path)
     sheet = excel.get_sheet_by_name(sheet_name)
@@ -40,7 +42,17 @@ def add_content_to_sheet(path, sheet_name,content):
     for i in list:
         sheet.column_dimensions[i].width = 20
     list2 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1','O1','P1','Q1','R1','S1','T1','U1','V1','W1','X1']
-    for i in list2:
+    list3 = ['A1','B1','C1','D1','E1','F1']
+    list5 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1']
+    list4 = []
+    if type == 0 :
+        list4 = list3
+    elif type == 1:
+        list4 = list2
+    elif type == 2:
+        list4 = list5
+
+    for i in list4:
         sheet[i].font = openpyxl.styles.Font(bold = True)
         # sheet[i].fill = openpyxl.styles.PatternFill(fill_type=None, end_color='91E4CB')
         sheet[i].fill = openpyxl.styles.PatternFill("solid", fgColor="91E4CB")
