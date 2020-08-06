@@ -14,12 +14,10 @@ Types if import:
 IMPORTANT: Do NOT post this list to the issue-tracker. Use it as a basis for
            yourself tracking down the missing module. Thanks!
 
-missing module named _posixsubprocess - imported by subprocess (conditional)
-missing module named pwd - imported by posixpath (delayed, conditional), shutil (optional), tarfile (optional), http.server (delayed, optional), webbrowser (delayed), netrc (delayed, conditional), getpass (delayed)
-missing module named posix - imported by os (conditional, optional)
-missing module named resource - imported by posix (top-level)
 missing module named 'org.python' - imported by copy (optional), xml.sax (delayed, conditional)
+missing module named pwd - imported by posixpath (delayed, conditional), shutil (optional), tarfile (optional), http.server (delayed, optional), webbrowser (delayed), netrc (delayed, conditional), getpass (delayed)
 missing module named termios - imported by tty (top-level), getpass (optional)
+missing module named _posixsubprocess - imported by subprocess (conditional)
 missing module named vms_lib - imported by platform (delayed, conditional, optional)
 missing module named 'java.lang' - imported by platform (delayed, optional), xml.sax._exceptions (conditional)
 missing module named java - imported by platform (delayed)
@@ -38,3 +36,5 @@ missing module named pandas - imported by openpyxl.compat.numbers (optional), op
 missing module named numpy - imported by openpyxl.compat.numbers (optional)
 missing module named PIL - imported by openpyxl.drawing.image (optional)
 missing module named tests - imported by openpyxl.reader.excel (optional)
+missing module named posix - imported by os (conditional, optional)
+missing module named resource - imported by posix (top-level)

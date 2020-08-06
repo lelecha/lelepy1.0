@@ -41,7 +41,8 @@ def add_content_to_sheet(path, sheet_name,content, type):
     list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T','U','V','W']
     for i in list:
         sheet.column_dimensions[i].width = 20
-    list2 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1','O1','P1','Q1','R1','S1','T1','U1','V1','W1','X1']
+    list2 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1','O1','P1','Q1','R1','S1','T1','U1','V1','W1','X1','Y1'
+             , 'Z1','AA1','AB1','AC1','AD1','AE1','AF1']
     list3 = ['A1','B1','C1','D1','E1','F1']
     list5 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1']
     list4 = []
@@ -49,6 +50,7 @@ def add_content_to_sheet(path, sheet_name,content, type):
         list4 = list3
     elif type == 1:
         list4 = list2
+        sheet.column_dimensions.group('A','B',hidden = True)
     elif type == 2:
         list4 = list5
 
@@ -61,13 +63,7 @@ def add_content_to_sheet(path, sheet_name,content, type):
 
 
     sheet.freeze_panes = 'A2'
-    # for row in sheet.values:
-    #     temp = list(row)
-    #     num1 = int(sheet.cell(row + 1, 3).value)
-    #     num2 = int(sheet.cell(row + 1, 4).value)
-    #     sheet.cell(row + 1, 3).fill = PatternFill("solid", fgColor="1874CD")
-    #
-    #     sheet.cell(2, 4).fill = PatternFill("solid", fgColor="1874CD")
+
 
 
     for index, row in enumerate(sheet.rows):
@@ -274,18 +270,12 @@ def write_excel_xlsx(path, sheet_name, value):
     for i in list:
         sheet.column_dimensions[i].width = 20
 
-    list2 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1','O1','P1','Q1','R1','S1','T1','U1','V1','W1','X1','Y1']
+    list2 = ['A1','B1','C1','D1','E1','F1','G1','H1','I1','J1','K1','L1','M1','N1','O1','P1','Q1','R1','S1','T1','U1','V1','W1','X1','Y1'
+             , 'Z1','AA1','AB1','AC1','AD1','AE1','AF1']
     for i in list2:
         sheet[i].font = openpyxl.styles.Font(bold = True)
         # sheet[i].fill = openpyxl.styles.PatternFill(fill_type=None, end_color='91E4CB')
         sheet[i].fill = openpyxl.styles.PatternFill("solid", fgColor="91E4CB")
-    # for row in sheet.values:
-    #     temp = list(row)
-    #     num1 = int(sheet.cell(row + 1, 3).value)
-    #     num2 = int(sheet.cell(row + 1, 4).value)
-    #     sheet.cell(row + 1, 3).fill = PatternFill("solid", fgColor="1874CD")
-    #
-    #     sheet.cell(2, 4).fill = PatternFill("solid", fgColor="1874CD")
 
     for index, row in enumerate(sheet.rows):
         if index > 0:
@@ -477,24 +467,4 @@ def read_excel_xlsx(path):
 
 
     return lists
-    # for j in row:
-    #     print(j)
 
-    # list = tuple(sheet.rows)
-    # print('111')
-
-    # for row in sheet.rows:
-    #     for cell in row:
-    #         print(cell.value, "\t")
-    #     print()
-
-# book_name_xlsx = 'text2.xlsx'
-#
-# sheet_name_xlsx = 'xlsxformtest'
-#
-# value3 = [["姓名", "性别", "年龄", "城市", "职业"],
-#           ["111", "女", "66", "石家庄", "运维工程师"],
-#           ["222", "男", "55", "南京", "饭店老板"],
-#           ["333", "女", "27", "苏州", "保安"], ]
-#
-# write_excel_xlsx(book_name_xlsx, sheet_name_xlsx, value3)

@@ -3,10 +3,12 @@ import sqlite3
 import traceback
 
 
+
+#返回一个sql insert 语句
 def insert_db(tablename, version, end_version, algo, name, algoId, subTidN, bit, numK
               , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU,algoSpe,
               testSpe, castType, iOrd,
-              TBLM_ID, dpt, dpt_person, confirmation, info):
+              TBLM_ID, dpt, dpt_person, confirmation, info,tid_name,subtid_name,tcam_init,actionId,keytidw,keysubtidw,keytidn,keysubtidn):
 
     try:
         if algo == '' or algo.isspace() or algo == 'None':
@@ -90,13 +92,39 @@ def insert_db(tablename, version, end_version, algo, name, algoId, subTidN, bit,
 
         if info == '' or info.isspace():
             info = 'None'
+        # 'tid_name': 'TID名称',
+        # 'subtid_name': 'SubTid名称',
+        # 'tcam_init': 'TCAM起始位置',
+        # 'actionId': '动作表ID',
+        # 'keytidw': 'keyTID位宽',
+        # 'keysubtidw': 'keySubtid位宽',
+        # 'keytidn': 'keyTID值',
+        # 'keysubtidn': 'keySubtid值'
+        if tid_name == '' or tid_name.isspace():
+            tid_name = 'None'
+        if subtid_name == '' or subtid_name.isspace():
+            subtid_name = 'None'
+        if tcam_init == '' or tcam_init.isspace():
+            tcam_init = 'None'
+        if actionId == '' or actionId.isspace():
+            actionId = 'None'
+        if keytidw == '' or keytidw.isspace():
+            keytidw = 'None'
+        if keysubtidw == '' or keysubtidw.isspace():
+            keysubtidw = 'None'
+        if keytidn == '' or keytidn.isspace():
+            keytidn = 'None'
+        if keysubtidn == '' or keysubtidn.isspace():
+            keysubtidn = 'None'
+
 
         sql_insert = "insert into '{tablename}' (id, version,end_version ,algo, name, bit, numK, tidW, tidN, subTidW, subTidN, sTypeW_bit, sType, " \
                      "storeLocation, algoId,ISSU,algoSpe, testSpe, " \
-                     "castType, iOrd, TBLM_ID, dpt, dpt_person, confirmation, info) " \
+                     "castType, iOrd, TBLM_ID, dpt, dpt_person, confirmation, info, tid_name, subtid_name, tcam_init, actionId,keytidw,keysubtidw,keytidn,keysubtidn) " \
                      "values ( NULL,'{version}','{end_version}','{algo}','{name}', '{bit}', '{numK}', '{tidW}', '{tidN}', '{subTidW}', " \
                      "'{subTidN}', '{sTypeW_bit}', '{sType}', '{storeLocation}', '{algoId}','{ISSU}','{algoSpe}','{testSpe}', " \
-                     "'{castType}', '{iOrd}', '{TBLM_ID}', '{dpt}', '{dpt_person}', '{confirmation}','{info}');".format(tablename=tablename,
+                     "'{castType}', '{iOrd}', '{TBLM_ID}', '{dpt}', '{dpt_person}', '{confirmation}','{info}','{tid_name}','{subtid_name}'," \
+                     "'{tcam_init}','{actionId}','{keytidw}','{keysubtidw}','{keytidn}','{keysubtidn}');".format(tablename=tablename,
                                                                                                                algo=algo,
                                                                                                                version = version,
                                                                                                                end_version = end_version,
@@ -120,14 +148,44 @@ def insert_db(tablename, version, end_version, algo, name, algoId, subTidN, bit,
                                                                                                                TBLM_ID=TBLM_ID,
                                                                                                                dpt=dpt,
                                                                                                                dpt_person=dpt_person,
-                                                                                                               confirmation=confirmation)
+                                                                                                               confirmation=confirmation,
+                                                                                                                 tid_name = tid_name,
+                                                                                                                 subtid_name=subtid_name,
+                                                                                                                 tcam_init = tcam_init,
+                                                                                                                 actionId = actionId,
+                                                                                                                 keytidw = keytidw,
+                                                                                                                 keysubtidw = keysubtidw,
+                                                                                                                 keytidn = keytidn,
+                                                                                                                 keysubtidn = keysubtidn)
 
-
+        # 'tid_name': 'TID名称',
+        # 'subtid_name': 'SubTid名称',
+        # 'tcam_init': 'TCAM起始位置',
+        # 'actionId': '动作表ID',
+        # 'keytidw': 'keyTID位宽',
+        # 'keysubtidw': 'keySubtid位宽',
+        # 'keytidn': 'keyTID值',
+        # 'keysubtidn': 'keySubtid值'
         return sql_insert
 
     except Exception as e:
         raise e
-
+#将插入sql 语句统一执行
+def excecute_sql(sql_store, db_file):
+    try:
+        db = sqlite3.connect(db_file)
+        cur_insert = db.cursor()
+        for i in range(len(sql_store)):
+            print(i)
+            cur_insert.execute(sql_store[i])
+        db.commit()
+    except Exception as e:
+        # db.rollback()
+        print('rollback')
+        traceback.print_exc()
+        raise e
+    finally:
+        db.close()
 #向形态表仓库插入一个形态表
 def insert_form(formname, db_file):
     try:
@@ -148,6 +206,7 @@ def insert_hardware(formname, tablename, db_file):
     try:
         db = sqlite3.connect(db_file)
         cur_insert = db.cursor()
+
         cur_insert.execute("INSERT INTO '{formname}' (tablename) values ('{tablename}')".format(formname = formname, tablename = tablename))
         db.commit()
         print('success insert logs')
@@ -157,9 +216,7 @@ def insert_hardware(formname, tablename, db_file):
         raise e
     finally:
         db.close()
-
-
-
+#插入一条修订
 def insert_logs(tablename, date, ver, intro, decision, content, reviser, db_file):
 
     if date == '' or date.isspace():
@@ -205,22 +262,7 @@ def insert_logs(tablename, date, ver, intro, decision, content, reviser, db_file
     finally:
         db.close()
 
-
-def excecute_sql(sql_store, db_file):
-    try:
-        db = sqlite3.connect(db_file)
-        cur_insert = db.cursor()
-        for i in range(len(sql_store)):
-            print(i)
-            cur_insert.execute(sql_store[i])
-        db.commit()
-    except Exception as e:
-        # db.rollback()
-        print('rollback')
-        traceback.print_exc()
-        raise e
-    finally:
-        db.close()
+#向单板信息插入条目
 def insert_hardware_info(name, version, form, algo_core, tcam, algo, algo_engine, multi_core, core_type, cpu_type, makefile, cmake, ko, info, db_file):
 
 
@@ -273,7 +315,6 @@ def insert_hardware_info(name, version, form, algo_core, tcam, algo, algo_engine
         print('rollback')
     finally:
         db.close()
-
 def insert_hardware_info_tmp(name, version, form, algo_core, tcam, algo, algo_engine, multi_core, core_type, cpu_type, makefile, cmake, ko, info,db_file):
 
 

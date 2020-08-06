@@ -1,11 +1,8 @@
 import sqlite3
-#建立形态表
 
-
-#建立单板表
 import traceback
 
-
+#新建一个单板
 def create_table(tablename,db_file):
     try:
         # tablename 需要是单板名字
@@ -22,8 +19,8 @@ def create_table(tablename,db_file):
                     "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     "version varchar(255) NOT NULL,"
                     "end_version varchar(255) NOT NULL,"
-                    "algo varchar(255),"
-                    "name varchar(255) NOT NULL UNIQUE ,"
+                    "algo varchar(255)NOT NULL,"
+                    "name varchar(255) NOT NULL,"
                     "algoId varchar(255) NOT NULL,"
                     "subTidN varchar(255) NOT NULL,"
                     "bit varchar(255) NOT NULL,"
@@ -43,14 +40,31 @@ def create_table(tablename,db_file):
                     "dpt varchar(255),"
                     "dpt_person varchar(255),"
                     "confirmation varchar(255),"
-                    "info varchar(255)"
+                    "info varchar(255),"
+                    "tid_name varchar(255),"
+                    "subtid_name varchar(255),"
+                    "tcam_init varchar(255),"
+                    "actionId varchar(255),"
+                    "keytidw varchar(255),"
+                    "keysubtidw varchar(255),"
+                    "keytidn varchar(255),"
+                    "keysubtidn varchar(255),"
+                    "UNIQUE(version, name)"
                     ");".format(tablename=tablename))
     except Exception as e:
         traceback.print_exc()
         raise e
-
+    # 'tid_name': 'TID名称',
+    # 'subtid_name': 'SubTid名称',
+    # 'tcam_init': 'TCAM起始位置',
+    # 'actionId': '动作表ID',
+    # 'keytidw': 'keyTID位宽',
+    # 'keysubtidw': 'keySubtid位宽',
+    # 'keytidn': 'keyTID值',
+    # 'keysubtidn': 'keySubtid值'
     finally:
         con.close()
+#新建修订记录
 def create_log(tablename,db_file):
     try:
         # tablename 需要是单板名字
@@ -76,6 +90,7 @@ def create_log(tablename,db_file):
         raise e
     finally:
         con.close()
+#新建一个形态表
 def create_form(formname, db_file):
     try:
         con = sqlite3.connect(db_file)
@@ -89,7 +104,7 @@ def create_form(formname, db_file):
         con.close()
     except Exception as e :
         raise e
-
+#新建一个存储形态表的表 只需用一次， 不会再用上了
 def form_store(db_file):
     con = sqlite3.connect(db_file)
 
@@ -101,7 +116,7 @@ def form_store(db_file):
     # finally:
     con.close()
 
-
+#更改表名，在备份的时候可以用
 def rename_table(old, new, db_file):
     try:
         sql = "ALTER TABLE '{old}' RENAME TO '{new}';".format(old = old, new = new)
@@ -113,6 +128,7 @@ def rename_table(old, new, db_file):
     except Exception:
         traceback.print_exc()
 
+#删表
 def drop_table(name,db_file):
     try:
         con = sqlite3.connect(db_file)
@@ -122,6 +138,7 @@ def drop_table(name,db_file):
     except Exception:
         traceback.print_exc()
 
+#复制表，新建继承单板会用到
 def copy_table(old, new, db_file):
     try:
         con = sqlite3.connect(db_file)
@@ -132,8 +149,7 @@ def copy_table(old, new, db_file):
         traceback.print_exc()
         raise Exception('复制失败')
 
-
-
+#处理异常：如果更新表的时候出现异常，可以清理_tmp结尾的垃圾表
 def delete_tmp(db_file):
     try:
         con = sqlite3.connect(db_file)
@@ -150,6 +166,7 @@ def delete_tmp(db_file):
     except Exception:
         traceback.print_exc()
 
+#创建异常
 def create_hardware_info(db_file):
     try:
         con = sqlite3.connect(db_file)

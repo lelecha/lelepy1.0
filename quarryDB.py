@@ -6,23 +6,7 @@ import traceback
 
 
 
-def get_head_name(tablename,db_file):
-    db = sqlite3.connect(db_file)
-    cur = db.cursor()
-    cur.execute("SELECT * FROM '{tablename}'".format(tablename=tablename))
-    sqlFields = cur.description
-    num = len(sqlFields)
-    fields = [None] * num
-    print(num)
-    for i in range(num):
-        print(sqlFields[i][0])
-        print(i)
-        fields[i] = sqlFields[i][0]
-    db.close()
-    return fields
-
-
-
+#返回一个单板的所有条目
 def quarry_all(tablename,db_file):
     sql_quarry = "select * from '{tablename}' order by cast(algoId AS INT), cast(subTidN AS INT);".format(tablename=tablename)
     try:
@@ -45,7 +29,7 @@ def quarry_all(tablename,db_file):
     finally:
         db.close()
 
-
+#返回一个形态表包含的所有单板
 def quarry_form(formname,db_file):
     sql_quarry = "select * from '{formname}';".format(formname = formname)
     try:
@@ -59,7 +43,7 @@ def quarry_form(formname,db_file):
         raise e
     finally:
         db.close()
-
+#返回所有形态表
 def quarry_form_store(db_file):
     sql_quarry = "select * from form_store;"
     try:
@@ -74,12 +58,14 @@ def quarry_form_store(db_file):
     finally:
         db.close()
 
+#返回一个sql查询结果
 
 def quarry_search(tablename, version ,end_version, algo, name, algoId, subTidN, bit, numK
                   , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU, algoSpe,
                   testSpe, castType, iOrd,
-                  TBLM_ID, dpt, dpt_person, confirmation, info,db_file):
-    list = [None] * 24
+                  TBLM_ID, dpt, dpt_person, confirmation, info, tid_name, subtid_name, tcam_init, actionId, keytidw,
+                   keysubtidw, keytidn, keysubtidn, db_file):
+    list = [None] * 32
 
     if algo == 'None' or algo == '':
         list[0] = "'1'"
@@ -92,6 +78,55 @@ def quarry_search(tablename, version ,end_version, algo, name, algoId, subTidN, 
         info = '1'
     else:
         list[23] = 'info'
+
+    if tid_name == 'None' or tid_name == '':
+        list[24] = "'1'"
+        tid_name = '1'
+    else:
+        list[24] = 'tid_name'
+
+    if subtid_name == 'None' or subtid_name == '':
+        list[25] = "'1'"
+        subtid_name = '1'
+    else:
+        list[25] = 'subtid_name'
+
+    if tcam_init == 'None' or tcam_init == '':
+        list[26] = "'1'"
+        tcam_init = '1'
+    else:
+        list[26] = 'tcam_init'
+
+    if actionId == 'None' or actionId == '':
+        list[27] = "'1'"
+        actionId = '1'
+    else:
+        list[27] = 'actionId'
+
+    if keytidw == 'None' or keytidw == '':
+        list[28] = "'1'"
+        keytidw = '1'
+    else:
+        list[28] = 'keytidw'
+
+    if keysubtidw == 'None' or keysubtidw == '':
+        list[29] = "'1'"
+        keysubtidw = '1'
+    else:
+        list[29] = 'keysubtidw'
+
+    if keytidn == 'None' or keytidn == '':
+        list[30] = "'1'"
+        keytidn = '1'
+    else:
+        list[30] = 'keytidn'
+
+    if keysubtidn == 'None' or keysubtidn == '':
+        list[31] = "'1'"
+        keysubtidn = '1'
+    else:
+        list[31] = 'keysubtidn'
+
 
     if version == 'None' or version == '':
         list[1] = "'1'"
@@ -227,13 +262,15 @@ def quarry_search(tablename, version ,end_version, algo, name, algoId, subTidN, 
     else:
         list[22] = 'confirmation'
 
-
     sql_search = "select * from '{tablename}' where {algo} = '{algo_}' and {version} = '{version_}' and {end_version} = '{end_version_}' and {name} = '{name_}' and {algoId} = '{algoId_}' and {subTidN} = '{subTidN_}' and {bit} = '{bit_}'" \
                  " and {numK} = '{numK_}' and {tidW} = '{tidW_}' and {tidN} = '{tidN_}' and {subTidW} = '{subTidW_}'" \
                  " and {sTypeW_bit} = '{sTypeW_bit_}' and {sType} = '{sType_}' and {storeLocation} = '{storeLocation_}'" \
                  " and {ISSU} = '{ISSU_}' and {algoSpe} = '{algoSpe_}' and {testSpe} = '{testSpe_}'" \
                  " and {castType} = '{castType_}' and {iOrd} = '{iOrd_}' and {TBLM_ID} = '{TBLM_ID_}' and {dpt} = '{dpt_}'" \
-                 " and {dpt_person} = '{dpt_person_}' and {confirmation} = '{confirmation_}' and {info} = '{info_}' order by cast(algoId AS INT), cast(subTidN AS INT)".format(tablename=tablename,
+                 " and {dpt_person} = '{dpt_person_}' and {confirmation} = '{confirmation_}' and {info} = '{info_}' and {tid_name} = '{tid_name_}'" \
+                 " and {subtid_name} = '{subtid_name_}' and {tcam_init} = '{tcam_init_}' and {actionId} = '{actionId_}'" \
+                 " and {keytidw} = '{keytidw_}' and {keysubtidw} = '{keysubtidw_}' and {keytidn} = '{keytidn_}' " \
+                 " and {keysubtidn} = '{keysubtidn_}' order by cast(algoId AS INT), cast(subTidN AS INT)".format(tablename=tablename,
                                                                                                  algo=list[0],
                                                                                                  algo_=algo,
                                                                                                  version = list[1],
@@ -281,8 +318,38 @@ def quarry_search(tablename, version ,end_version, algo, name, algoId, subTidN, 
                                                                                                  confirmation=list[22],
                                                                                                  confirmation_=confirmation,
                                                                                                  info = list[23],
-                                                                                                 info_ = info
+                                                                                                 info_ = info,
+                                                                                                 tid_name =  list[24],
+                                                                                                 tid_name_= tid_name,
+                                                                                                 subtid_name=list[25],
+                                                                                                 subtid_name_=subtid_name,
+                                                                                                 tcam_init=list[26],
+                                                                                                 tcam_init_=tcam_init,
+                                                                                                 actionId=list[27],
+                                                                                                 actionId_=actionId,
+                                                                                                 keytidw=list[28],
+                                                                                                 keytidw_=keytidw,
+                                                                                                 keysubtidw=list[29],
+                                                                                                 keysubtidw_=keysubtidw,
+                                                                                                 keytidn=list[30],
+                                                                                                 keytidn_=keytidn,
+                                                                                                                 keysubtidn=list[31],
+                                                                                                                 keysubtidn_=keysubtidn,
+
+
+
+
                                                                                                  )
+
+
+    # 'tid_name': 'TID名称',
+    # 'subtid_name': 'SubTid名称',
+    # 'tcam_init': 'TCAM起始位置',
+    # 'actionId': '动作表ID',
+    # 'keytidw': 'keyTID位宽',
+    # 'keysubtidw': 'keySubtid位宽',
+    # 'keytidn': 'keyTID值',
+    # 'keysubtidn': 'keySubtid值'
     try:
         print(sql_search)
         db = sqlite3.connect(db_file)
@@ -298,7 +365,7 @@ def quarry_search(tablename, version ,end_version, algo, name, algoId, subTidN, 
         print('rollback')
     finally:
         db.close()
-
+#返回一个形态表的修订记录
 def quarry_logs(tablename, db_file):
     sql_quarry_log = "select * from '{tablename}_logs' ".format(tablename = tablename)
     try:
@@ -317,7 +384,7 @@ def quarry_logs(tablename, db_file):
         print('rollback')
     finally:
         db.close()
-
+#返回单板信息
 def quarry_hardware_info(db_file):
     sql_quarry_hardwareinfo = "select * from hardware_info;"
     try:

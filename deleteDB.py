@@ -2,18 +2,75 @@ import sqlite3
 import traceback
 
 
+# 'tid_name': 'TID名称',
+# 'subtid_name': 'SubTid名称',
+# 'tcam_init': 'TCAM起始位置',
+# 'actionId': '动作表ID',
+# 'keytidw': 'keyTID位宽',
+# 'keysubtidw': 'keySubtid位宽',
+# 'keytidn': 'keyTID值',
+# 'keysubtidn': 'keySubtid值'
 def delete(tablename, version, end_version, algo, name, algoId, subTidN, bit, numK
                   , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU, algoSpe,
                   testSpe, castType, iOrd,
-                  TBLM_ID, dpt, dpt_person, confirmation, info,db_file):
-    list = [None] * 24
+                  TBLM_ID, dpt, dpt_person, confirmation, info, tid_name,subtid_name, tcam_init,actionId, keytidw, keysubtidw, keytidn, keysubtidn, db_file):
+    list = [None] * 32
 
     if algo == 'None' or algo == '':
         list[2] = "'1'"
         algo = '1'
     else:
         list[2] = 'algo'
+################################
+    if tid_name == 'None' or tid_name == '':
+        list[24] = "'1'"
+        tid_name = '1'
+    else:
+        list[24] = 'tid_name'
 
+
+    if subtid_name == 'None' or subtid_name == '':
+        list[25] = "'1'"
+        subtid_name = '1'
+    else:
+        list[25] = 'subtid_name'
+
+    if tcam_init == 'None' or tcam_init == '':
+        list[26] = "'1'"
+        tcam_init = '1'
+    else:
+        list[26] = 'tcam_init'
+
+    if actionId == 'None' or actionId == '':
+        list[27] = "'1'"
+        actionId = '1'
+    else:
+        list[27] = 'actionId'
+
+    if keytidw == 'None' or keytidw == '':
+        list[28] = "'1'"
+        keytidw = '1'
+    else:
+        list[28] = 'keytidw'
+
+    if keysubtidw == 'None' or keysubtidw == '':
+        list[29] = "'1'"
+        keysubtidw = '1'
+    else:
+        list[29] = 'keysubtidw'
+
+    if keytidn == 'None' or keytidn == '':
+        list[30] = "'1'"
+        keytidn = '1'
+    else:
+        list[30] = 'keytidn'
+
+    if keysubtidn == 'None' or keysubtidn == '':
+        list[31] = "'1'"
+        keysubtidn = '1'
+    else:
+        list[31] = 'keysubtidn'
+###########################
 
     if version == 'None' or version == '':
         list[0] = "'1'"

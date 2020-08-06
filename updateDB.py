@@ -2,10 +2,18 @@ import sqlite3
 import traceback
 import constants
 
+# 'tid_name': 'TID名称',
+# 'subtid_name': 'SubTid名称',
+# 'tcam_init': 'TCAM起始位置',
+# 'actionId': '动作表ID',
+# 'keytidw': 'keyTID位宽',
+# 'keysubtidw': 'keySubtid位宽',
+# 'keytidn': 'keyTID值',
+# 'keysubtidn': 'keySubtid值'
 def update_db(tablename,version, end_version, algo, name, algoId, subTidN, bit, numK
               , tidW, tidN, subTidW, sTypeW_bit, sType, storeLocation, ISSU,algoSpe,
               testSpe, castType, iOrd,
-              TBLM_ID, dpt, dpt_person, confirmation, info,index,copy):
+              TBLM_ID, dpt, dpt_person, confirmation, info,tid_name, subtid_name, tcam_init, actionId, keytidw, keysubtidw, keytidn, keysubtidn, index,copy):
 
     if algo == '' or algo.isspace():
         algo = 'N/A'
@@ -17,7 +25,25 @@ def update_db(tablename,version, end_version, algo, name, algoId, subTidN, bit, 
 
     if info == '' or info.isspace():
         info = 'N/A'
+#################################
+    if tid_name == '' or tid_name.isspace():
+        tid_name = 'N/A'
+    if subtid_name == '' or subtid_name.isspace():
+        subtid_name = 'N/A'
+    if tcam_init == '' or tcam_init.isspace():
+        tcam_init = 'N/A'
+    if actionId == '' or actionId.isspace():
+        actionId = 'N/A'
+    if keytidw == '' or keytidw.isspace():
+        keytidw = 'N/A'
+    if keysubtidw == '' or keysubtidw.isspace():
+        keysubtidw = 'N/A'
+    if keytidn == '' or keytidn.isspace():
+        keytidn = 'N/A'
+    if keysubtidn == '' or keysubtidn.isspace():
+        keysubtidn = 'N/A'
 
+######################################
     if name == '' or name.isspace():
         name = 'N/A'
 
@@ -79,7 +105,9 @@ def update_db(tablename,version, end_version, algo, name, algoId, subTidN, bit, 
     if copy[index][1] == version and copy[index][2] == end_version and copy[index][3] == algo and copy[index][4] == name and copy[index][5] == algoId and copy[index][6] == subTidN and copy[index][7] == bit and copy[index][8] == numK and copy[index][9] == tidW \
         and copy[index][10] == tidN and copy[index][11] == subTidW and copy[index][12] == sTypeW_bit and copy[index][13] == sType and copy[index][14] == storeLocation and copy[index][15] == ISSU \
         and copy[index][16] == algoSpe and copy[index][17] == testSpe and copy[index][18] == castType and copy[index][19] == iOrd and copy[index][20] == TBLM_ID and copy[index][21] == dpt \
-        and copy[index][22] == dpt_person and copy[index][23] == confirmation and copy[index][24] == info:
+        and copy[index][22] == dpt_person and copy[index][23] == confirmation and copy[index][24] == info and copy[index][25] == tid_name\
+        and copy[index][26] == subtid_name and copy[index][27] == tcam_init and copy[index][28] == actionId and copy[index][29] == keytidw and copy[index][30] == keysubtidw and copy[index][31] == keytidn \
+        and copy[index][32] == keysubtidn:
         return
 
     loginfo = []
@@ -133,7 +161,31 @@ def update_db(tablename,version, end_version, algo, name, algoId, subTidN, bit, 
     if copy[index][24] != info:
         loginfo.append(constants.head_name['info'] + ' 从 ' + copy[index][24] +' 更改为 '+ info +'。 ')
 
+    if copy[index][25] != tid_name:
+        loginfo.append(constants.head_name['tid_name'] + ' 从 ' + copy[index][25] +' 更改为 '+ tid_name +'。 ')
+    if copy[index][26] != subtid_name:
+        loginfo.append(constants.head_name['subtid_name'] + ' 从 ' + copy[index][26] +' 更改为 '+ subtid_name +'。 ')
+    if copy[index][27] != tcam_init:
+        loginfo.append(constants.head_name['tcam_init'] + ' 从 ' + copy[index][27] +' 更改为 '+ tcam_init +'。 ')
+    if copy[index][28] != actionId:
+        loginfo.append(constants.head_name['actionId'] + '从 ' + copy[index][28] +' 更改为 '+ actionId +'。 ')
+    if copy[index][29] != keytidw:
+        loginfo.append(constants.head_name['keytidw'] + ' 从 ' + copy[index][29] +' 更改为 '+ keytidw +'。 ')
+    if copy[index][30] != keysubtidw:
+        loginfo.append(constants.head_name['keysubtidw'] + ' 从 ' + copy[index][30] +' 更改为 '+ keysubtidw +'。 ')
+    if copy[index][31] != keytidn:
+        loginfo.append(constants.head_name['keytidn'] + ' 从 ' + copy[index][31] +' 更改为 '+ keytidn +'。 ')
+    if copy[index][32] != keysubtidn:
+        loginfo.append(constants.head_name['keysubtidn'] + ' 从 ' + copy[index][32] +' 更改为 '+ keysubtidn +'。 ')
 
+    # 'tid_name': 'TID名称',
+    # 'subtid_name': 'SubTid名称',
+    # 'tcam_init': 'TCAM起始位置',
+    # 'actionId': '动作表ID',
+    # 'keytidw': 'keyTID位宽',
+    # 'keysubtidw': 'keySubtid位宽',
+    # 'keytidn': 'keyTID值',
+    # 'keysubtidn': 'keySubtid值'
 
 
 
@@ -143,7 +195,9 @@ def update_db(tablename,version, end_version, algo, name, algoId, subTidN, bit, 
                  " ,sTypeW_bit = '{sTypeW_bit_}' ,sType = '{sType_}' ,storeLocation = '{storeLocation_}'" \
                  " ,ISSU = '{ISSU_}' ,algoSpe = '{algoSpe_}' ,testSpe = '{testSpe_}'" \
                  " ,castType = '{castType_}' ,iOrd = '{iOrd_}' ,TBLM_ID = '{TBLM_ID_}' ,dpt = '{dpt_}'" \
-                 " ,dpt_person = '{dpt_person_}' ,confirmation = '{confirmation_}', info = '{info_}' where version = '{copy_version}' and end_version = '{copy_end_version}' and algo = '{copy_algo}'" \
+                 " ,dpt_person = '{dpt_person_}' ,confirmation = '{confirmation_}', info = '{info_}', tid_name = '{tid_name_}'," \
+                 "subtid_name = '{subtid_name_}', tcam_init = '{tcam_init_}', actionId = '{actionId_}', keytidw = '{keytidw_}', " \
+                 "keysubtidw = '{keysubtidw_}', keytidn = '{keytidn_}', keysubtidn = '{keysubtidn_}' where version = '{copy_version}' and end_version = '{copy_end_version}' and algo = '{copy_algo}'" \
                  " and name = '{copy_name}' and algoId = '{copy_algoId}' and subTidN = '{copy_subTidN}'".format(tablename=tablename,
                                                                                                            version_ = version,
                                                                                                            end_version_ = end_version,
@@ -169,6 +223,14 @@ def update_db(tablename,version, end_version, algo, name, algoId, subTidN, bit, 
                                                                                                            dpt_person_=dpt_person,
                                                                                                            confirmation_=confirmation,
                                                                                                            info_ = info,
+                                                                                                           tid_name_ = tid_name,
+                                                                                                           subtid_name_=subtid_name,
+                                                                                                           tcam_init_ = tcam_init,
+                                                                                                           actionId_ = actionId,
+                                                                                                           keytidw_ = keytidw,
+                                                                                                           keysubtidw_ = keysubtidw,
+                                                                                                           keytidn_ = keytidn,
+                                                                                                           keysubtidn_ = keysubtidn,
 
                                                                                                            copy_version = copy[index][1],
                                                                                                            copy_end_version = copy[index][2],
